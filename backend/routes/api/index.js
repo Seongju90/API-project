@@ -7,10 +7,12 @@ router.post('/test', function(req, res) {
     res.json({ requestBody: req.body });
 });
 
-// GET /api/restore-user
+// GET /api/restore-user/
 const { restoreUser } = require('../../utils/auth.js');
 
+// This will run the middleware before going to any RESTful endpoint
 router.use(restoreUser);
+
 
 // router.get(
 //   '/restore-user',

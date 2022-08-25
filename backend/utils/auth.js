@@ -38,6 +38,7 @@ const restoreUser = (req, res, next) => {
     }
 
     try {
+        // verify takes in payload as second argument, jwtPayload.data gets id from Model we created in the token above.
       const { id } = jwtPayload.data;
       req.user = await User.scope('currentUser').findByPk(id);
     } catch (e) {
