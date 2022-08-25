@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-![](vscode-remote://wsl%2Bubuntu-20.04/home/adduser/appacademy/Philip/w12-project/authenticate-me/AIRBNB.png)
+![AIRBNB](https://user-images.githubusercontent.com/99510035/186544799-7ab0b221-c7cd-4dfd-8291-6f23561320e2.png)
 
 ## API Documentation
 
