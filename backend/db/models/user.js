@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     };
 
-    static async signup({ username, email, password }) {
+    static async signup({ firstName, lastName, username, email, password }) {
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({
         // add firstName lastName attributes here because we creating new User
@@ -54,10 +54,9 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
+      unique: true,
       validate: {
         len: [4, 30],
-        // isEmail: false,
         isNotEmail(value) {
           if (Validator.isEmail(value)) {
             throw new Error("Cannot be an email.");
@@ -84,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
+      unique: true,
       validate: {
         len: [3, 256],
         isEmail: true
@@ -116,3 +115,19 @@ module.exports = (sequelize, DataTypes) => {
   });
   return User;
 };
+
+
+// fetch('/api/users', {
+//   method: 'POST',
+//   headers: {
+//     "Content-Type": "application/json",
+//     "XSRF-TOKEN": "LmrmHN6V-YwxL78dpB9N1TWf-c2IpSjeMpTg"
+//   },
+//   body: JSON.stringify({
+//     firstName: 'fire',
+//     lastName: 'star',
+//     email: 'firestar@spider.man',
+//     username: 'Firestar',
+//     password: 'password'
+//   })
+// }).then(res => res.json()).then(data => console.log(data));

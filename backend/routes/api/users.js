@@ -12,13 +12,13 @@ const validateSignup = [
   check('firstName')
     .exists({ checkFalsy: true})
     .isLength({min: 4})
-    .isAlpha({checkFalsy: true})
+    .isAlpha()
     .withMessage('Please provide a first name with alphabets and length of at least 4 characters'),
   check('lastName')
     .exists({ checkFalsy: true})
     .isLength({min: 4})
-    .isAlpha({checkFalsy: true})
-    .withMessage('Please provide a last name with alphabets and length of at least 4 characters'),,
+    .isAlpha()
+    .withMessage('Please provide a last name with alphabets and length of at least 4 characters'),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
