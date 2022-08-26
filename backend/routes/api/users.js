@@ -8,6 +8,14 @@ const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
 const validateSignup = [
+  check('firstName')
+    .exists({ checkFalsy: true})
+    .isLength({min: 4})
+    .isAlpha({checkFalsy: true}),
+  check('lastName')
+    .exists({ checkFalsy: true})
+    .isLength({min: 4})
+    .isAlpha({checkFalsy: true}),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
@@ -31,8 +39,10 @@ router.post(
     '/',
     validateSignup,
     async (req, res) => {
-      const { email, password, username } = req.body;
-      const user = await User.signup({ email, username, password });
+      // add the firstName lastName attributes here to make a post request of a signup
+      const { firstName, lastName, email, password, username } = req.body;
+      // it uses the static signup function in user.js on line 45 to create a user
+      const user = await User.signup({ firstName, lastName, email, username, password });
 
       await setTokenCookie(res, user);
 
