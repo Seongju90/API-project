@@ -8,14 +8,17 @@ const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
 const validateSignup = [
+  // add attribute validations here because it checks this function when creating a VALID user.
   check('firstName')
     .exists({ checkFalsy: true})
     .isLength({min: 4})
-    .isAlpha({checkFalsy: true}),
+    .isAlpha({checkFalsy: true})
+    .withMessage('Please provide a first name with alphabets and length of at least 4 characters'),
   check('lastName')
     .exists({ checkFalsy: true})
     .isLength({min: 4})
-    .isAlpha({checkFalsy: true}),
+    .isAlpha({checkFalsy: true})
+    .withMessage('Please provide a last name with alphabets and length of at least 4 characters'),,
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
