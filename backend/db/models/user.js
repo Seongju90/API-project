@@ -115,19 +115,3 @@ module.exports = (sequelize, DataTypes) => {
   });
   return User;
 };
-
-
-// fetch('/api/users', {
-//   method: 'POST',
-//   headers: {
-//     "Content-Type": "application/json",
-//     "XSRF-TOKEN": "LmrmHN6V-YwxL78dpB9N1TWf-c2IpSjeMpTg"
-//   },
-//   body: JSON.stringify({
-//     firstName: 'fire',
-//     lastName: 'star',
-//     email: 'firestar@spider.man',
-//     username: 'Firestar',
-//     password: 'password'
-//   })
-// }).then(res => res.json()).then(data => console.log(data));
