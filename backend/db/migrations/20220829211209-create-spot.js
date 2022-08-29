@@ -13,16 +13,16 @@ module.exports = {
         references: {models: "Users", key: 'id'}
       },
       address: {
-        type: Sequelize.VARCHAR(255)
+        type: Sequelize.STRING(255)
       },
       city: {
-        type: Sequelize.VARCHAR(255)
+        type: Sequelize.STRING(255)
       },
       state: {
-        type: Sequelize.VARCHAR(255)
+        type: Sequelize.STRING(255)
       },
       country: {
-        type: Sequelize.VARCHAR(255)
+        type: Sequelize.STRING(255)
       },
       lat: {
         type: Sequelize.INTEGER
@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.VARCHAR(255)
+        type: Sequelize.STRING(255)
       },
       description: {
         type: Sequelize.STRING(255)

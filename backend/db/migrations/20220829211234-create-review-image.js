@@ -13,7 +13,7 @@ module.exports = {
         references: { model: 'Reviews', key: 'id'}
       },
       url: {
-        type: Sequelize.VARCHAR(255),
+        type: Sequelize.STRING(255),
       },
       createdAt: {
         allowNull: false,
