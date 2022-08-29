@@ -10,11 +10,11 @@ module.exports = {
       },
       spotId: {
         type: Sequelize.NUMBER,
-        references: { model: 'Spots', key: 'id'}
+        references: { model: 'Spots' }
       },
       userId: {
         type: Sequelize.NUMBER,
-        references: { model: 'Users', key: 'id'}
+        references: { model: 'Users' }
       },
       startDate: {
         type: Sequelize.DATE
