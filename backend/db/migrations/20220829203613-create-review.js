@@ -15,7 +15,9 @@ module.exports = {
         type: Sequelize.NUMBER
       },
       review: {
-        type: Sequelize.VARCHAR(255)
+        type: Sequelize.VARCHAR(255),
+        references: { model: 'Users', key: 'id'}
+        // may need onDelete: 'CASCADE' later
       },
       stars: {
         type: Sequelize.INTEGER
