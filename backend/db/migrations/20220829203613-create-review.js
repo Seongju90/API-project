@@ -9,15 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       spotId: {
-        type: Sequelize.NUMBER
+        type: Sequelize.NUMBER,
+        references: { model: 'Spots', key: 'id'}
       },
       userId: {
-        type: Sequelize.NUMBER
+        type: Sequelize.NUMBER,
+        references: { model: 'Users', key: 'id'}
+        // may need onDelete: 'CASCADE' later
       },
       review: {
         type: Sequelize.VARCHAR(255),
-        references: { model: 'Users', key: 'id'}
-        // may need onDelete: 'CASCADE' later
       },
       stars: {
         type: Sequelize.INTEGER

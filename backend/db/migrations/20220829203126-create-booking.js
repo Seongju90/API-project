@@ -9,10 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       spotId: {
-        type: Sequelize.NUMBER
+        type: Sequelize.NUMBER,
+        references: { model: 'Spots', key: 'id'}
       },
       userId: {
-        type: Sequelize.NUMBER
+        type: Sequelize.NUMBER,
+        references: { model: 'Users', key: 'id'}
       },
       startDate: {
         type: Sequelize.DATE
