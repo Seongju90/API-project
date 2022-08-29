@@ -22,7 +22,7 @@ module.exports = {
         unique: true
       },
       hashedPassword: {
-        type: Sequelize.VARCHAR(255),
+        type: Sequelize.STRING(255),
         allowNull: false
       },
       email: {

@@ -47,10 +47,11 @@ router.post(
       // it uses the static signup function in user.js on line 45 to create a user
       const user = await User.signup({ firstName, lastName, email, username, password });
 
-      await setTokenCookie(res, user);
+      let token = await setTokenCookie(res, user);
 
       return res.json({
-        user
+        user,
+        token
       });
     }
   );
