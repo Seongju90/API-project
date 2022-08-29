@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     hashedPassword: {
-      type: DataTypes.VARCHAR,
+      type: DataTypes.STRING,
       allowNull: false
     },
     email: {
