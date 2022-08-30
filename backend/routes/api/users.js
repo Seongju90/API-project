@@ -38,6 +38,21 @@ const validateSignup = [
   handleValidationErrors
 ];
 
+// Get the Current User
+router.get('/:id',
+  requireAuth,
+  async (req, res, next) => {
+    const { id, firstName, lastName, email, username } = req.user
+
+    res.json({
+      id,
+      firstName,
+      lastName,
+      email,
+      username
+    })
+});
+
 router.post(
     '/',
     validateSignup,
@@ -47,19 +62,12 @@ router.post(
       // it uses the static signup function in user.js on line 45 to create a user
       const user = await User.signup({ firstName, lastName, email, username, password });
 
-      let tokenCookie = await setTokenCookie(res, user);
-      user.token = tokenCookie;
+      await setTokenCookie(res, user);
 
       return res.json({
         user,
       });
     }
   );
-
-router.get('/test', async (req, res) => {
-  const users = await User.findAll()
-
-  return res.json(users)
-})
 
 module.exports = router;
