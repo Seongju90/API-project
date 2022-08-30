@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    ownerdId: DataTypes.NUMBER,
+    ownerId: DataTypes.NUMBER,
     address: DataTypes.STRING,
     city: DataTypes.STRING,
     state: DataTypes.STRING,
