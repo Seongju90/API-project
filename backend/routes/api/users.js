@@ -38,21 +38,6 @@ const validateSignup = [
   handleValidationErrors
 ];
 
-// Get the Current User
-router.get('/:id',
-  requireAuth,
-  async (req, res, next) => {
-    const { id, firstName, lastName, email, username } = req.user
-
-    res.json({
-      id,
-      firstName,
-      lastName,
-      email,
-      username
-    })
-});
-
 router.post(
     '/',
     validateSignup,
