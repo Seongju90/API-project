@@ -236,8 +236,58 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
 });
 
 router.put('/:spotId', requireAuth, async(req, res, next) => {
-    const userId = req.user.id
-    res.json(userId)
+    const userId = req.user.id;
+    const spotId = req.params.spotId;
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
+    // check if spot to be updated exists and if spot belongs to current user
+    const spot = await Spot.findByPk(spotId)
+
+    if(spot && userId === spot.ownerId) {
+        spot.set({
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
+        })
+        // set values then save!
+        await spot.save()
+        res.json(spot)
+    } else {
+        res.status(404)
+        res.json({
+            "message": "Spot couldn't be found",
+            "statusCode": 404
+        })
+    };
+})
+
+router.delete('/:spotId', requireAuth, async(req, res, next) => {
+    const userId = req.user.id;
+    const spotId = req.params.spotId;
+
+    // check to see if spot to be delete exists
+    const spot = await Spot.findByPk(spotId)
+
+    // if spot exists and the user is the owner of the spot
+    if (spot && userId === spot.ownerId) {
+        await spot.destroy()
+        res.json({
+            "message": "Successfully deleted",
+            "statusCode": 200
+        })
+    } else {
+        res.status(404)
+        res.json({
+            "message": "Spot couldn't be found",
+            "statusCode": 404
+        })
+    }
 })
 
 
