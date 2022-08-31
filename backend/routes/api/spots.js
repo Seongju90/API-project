@@ -92,11 +92,11 @@ router.get('/current', requireAuth, async (req, res, next) => {
     })
 
     // check after adding a spot image to the new spot
-    spots.forEach(spot => {
-        if(spot.id === spotImg.spotId) {
-            spot.previewImage =spotImg.url
-        }
-    })
+    // spots.forEach(spot => {
+    //     if(spot.id === spotImg.spotId) {
+    //         spot.previewImage = spotImg.url
+    //     }
+    // })
 
     res.json(spots)
 })
@@ -195,8 +195,35 @@ router.get('/:spotId', async (req, res, next) => {
     }
 })
 
+router.post('/:spotId/images', requireAuth, async(req, res, next) => {
+    const id = req.params.spotId;
+    const { url, preview } = req.body;
 
+    const spotExists = await Spot.findByPk(id)
 
+    // if spot doesn't exists throw an error
+    if (!spotExists) {
+        res.json({
+            "message": "Spot couldn't be found",
+            "statusCode": 404
+        })
+        // else create a new spotimage at that spot
+    } else {
+        const newSpotImg = await SpotImage.create({
+            spotId: id,
+            url,
+            preview: true
+        })
+
+        let jsonSpotImg = newSpotImg.toJSON()
+        // query for the new spot to edit format of the response
+        let formatSpotImg = await SpotImage.findByPk(jsonSpotImg.id, {
+            attributes: ['id', 'url', 'preview']
+        })
+
+        res.json(formatSpotImg)
+    }
+});
 
 
 
