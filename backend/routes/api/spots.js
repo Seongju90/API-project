@@ -2,6 +2,7 @@ const express = require('express')
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, sequelize } = require('../../db/models');
+const { raw } = require('express');
 
 const router = express.Router();
 
@@ -57,6 +58,9 @@ router.get('/', async(req, res, next) => {
 router.get('/current', requireAuth, async (req, res, next) => {
     // pulled from requireAuth -> restore User
     const userId = req.user.id
+
+    //testing
+    // const userId = 1
 
     let spots = await Spot.findAll({
         where: {
@@ -135,18 +139,59 @@ router.post('/', requireAuth, async (req, res, next) => {
 });
 
 router.get('/:spotId', async (req, res, next) => {
-    let id = req.params.spotId
+    const id = req.params.spotId
+    let spot = await Spot.findByPk(id)
 
-    let spot = await Spot.findByPk(spotId)
+    if (spot) {
+        //change to json in order to add properties
+        let spotJson = spot.toJSON()
 
-    let numReview = await Review.count({
-        where: {
-            id
-        }
-    })
+        // find num of reviews of spot and add it to json object
+        let numReview = await Review.count({
+            where: {
+                spotId: id
+            },
+            raw: true
+        });
 
-    res.json(numReview)
-    // res.json(spot)
+        spotJson.numReview = numReview;
+
+        // find sum of stars of the current spot
+        let sumReview = await Review.sum('stars', {
+            where: {
+                spotId: id
+            },
+            raw: true
+        });
+
+        // calculate avgstar by # of reviews / # of stars total
+        spotJson.avgStarRating = numReview / sumReview;
+
+        // add spotImages to the response excluding some attributes
+        let spotImages = await SpotImage.findAll({
+            where: {
+                spotId: id
+            },
+            attributes: {exclude: ['createdAt', 'updatedAt', 'spotId']}
+        })
+
+        spotJson.SpotImages = spotImages;
+
+        // find owner attributes and add to json response
+        let owner = await User.findByPk(spotJson.ownerId, {
+            attributes: ['id', 'firstName', 'lastName']
+        });
+
+        spotJson.Owner = owner;
+
+
+        res.json(spotJson)
+    } else {
+        res.json({
+            "message": "Spot couldn't be found",
+            "statusCode": 404
+        })
+    }
 })
 
 
