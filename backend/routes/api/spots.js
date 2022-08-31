@@ -128,6 +128,7 @@ router.post('/', requireAuth, async (req, res, next) => {
 
         res.json(newSpot)
     } else {
+        res.status(400)
         res.json({
             "message": "Validation Error",
             "statusCode": 400,
@@ -195,6 +196,7 @@ router.get('/:spotId', async (req, res, next) => {
 
         res.json(spotJson)
     } else {
+        res.status(404)
         res.json({
             "message": "Spot couldn't be found",
             "statusCode": 404
@@ -210,12 +212,13 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
 
     // if spot doesn't exists throw an error
     if (!spotExists) {
+        res.status(404)
         res.json({
             "message": "Spot couldn't be found",
             "statusCode": 404
         })
-        // else create a new spotimage at that spot
     } else {
+        // else create a new spotimage at that spot
         const newSpotImg = await SpotImage.create({
             spotId: id,
             url,
