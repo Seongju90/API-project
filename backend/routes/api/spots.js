@@ -88,7 +88,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 attributes: []
             },
         ],
-        group: ['Reviews.stars'],
+        group: ['Spot.id'],
         raw: true
     })
 
@@ -231,6 +231,11 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         res.json(formatSpotImg)
     }
 });
+
+router.put('/:spotId', requireAuth, async(req, res, next) => {
+    const userId = req.user.id
+    res.json(userId)
+})
 
 
 

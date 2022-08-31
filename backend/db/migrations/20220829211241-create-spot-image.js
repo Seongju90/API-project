@@ -16,6 +16,7 @@ module.exports = {
         type: Sequelize.STRING(255)
       },
       preview: {
+        // set defaultValue ???
         type: Sequelize.BOOLEAN
       },
       createdAt: {
