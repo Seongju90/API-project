@@ -58,13 +58,42 @@ router.get('/current', requireAuth, async (req, res, next) => {
     // pulled from requireAuth -> restore User
     const userId = req.user.id
 
-    let currentUserSpots = await Spot.findAll({
+    let spots = await Spot.findAll({
         where: {
             ownerId: userId
+        },
+        attributes: {
+            include: [
+                [
+                    sequelize.fn("AVG", sequelize.col("Reviews.stars")),
+                    "avgRating"
+                ]
+            ],
+        },
+        include: [
+            {
+                model: Review,
+                attributes: []
+            },
+        ],
+        group: ['Reviews.stars'],
+        raw: true
+    })
+
+    let spotImg = await SpotImage.findOne({
+        where: {
+            spotId: userId
         }
     })
 
-    res.json(currentUserSpots)
+    // check after adding a spot image to the new spot
+    spots.forEach(spot => {
+        if(spot.id === spotImg.spotId) {
+            spot.previewImage =spotImg.url
+        }
+    })
+
+    res.json(spots)
 })
 
 router.post('/', requireAuth, async (req, res, next) => {
