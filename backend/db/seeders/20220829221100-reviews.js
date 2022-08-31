@@ -19,6 +19,30 @@ const reviews = [
     review: 'I will never come back to this place ever',
     stars: 1,
   },
+  {
+    userId: 3,
+    spotId: 2,
+    review: 'I will never come back to this place ever',
+    stars: 1,
+  },
+  {
+    userId: 3,
+    spotId: 3,
+    review: 'I will never come back to this place ever',
+    stars: 4,
+  },
+  {
+    userId: 3,
+    spotId: 1,
+    review: 'I will never come back to this place ever......',
+    stars: 3,
+  },
+  {
+    userId: 3,
+    spotId: 1,
+    review: 'I will never come back to this place ever......',
+    stars: 2,
+  },
 ]
 
 module.exports = {
