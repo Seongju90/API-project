@@ -134,7 +134,20 @@ router.post('/', requireAuth, async (req, res, next) => {
     }
 });
 
+router.get('/:spotId', async (req, res, next) => {
+    let id = req.params.spotId
 
+    let spot = await Spot.findByPk(spotId)
+
+    let numReview = await Review.count({
+        where: {
+            id
+        }
+    })
+
+    res.json(numReview)
+    // res.json(spot)
+})
 
 
 
