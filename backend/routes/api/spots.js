@@ -55,6 +55,7 @@ router.get('/', async(req, res, next) => {
     res.json({Spots: spots})
 });
 
+// GET ALL SPOTS OWNED BY CURRENT USER
 router.get('/current', requireAuth, async (req, res, next) => {
     // pulled from requireAuth -> restore User
     const userId = req.user.id
