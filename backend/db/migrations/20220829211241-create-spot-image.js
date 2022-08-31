@@ -10,14 +10,15 @@ module.exports = {
       },
       spotId: {
         type: Sequelize.INTEGER,
-        references: { model: 'Spots'}
+        references: { model: 'Spots'},
+        onDelete: 'CASCADE'
       },
       url: {
         type: Sequelize.STRING(255)
       },
       preview: {
-        // set defaultValue ???
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,
