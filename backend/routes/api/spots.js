@@ -240,9 +240,26 @@ router.put('/:spotId', requireAuth, async(req, res, next) => {
     const spotId = req.params.spotId;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-    // check if spot to be updated exists and if spot belongs to current user
     const spot = await Spot.findByPk(spotId)
 
+    // if spot doesnt exists
+    if(!spot) {
+        res.status(404)
+        res.json({
+            "message": "Spot couldn't be found",
+            "statusCode": 404
+        })
+    }
+
+    // if userId is not the owner of the spot
+    if(userId !== spot.ownerId) {
+        res.status(401)
+        res.json({
+            "messsage": "Unauthorized User",
+            "statusCode": 401,
+        })
+    }
+    // check if spot to be updated exists and if spot belongs to current user
     if(spot && userId === spot.ownerId) {
         spot.set({
             address,
@@ -259,10 +276,22 @@ router.put('/:spotId', requireAuth, async(req, res, next) => {
         await spot.save()
         res.json(spot)
     } else {
-        res.status(404)
+        // if current user is owner, but spot attributes have validation errors
+        res.status(400)
         res.json({
-            "message": "Spot couldn't be found",
-            "statusCode": 404
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+              "address": "Street address is required",
+              "city": "City is required",
+              "state": "State is required",
+              "country": "Country is required",
+              "lat": "Latitude is not valid",
+              "lng": "Longitude is not valid",
+              "name": "Name must be less than 50 characters",
+              "description": "Description is required",
+              "price": "Price per day is required"
+            }
         })
     };
 })
