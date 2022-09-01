@@ -87,23 +87,20 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 model: Review,
                 attributes: []
             },
+            {
+                model: SpotImage,
+                attributes: ['url']
+            }
         ],
         group: ['Spot.id'],
         raw: true
     })
 
-    let spotImg = await SpotImage.findOne({
-        where: {
-            spotId: userId
-        }
-    })
-
-    // check after adding a spot image to the new spot
-    // spots.forEach(spot => {
-    //     if(spot.id === spotImg.spotId) {
-    //         spot.previewImage = spotImg.url
-    //     }
-    // })
+   spots.map(spot => {
+        spot.previewImage = spot["SpotImages.url"];
+        delete spot["SpotImages.url"]
+        return spot
+   })
 
     res.json(spots)
 })
