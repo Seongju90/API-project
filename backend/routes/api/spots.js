@@ -36,12 +36,9 @@ router.get('/', async(req, res, next) => {
         raw: true
     })
 
-<<<<<<< HEAD
     // this code works, BUT because I have to add an attribute 'url' in the model Spot image,
     // it errors out because aggregates only accepts empty attribute models.
 
-=======
->>>>>>> dev
     // spots.map(spot => {
     //     // creating previewImage setting the value to the url (renaming)
     //     spot.previewImage = spot["SpotImages.url"]
