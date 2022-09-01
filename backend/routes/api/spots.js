@@ -3,7 +3,7 @@ const express = require('express')
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = require('../../db/models');
 const { raw } = require('express');
-const booking = require('../../db/models/booking');
+const { validateBookings } = require('./bookings.js')
 
 const router = express.Router();
 
@@ -441,9 +441,14 @@ router.get('/:spotId/bookings', requireAuth, async(req, res, next) => {
         res.json({Bookings: bookings})
     }
 })
-
 // Create a Booking from a Spot based on the Spot's id
-router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
+router.post('/:spotId/bookings', requireAuth, validateBookings, async(req, res, next) => {
+
+    console.log(validateBookings)
+    console.log(requireAuth)
+    const { startDate, endDate } = req.body
+    res.json(startDate)
+
 
 })
 

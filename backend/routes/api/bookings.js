@@ -2,9 +2,23 @@ const express = require('express')
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = require('../../db/models');
+const { check } = require('express-validator');
 const { raw } = require('express');
+const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
+
+const validateBookings = [
+    check('startDate')
+        .exists({ checkFalsy: true})
+        .isAfter(new Date())
+        .withMessage("Start date must be in the future"),
+    check('endDate')
+        .exists({ checkFalsy: true})
+        .isAfter('startDate')
+        .withMessage("endDate cannot be on or before startDate"),
+    handleValidationErrors
+];
 
 /* --------------------------- ROUTERS -------------------------------*/
 
