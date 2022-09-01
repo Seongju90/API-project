@@ -442,7 +442,9 @@ router.get('/:spotId/bookings', requireAuth, async(req, res, next) => {
     }
 })
 // Create a Booking from a Spot based on the Spot's id
-router.post('/:spotId/bookings', requireAuth, validateBookings, async(req, res, next) => {
+router.post('/:spotId/bookings', [requireAuth, validateBookings], async(req, res, next) => {
+    const userId = req.user.id;
+    const spotId = req.params.spotId;
 
     console.log(validateBookings)
     console.log(requireAuth)
@@ -451,6 +453,7 @@ router.post('/:spotId/bookings', requireAuth, validateBookings, async(req, res, 
 
 
 })
+
 
 // Delete a Spot
 router.delete('/:spotId', requireAuth, async(req, res, next) => {
