@@ -1,8 +1,9 @@
 const express = require('express')
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, Spot, Review, SpotImage, sequelize, ReviewImage } = require('../../db/models');
+const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = require('../../db/models');
 const { raw } = require('express');
+const booking = require('../../db/models/booking');
 
 const router = express.Router();
 
@@ -400,6 +401,51 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     }
 })
 
+// Get all Bookings for a Spot based on the Spot's id
+router.get('/:spotId/bookings', requireAuth, async(req, res, next) => {
+    const spotId = req.params.spotId
+    const userId = req.user.id
+    const spot = await Spot.findByPk(spotId)
+    const ownerId = spot.ownerId
+
+    if(!spot) {
+        res.status(404)
+        res.json({
+            "message": "Spot couldn't be found",
+            "statusCode": 404
+        })
+    }
+
+    if(userId !== ownerId) {
+        const bookings = await Booking.findAll({
+            where: {
+                spotId
+            },
+            attributes: ['spotId', 'startDate', 'endDate']
+        })
+
+        res.json(bookings)
+    }
+
+    if(userId === ownerId) {
+        const bookings = await Booking.findAll({
+            where: {
+                spotId
+            },
+            include: {
+                model: User,
+                attributes: ['id', 'firstName', 'lastName']
+            }
+        })
+
+        res.json({Bookings: bookings})
+    }
+})
+
+// Create a Booking from a Spot based on the Spot's id
+router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
+
+})
 
 // Delete a Spot
 router.delete('/:spotId', requireAuth, async(req, res, next) => {
