@@ -17,11 +17,33 @@ router.get('/current', requireAuth, async(req, res, next) => {
         where: {
             userId
         },
-        include:
+        include: {
+            model: Spot,
+            attributes: {exclude: ['description', 'createdAt', 'updatedAt']}
+        },
+        raw: true,
+        nest: true
     })
 
+   // iterate through the bookings to get the spotId
+   for (let booking of bookings) {
+        let spotId = booking.spotId
 
-    res.json(spot)
+        let spot = await Spot.findByPk(spotId)
+        spot = spot.toJSON()
+
+        const spotImages = await SpotImage.findAll({
+            where: {
+                spotId
+            }
+        })
+
+        for (spotImage of spotImages) {
+            booking.Spot.previewImage = spotImage.url
+        }
+   }
+
+    res.json({Bookings: bookings})
 })
 
 
