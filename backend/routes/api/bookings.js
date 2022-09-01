@@ -6,14 +6,13 @@ const { check } = require('express-validator');
 const { raw } = require('express');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const bookingRouter = express.Router();
+const router = express.Router();
 
-const validateBookings = [];
 
 /* --------------------------- ROUTERS -------------------------------*/
 
 // Get all of the Current User's Bookings
-bookingRouter.get('/current', requireAuth, async(req, res, next) => {
+router.get('/current', requireAuth, async(req, res, next) => {
     const userId = req.user.id
 
     const bookings = await Booking.findAll({
@@ -49,9 +48,19 @@ bookingRouter.get('/current', requireAuth, async(req, res, next) => {
     res.json({Bookings: bookings})
 })
 
+// Edit a Booking
+router.put('/:bookingId', requireAuth, async(req, res, next) => {
+    const userId = req.user.id;
+    const bookingId = req.params.bookingId;
+    res.json(bookingId)
+
+    // const bookingToEdit = await Booking.findByPk(bookingId)
+
+    // if (bookingToEdit.userId === userId) {
+    //     res.json('success')
+    // }
+})
+
 
 // if exporting in an object must destruct out of same object
-module.exports = {
-    bookingRouter,
-    validateBookings
-}
+module.exports = router

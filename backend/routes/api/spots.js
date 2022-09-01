@@ -513,7 +513,6 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
     res.json(newBooking)
 })
 
-
 // Delete a Spot
 router.delete('/:spotId', requireAuth, async(req, res, next) => {
     const userId = req.user.id;
