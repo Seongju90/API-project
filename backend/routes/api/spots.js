@@ -36,29 +36,29 @@ router.get('/', async(req, res, next) => {
         raw: true
     })
 
-    spots.map(spot => {
-        // creating previewImage setting the value to the url (renaming)
-        spot.previewImage = spot["SpotImages.url"]
-        // delete the old key-value that is the same
-        delete spot["SpotImages.url"]
-        return spot
-    })
-
-    // let spotImg = await SpotImage.findAll({
-    //     where: {
-    //         preview: true
-    //     },
-    //     raw: true
+    // spots.map(spot => {
+    //     // creating previewImage setting the value to the url (renaming)
+    //     spot.previewImage = spot["SpotImages.url"]
+    //     // delete the old key-value that is the same
+    //     delete spot["SpotImages.url"]
+    //     return spot
     // })
 
+    let spotImg = await SpotImage.findAll({
+        where: {
+            preview: true
+        },
+        raw: true
+    })
+
     // nested for loop inefficient
-    // spots.forEach(spot => {
-    //     spotImg.forEach(img => {
-    //         if (spot.id === img.spotId) {
-    //             spot.previewImage = img.url
-    //         }
-    //     })
-    // });
+    spots.forEach(spot => {
+        spotImg.forEach(img => {
+            if (spot.id === img.spotId) {
+                spot.previewImage = img.url
+            }
+        })
+    });
 
     res.json({Spots: spots})
 });
