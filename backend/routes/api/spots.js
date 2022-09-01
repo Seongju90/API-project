@@ -93,18 +93,28 @@ router.get('/current', requireAuth, async (req, res, next) => {
             },
             {
                 model: SpotImage,
-                attributes: ['url']
+                attributes: []
             }
         ],
         group: ['Spot.id'],
         raw: true
     })
 
-   spots.map(spot => {
-        spot.previewImage = spot["SpotImages.url"];
-        delete spot["SpotImages.url"]
-        return spot
-   })
+    let spotImg = await SpotImage.findAll({
+        where: {
+            preview: true
+        },
+        raw: true
+    })
+
+    // nested for loop inefficient
+    spots.forEach(spot => {
+        spotImg.forEach(img => {
+            if (spot.id === img.spotId) {
+                spot.previewImage = img.url
+            }
+        })
+    });
 
     res.json(spots)
 })
