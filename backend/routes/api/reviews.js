@@ -109,6 +109,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     res.json(newReviewImage)
 })
 
+// Edit a Review
 router.put('/:reviewId', requireAuth, async(req, res, next) => {
     const userId = req.user.id;
     const reviewId = req.params.reviewId
@@ -137,4 +138,26 @@ router.put('/:reviewId', requireAuth, async(req, res, next) => {
     // handle body validation errors later
 })
 
+// Delete a Review
+router.delete('/:reviewId', requireAuth, async(req, res, next) => {
+    const userId = req.user.id;
+    const reviewId = req.params.reviewId
+    const reviewToDestroy = await Review.findByPk(reviewId)
+
+    if (!reviewToDestroy) {
+        res.status(404)
+        res.json({
+            "message": "Review couldn't be found",
+            "statusCode": 404
+          })
+    }
+
+    if (userId === reviewToDestroy.userId) {
+        await reviewToDestroy.destroy()
+        res.json({
+            "message": "Successfully deleted",
+            "statusCode": 200
+        })
+    }
+})
 module.exports = router;
