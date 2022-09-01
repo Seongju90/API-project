@@ -354,6 +354,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
 
     const spot = await Spot.findByPk(spotId)
     if (!spot) {
+        res.status(404)
         res.json({
             "message": "Spot couldn't be found",
             "statusCode": 404
@@ -368,6 +369,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     })
 
     if (existingReview) {
+        res.status(403)
         res.json({
             "message": "User already has a review for this spot",
             "statusCode": 403
@@ -375,6 +377,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     }
 
     if (req.body) {
+        res.status(400)
         res.json({
             "message": "Validation error",
             "statusCode": 400,
