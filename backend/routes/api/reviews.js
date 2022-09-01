@@ -24,36 +24,46 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 model: Spot,
                 attributes: {exclude: ['createdAt', 'updatedAt', 'description']}
             },
+            {
+                model: ReviewImage,
+                attributes: ['id', 'url']
+            }
         ],
         raw: true,
         // if you have associations with include that gets flatten, use nest parameter to counter that.
         nest: true
     })
 
-    // for (let review of reviews) {
-    //     // find the spot where the ID of spot is connected to spotID review
-    //     let spot = await Spot.findOne({
-    //         where: {
-    //             id: review.spotId
-    //         },
-    //         raw: true
-    //     });
+    // adding previewImage to Spot in the response
+    for (let review of reviews) {
+        // find the spot where the ID of spot is connected to spotID review
+        let spot = await Spot.findOne({
+            where: {
+                id: review.spotId
+            },
+            raw: true
+        });
 
-    //     let spotImg = await SpotImage.findAll({
-    //         where: {
-    //             spotId: spot.id
-    //         },
-    //         raw: true
-    //     });
+        // finding all the spotImages where spotId matches
+        let spotImgs = await SpotImage.findAll({
+            where: {
+                spotId: spot.id
+            },
+            raw: true
+        });
 
+        // foreach image, if the spot id matches the spot, I want to add previewImage with spot img url
+        spotImgs.forEach(spotImg => {
+            if (spotImg.spotId === spot.id) {
+                review.Spot.previewImage = spotImg.url
+            }
+        })
 
-    //     res.json(spotImg)
+        // shove the review images in an array
+        review.ReviewImages = [review.ReviewImages]
+    }
 
-    // }
-
-
-
-    // res.json({Reviews: reviews})
+    res.json({Reviews: reviews})
 })
 
 module.exports = router;
