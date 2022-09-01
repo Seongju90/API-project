@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    spotId: DataTypes.NUMBER,
-    userId: DataTypes.NUMBER,
+    spotId: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE
   }, {
