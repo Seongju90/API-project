@@ -6,7 +6,8 @@ const { raw } = require('express');
 
 const router = express.Router();
 
-// GET ALL SPOTS
+/* --------------------------- ROUTERS -------------------------------*/
+// Get all spots
 router.get('/', async(req, res, next) => {
     // EAGER LOADING
     let spots = await Spot.findAll({
@@ -62,7 +63,7 @@ router.get('/', async(req, res, next) => {
     res.json({Spots: spots})
 });
 
-// GET ALL SPOTS OWNED BY CURRENT USER
+// Get all Spots owned by the Current User
 router.get('/current', requireAuth, async (req, res, next) => {
     // pulled from requireAuth -> restore User
     const userId = req.user.id
@@ -105,6 +106,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
     res.json(spots)
 })
 
+// Create a Spot
 router.post('/', requireAuth, async (req, res, next) => {
     const userId = req.user.id;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
@@ -144,6 +146,7 @@ router.post('/', requireAuth, async (req, res, next) => {
     }
 });
 
+// Get details of a Spot from an id
 router.get('/:spotId', async (req, res, next) => {
     const id = req.params.spotId
     let spot = await Spot.findByPk(id)
@@ -201,6 +204,7 @@ router.get('/:spotId', async (req, res, next) => {
     }
 })
 
+// Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     const id = req.params.spotId;
     const { url, preview } = req.body;
@@ -232,6 +236,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     }
 });
 
+// Edit a Spot
 router.put('/:spotId', requireAuth, async(req, res, next) => {
     const userId = req.user.id;
     const spotId = req.params.spotId;
@@ -293,6 +298,7 @@ router.put('/:spotId', requireAuth, async(req, res, next) => {
     };
 })
 
+// Delete a Spot
 router.delete('/:spotId', requireAuth, async(req, res, next) => {
     const userId = req.user.id;
     const spotId = req.params.spotId;
