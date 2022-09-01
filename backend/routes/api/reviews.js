@@ -112,10 +112,11 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 router.put('/:reviewId', requireAuth, async(req, res, next) => {
     const userId = req.user.id;
     const reviewId = req.params.reviewId
+    const { review , stars} = req.body
 
-    const review = await Review.findByPk(reviewId)
+    const reviews = await Review.findByPk(reviewId)
 
-    if (!review) {
+    if (!reviews) {
         res.status(404)
         res.json({
             "message": "Review couldn't be found",
@@ -123,6 +124,16 @@ router.put('/:reviewId', requireAuth, async(req, res, next) => {
         })
     }
 
+    if (userId === reviews.userId) {
+        reviews.set({
+            review,
+            stars
+        })
+
+        await reviews.save()
+
+        res.json(reviews)
+    }
     // handle body validation errors later
 })
 
