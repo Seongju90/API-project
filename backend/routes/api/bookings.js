@@ -6,24 +6,14 @@ const { check } = require('express-validator');
 const { raw } = require('express');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const router = express.Router();
+const bookingRouter = express.Router();
 
-const validateBookings = [
-    check('startDate')
-        .exists({ checkFalsy: true})
-        .isAfter(new Date())
-        .withMessage("Start date must be in the future"),
-    check('endDate')
-        .exists({ checkFalsy: true})
-        .isAfter('startDate')
-        .withMessage("endDate cannot be on or before startDate"),
-    handleValidationErrors
-];
+const validateBookings = [];
 
 /* --------------------------- ROUTERS -------------------------------*/
 
 // Get all of the Current User's Bookings
-router.get('/current', requireAuth, async(req, res, next) => {
+bookingRouter.get('/current', requireAuth, async(req, res, next) => {
     const userId = req.user.id
 
     const bookings = await Booking.findAll({
@@ -60,7 +50,8 @@ router.get('/current', requireAuth, async(req, res, next) => {
 })
 
 
+// if exporting in an object must destruct out of same object
 module.exports = {
-    router,
+    bookingRouter,
     validateBookings
 }
