@@ -50,15 +50,9 @@ router.post(
       await setTokenCookie(res, user);
 
       return res.json({
-        user
+        user,
       });
     }
   );
-
-router.get('/test', async (req, res) => {
-  const users = await User.findAll()
-
-  return res.json(users)
-})
 
 module.exports = router;

@@ -7,8 +7,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
      toSafeObject() {
-      const { id, username, email } = this; // context will be the User instance
-      return { id, username, email };
+      // add firstName lastName here to match response
+      const { id, firstName, lastName, username, email } = this; // context will be the User instance
+      return { id, firstName, lastName, username, email };
      };
 
      validatePassword(password) {
@@ -47,23 +48,12 @@ module.exports = (sequelize, DataTypes) => {
       return await User.scope('currentUser').findByPk(user.id);
     };
     static associate(models) {
-      // define association here
+      User.hasMany(models.Review, {foreignKey: 'userId', onDelete: 'CASCADE'})
+      User.hasMany(models.Booking, {foreignKey: 'userId', onDelete: 'CASCADE'})
+      User.hasMany(models.Spot, {foreignKey: 'ownerId', onDelete: 'CASCADE'})
     }
   }
   User.init({
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        len: [4, 30],
-        isNotEmail(value) {
-          if (Validator.isEmail(value)) {
-            throw new Error("Cannot be an email.");
-          }
-        }
-      },
-    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -79,6 +69,19 @@ module.exports = (sequelize, DataTypes) => {
         len: [4,30],
         isAlpha: true
       }
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        len: [4, 30],
+        isNotEmail(value) {
+          if (Validator.isEmail(value)) {
+            throw new Error("Cannot be an email.");
+          }
+        }
+      },
     },
     email: {
       type: DataTypes.STRING,
@@ -106,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     scopes: {
       currentUser: {
-        attributes: { exclude: ["hashedPassword"] }
+        attributes: { exclude: ["hashedPassword", "createdAt", "updatedAt"] }
       },
       loginUser: {
         attributes: {}

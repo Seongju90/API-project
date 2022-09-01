@@ -47,10 +47,13 @@ router.post(
         return next(err);
       }
 
-      await setTokenCookie(res, user);
+      let token = await setTokenCookie(res, user);
+      // in order to add properties need to convert from promise to JSON object
+      let userJson = user.toJSON()
+      userJson.token = token;
 
       return res.json({
-        user
+        userJson,
       });
     }
   );
