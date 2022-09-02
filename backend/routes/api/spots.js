@@ -147,8 +147,8 @@ router.get('/', async(req, res, next) => {
     let spots = await Spot.findAll({
         // where,
         raw: true,
-        limit: size,
-        offset: (page - 1) * size
+        // limit: size,
+        // offset: (page - 1) * size
     })
 
     // Add avgRating Data to Spot response
@@ -192,7 +192,8 @@ router.get('/', async(req, res, next) => {
         })
     });
 
-    res.json({Spots: spots, page, size})
+    // , page, size
+    res.json({Spots: spots})
 });
 
 // Get all Spots owned by the Current User
