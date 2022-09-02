@@ -18,6 +18,7 @@ const validateLogin = [
   handleValidationErrors
 ];
 
+// Returns the information about the current user that is logged in.
 router.get(
   '/',
   restoreUser,
@@ -27,10 +28,14 @@ router.get(
       return res.json({
         user: user.toSafeObject()
       });
-    } else return res.json({});
+    } else return res.status(401).json({
+      "message": "Authentication required",
+      "statusCode": 401
+    });
   }
 );
 
+// Logs in a current user with valid credentials and returns the current user's information.
 router.post(
     '/',
     validateLogin,
@@ -48,12 +53,17 @@ router.post(
       }
 
       let token = await setTokenCookie(res, user);
-      // in order to add properties need to convert from promise to JSON object
-      let userJson = user.toJSON()
-      userJson.token = token;
 
-      return res.json({
-        userJson,
+      let userData = {}
+      userData.id = user.id
+      userData.firstName = user.firstName
+      userData.lastName = user.lastName
+      userData.email = user.email
+      userData.username = user.username
+      userData.token = token
+
+      res.json({
+        ...userData
       });
     }
   );
