@@ -5,15 +5,15 @@ const { check } = require('express-validator');
 const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = require('../../db/models');
 const { raw } = require('express');
 const { handleValidationErrors } = require('../../utils/validation');
-const { validateBookings } = require('./bookings.js');
 const { Op } = require('sequelize');
 
 const router = express.Router();
 
 /* --------------------------- ROUTERS -------------------------------*/
+
 // Get all spots
 router.get('/', async(req, res, next) => {
-    // EAGER LOADING
+
     let spots = await Spot.findAll({
         attributes: {
             include: [
@@ -40,17 +40,6 @@ router.get('/', async(req, res, next) => {
         raw: true
     })
 
-    // this code works, BUT because I have to add an attribute 'url' in the model Spot image,
-    // it errors out because aggregates only accepts empty attribute models.
-
-    // spots.map(spot => {
-    //     // creating previewImage setting the value to the url (renaming)
-    //     spot.previewImage = spot["SpotImages.url"]
-    //     // delete the old key-value that is the same
-    //     delete spot["SpotImages.url"]
-    //     return spot
-    // })
-
     let spotImg = await SpotImage.findAll({
         where: {
             preview: true
@@ -58,7 +47,7 @@ router.get('/', async(req, res, next) => {
         raw: true
     })
 
-    // nested for loop inefficient
+    // loop through the return value of spots findAll = array
     spots.forEach(spot => {
         spotImg.forEach(img => {
             if (spot.id === img.spotId) {
@@ -120,7 +109,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         })
     });
 
-    res.json(spots)
+    res.json({Spots: spots})
 })
 
 // Create a Spot
@@ -144,6 +133,7 @@ router.post('/', requireAuth, async (req, res, next) => {
 
         res.json(newSpot)
     } else {
+        // need to change this to sequelize validations later
         res.status(400)
         res.json({
             "message": "Validation Error",
@@ -298,7 +288,7 @@ router.put('/:spotId', requireAuth, async(req, res, next) => {
         await spot.save()
         res.json(spot)
     } else {
-        // if current user is owner, but spot attributes have validation errors
+        // need to setup sequelize validator errors here
         res.status(400)
         res.json({
             "message": "Validation Error",
@@ -360,6 +350,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     const { review, stars } = req.body
 
     const spot = await Spot.findByPk(spotId)
+
     if (!spot) {
         res.status(404)
         res.json({
@@ -368,6 +359,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
         })
     }
 
+    // queried for existing review with userId && spotId
     const existingReview = await Review.findOne({
         where: {
             userId,
@@ -383,7 +375,17 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
           })
     }
 
+    // if I have req body make a new review
     if (req.body) {
+        const newReview = await Review.create({
+            userId,
+            spotId,
+            review,
+            stars
+        })
+        res.json(newReview)
+    } else {
+        // need to make custom validators for sequelize later
         res.status(400)
         res.json({
             "message": "Validation error",
@@ -393,17 +395,6 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
               "stars": "Stars must be an integer from 1 to 5",
             }
         })
-    }
-
-    if (spotId) {
-        const newReview = await Review.create({
-            userId,
-            spotId,
-            review,
-            stars
-        })
-
-        res.json(newReview)
     }
 })
 
@@ -540,11 +531,42 @@ router.delete('/:spotId', requireAuth, async(req, res, next) => {
     }
 })
 
-
-
-
-
-
-
-
 module.exports = router;
+
+/*
+--------------------CODE THAT WOULD WORK WITH SQLITE3 BUT NOT POSTGRESSQL-------------
+let spots = await Spot.findAll({
+        attributes: {
+            include: [
+                [
+                    sequelize.fn("AVG", sequelize.col("Reviews.stars")),
+                    "avgRating"
+                ]
+            ],
+        },
+        include: [
+            {
+                model: Review,
+                attributes: []
+            },
+            {
+                model: SpotImage,
+                attributes: ['url'], // eager loaded url here
+                where: {
+                    preview: true
+                }
+            },
+        ],
+        group: ['Spot.id'],
+        raw: true
+    })
+
+    spots.map(spot => {
+        // creating previewImage setting the value to the url (renaming)
+        spot.previewImage = spot["SpotImages.url"]
+        // delete the old key-value that is the same
+        delete spot["SpotImages.url"]
+        return spot
+    })
+
+    */

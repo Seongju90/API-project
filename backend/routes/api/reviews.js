@@ -7,8 +7,7 @@ const router = express.Router();
 /* --------------------------- ROUTERS -------------------------------*/
 
 router.get('/current', requireAuth, async (req, res, next) => {
-    // const userId = req.user.id;
-    const userId = 3
+    const userId = req.user.id;
 
     // eager load all the reviews where current user has
     let reviews = await Review.findAll({
@@ -97,16 +96,19 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         })
     }
 
-    let newReviewImage = await ReviewImage.create({
-        url
-    })
+    // Review must belong to the current user
+    if (userId === reviews.userId) {
+        let newReviewImage = await ReviewImage.create({
+            url
+        })
 
-    // formatting the response
-    newReviewImage = newReviewImage.toJSON()
-    delete newReviewImage["createdAt"]
-    delete newReviewImage["updatedAt"]
+        // formatting the response
+        newReviewImage = newReviewImage.toJSON()
+        delete newReviewImage["createdAt"]
+        delete newReviewImage["updatedAt"]
 
-    res.json(newReviewImage)
+        res.json(newReviewImage)
+    }
 })
 
 // Edit a Review
