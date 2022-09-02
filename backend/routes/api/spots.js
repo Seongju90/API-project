@@ -13,33 +13,166 @@ const router = express.Router();
 
 // Get all spots
 router.get('/', async(req, res, next) => {
+    // Return spots filtered by query parameters.
+    let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice, page, size } = req.query
 
+    if (page > 10) page = 1
+    if (size > 20) size = 20
+
+    if (page <= 0) {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "page": "Page must be greater than or equal to 0"
+            }
+        })
+    }
+    if (size <= 0) {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "size": "Size must be greater than or equal to 0"
+            }
+        })
+    }
+    let parsedMinLat = parseInt(minLat)
+    let parsedMaxLat = parseInt(maxLat)
+    let parsedMinLng = parseInt(minLng)
+    let parsedMaxLng = parseInt(maxLng)
+    let parsedMinPrice = parseInt(minPrice)
+    let parsedMaxPrice = parseInt(maxPrice)
+    // create where query
+    const where = {};
+    // check if its an integer OR (lat - rounded lat not zero) === decimal OR doesnt exist (optional)
+    if (isNaN(parsedMinLat)) {
+        1 === 1; // do nothing
+    } else if (Number.isInteger(parsedMinLat) || (parsedMinLat - Math.floor(parsedMinLat)) !== 0) {
+        where.parsedMinLat = parsedMinLat
+    } else {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "minLat": "Minimum latitude is invalid",
+            }
+        })
+    }
+
+    if (isNaN(parsedMaxLat)) {
+        1 === 1; // do nothing
+    } else if (Number.isInteger(parsedMaxLat) || (parsedMaxLat - Math.floor(parsedMaxLat)) !== 0 || undefined) {
+        where.parsedMaxLat = parsedMaxLat
+    } else {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "maxLat": "Maximum latitude is invalid",
+            }
+        })
+    }
+
+    if (isNaN(parsedMinLng)) {
+        1 === 1; // do nothing
+    } else if (Number.isInteger(parsedMinLng) || (parsedMinLng - Math.floor(parsedMinLng)) !== 0 || undefined) {
+        where.parsedMinLng = parsedMinLng
+    } else {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "minLng": "Maximum longitude is invalid"
+            }
+        })
+    }
+
+    if (isNaN(parsedMaxLng)) {
+        1 === 1; // do nothing
+    } else if (Number.isInteger(parsedMaxLng) || (parsedMaxLng - Math.floor(parsedMaxLng)) !== 0 || undefined) {
+        where.parsedMaxLng = parsedMaxLng
+    } else {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "maxLng": "Minimum longitude is invalid"
+            }
+        })
+    }
+
+    if (isNaN(parsedMinPrice)) {
+        1 === 1; // do nothing
+    } else if ((Number.isInteger(parsedMinPrice) || (parsedMinPrice - Math.floor(parsedMinPrice)) !== 0 || undefined)
+        && parsedMinPrice >= 0) {
+        where.parsedMinPrice = parsedMinPrice
+    } else {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "minPrice": "Minimum price must be greater than or equal to 0"
+            }
+        })
+    }
+
+    if (isNaN(parsedMaxPrice)) {
+        1 === 1; // do nothing
+    } else if ((Number.isInteger(parsedMaxPrice) || (parsedMaxPrice - Math.floor(parsedMaxPrice)) !== 0 || undefined)
+        && parsedMaxPrice >= 0) {
+        where.parsedMaxPrice = parsedMaxPrice
+    } else {
+        res.status(400)
+        res.json({
+            "message": "Validation Error",
+            "statusCode": 400,
+            "errors": {
+                "maxPrice": "Maximum price must be greater than or equal to 0"
+            }
+        })
+    }
+
+    // find all spots with pagination
     let spots = await Spot.findAll({
-        attributes: {
-            include: [
-                [
-                    sequelize.fn("AVG", sequelize.col("Reviews.stars")),
-                    "avgRating"
-                ]
-            ],
-        },
-        include: [
-            {
-                model: Review,
-                attributes: []
-            },
-            {
-                model: SpotImage,
-                attributes: [],
-                where: {
-                    preview: true
-                }
-            },
-        ],
-        group: ['Spot.id'],
-        raw: true
+        where,
+        raw: true,
+        limit: size,
+        offset: (page - 1) * size
     })
 
+    // Add avgRating Data to Spot response
+    for (let spot of spots) {
+        // manually calculate avg because can't eagar load aggregate
+        const numberReviews = await Review.count({
+            where: {
+                spotId: spot.id
+            },
+            group: ['spotId'],
+            raw: true
+        })
+
+        const totalReviews = await Review.sum('stars', {
+            where: {
+                spotId: spot.id
+            },
+            group: ['spotId'],
+            raw: true
+        })
+
+        // count returns an array
+        const avgRating = numberReviews[0].count / totalReviews
+        spot.avgRating = avgRating
+    }
+
+    // Add previewImage to Spot response
     let spotImg = await SpotImage.findAll({
         where: {
             preview: true
@@ -56,7 +189,7 @@ router.get('/', async(req, res, next) => {
         })
     });
 
-    res.json({Spots: spots})
+    res.json({Spots: spots, page, size})
 });
 
 // Get all Spots owned by the Current User
@@ -529,20 +662,22 @@ router.delete('/:spotId', requireAuth, async(req, res, next) => {
     const spotId = req.params.spotId;
 
     // check to see if spot to be delete exists
-    const spot = await Spot.findByPk(spotId)
+    const spotToDestroy = await Spot.findByPk(spotId)
 
-    // if spot exists and the user is the owner of the spot
-    if (spot && userId === spot.ownerId) {
-        await spot.destroy()
-        res.json({
-            "message": "Successfully deleted",
-            "statusCode": 200
-        })
-    } else {
+    if (!spotToDestroy) {
         res.status(404)
         res.json({
             "message": "Spot couldn't be found",
             "statusCode": 404
+        })
+    }
+
+    // if spot exists and the user is the owner of the spot
+    if (userId === spotToDestroy.ownerId) {
+        await spotToDestroy.destroy()
+        res.json({
+            "message": "Successfully deleted",
+            "statusCode": 200
         })
     }
 })
