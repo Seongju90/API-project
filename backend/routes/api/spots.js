@@ -20,7 +20,7 @@ router.get('/', async(req, res, next) => {
     if (page > 10) page = 1
     if (size > 20) size = 20
 
-    if (page <= 0) {
+    if (page <= 0 || !page) {
         res.status(400)
         res.json({
             "message": "Validation Error",
@@ -30,7 +30,7 @@ router.get('/', async(req, res, next) => {
             }
         })
     }
-    if (size <= 0) {
+    if (size <= 0 || !size) {
         res.status(400)
         res.json({
             "message": "Validation Error",
