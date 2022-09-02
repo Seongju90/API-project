@@ -12,8 +12,6 @@ router.delete('/:imageId', requireAuth, async(req, res, next) => {
     const imageId = req.params.imageId;
 
     const reviewImage = await ReviewImage.findByPk(imageId)
-    const review = await Review.findByPk(userId)
-
     // Error response: Couldn't find a Review Image with the specified id
     if (!reviewImage) {
         res.status(404)
@@ -23,14 +21,17 @@ router.delete('/:imageId', requireAuth, async(req, res, next) => {
         })
     }
 
+    const review = await Review.findByPk(reviewImage.reviewId)
+
     // Review must belong to the current user
     if (userId === review.userId) {
+        await reviewImage.destroy()
+
         res.json({
             "message": "Successfully deleted",
             "statusCode": 200
         })
     }
-
 })
 
 module.exports = router;
