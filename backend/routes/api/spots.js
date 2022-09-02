@@ -144,7 +144,7 @@ router.get('/', async(req, res, next) => {
 
     // find all spots with pagination
     let spots = await Spot.findAll({
-        where,
+        // where,
         raw: true,
         limit: size,
         offset: (page - 1) * size
