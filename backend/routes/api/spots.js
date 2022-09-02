@@ -540,7 +540,7 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
         res.json(newBooking)
     } else {
         // loop through the bookings, if start date greater than exist start
-        // && end date is less than exist end throw error
+        // && or end date exist inbetween
         for (let bookings of existingBookings) {
             let existStartDate = Date.parse(bookings.startDate)
             let existEndDate = Date.parse(bookings.endDate)
