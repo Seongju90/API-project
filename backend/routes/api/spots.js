@@ -14,7 +14,8 @@ const router = express.Router();
 // Get all spots
 router.get('/', async(req, res, next) => {
     // Return spots filtered by query parameters.
-    let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice, page, size } = req.query
+    // minLat, maxLat, minLng, maxLng, minPrice, maxPrice,
+    let { page, size } = req.query
 
     if (page > 10) page = 1
     if (size > 20) size = 20
