@@ -16,11 +16,8 @@ router.get('/', async(req, res, next) => {
     // Return spots filtered by query parameters.
     let {page, size } = req.query
 
-    console.log(page)
-    console.log(size)
-
-    if (page > 10) page = 1
-    if (size > 20) size = 20
+    if (page > 10 || !page) page = 1
+    if (size > 20 || !size) size = 20
 
     if (page <= 0) {
         res.status(400)
