@@ -17,10 +17,10 @@ router.get('/', async(req, res, next) => {
     // minLat, maxLat, minLng, maxLng, minPrice, maxPrice,
     let { page, size } = req.query
 
-    if (page > 10) page = 1
-    if (size > 20) size = 20
+    if (page > 10 || !page) page = 1
+    if (size > 20 || !size) size = 20
 
-    if (page <= 0 || !page) {
+    if (page <= 0) {
         res.status(400)
         res.json({
             "message": "Validation Error",
@@ -30,7 +30,7 @@ router.get('/', async(req, res, next) => {
             }
         })
     }
-    if (size <= 0 || !size) {
+    if (size <= 0) {
         res.status(400)
         res.json({
             "message": "Validation Error",
