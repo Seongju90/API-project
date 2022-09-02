@@ -128,7 +128,8 @@ router.delete('/:bookingId', requireAuth, async(req, res, next) => {
     const bookingId = req.params.bookingId;
     const todayDate = Date.parse(new Date())
 
-    const booking = await Booking.findByPk(bookingId)
+    // don't forget to turn to json please
+    let booking = await Booking.findByPk(bookingId)
 
     // Error response: Couldn't find a Booking with the specified id
     if (!booking) {
@@ -139,8 +140,12 @@ router.delete('/:bookingId', requireAuth, async(req, res, next) => {
         })
     }
 
+    // parse to JSON to get raw data to compare dates
+    let bookingJson = booking.toJSON()
+    const parsedStartDate = Date.parse(bookingJson.startDate)
     // Error response: Bookings that have been started can't be deleted
-    if (todayDate >= booking.startDate) {
+    if (todayDate >= parsedStartDate) {
+        console.log("success")
         res.status(403)
         res.json({
             "message": "Bookings that have been started can't be deleted",
@@ -149,7 +154,7 @@ router.delete('/:bookingId', requireAuth, async(req, res, next) => {
     }
 
     // Booking must belong to the current user or the Spot must belong to the current user
-    if (userId === booking.userId) {
+    if (userId === booking.userId && todayDate <= parsedStartDate) {
         await booking.destroy()
         res.json({
             "message": "Successfully deleted",
