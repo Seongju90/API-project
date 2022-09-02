@@ -25,8 +25,14 @@ router.get(
   (req, res) => {
     const { user } = req;
     if (user) {
+      user.toSafeObject()
+      const { id, firstName, lastName, email, username } = user
       return res.json({
-        user: user.toSafeObject()
+        id,
+        firstName,
+        lastName,
+        email,
+        username
       });
     } else return res.status(401).json({
       "message": "Authentication required",
