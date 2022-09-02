@@ -26,10 +26,10 @@ module.exports = {
         type: Sequelize.STRING(255)
       },
       lat: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL
       },
       lng: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL
       },
       name: {
         type: Sequelize.STRING(255)
@@ -38,7 +38,8 @@ module.exports = {
         type: Sequelize.STRING(255)
       },
       price: {
-        type: Sequelize.INTEGER
+        // price can include decimals
+        type: Sequelize.DECIMAL
       },
       createdAt: {
         allowNull: false,

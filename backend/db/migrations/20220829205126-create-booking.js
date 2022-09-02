@@ -9,13 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       spotId: {
-        type: Sequelize.NUMBER,
-        references: { model: 'Spots' },
+        type: Sequelize.INTEGER,
+        references: { model: 'Spots', key: 'id' },
         onDelete: 'CASCADE'
       },
       userId: {
-        type: Sequelize.NUMBER,
-        references: { model: 'Users' },
+        type: Sequelize.INTEGER,
+        references: { model: 'Users', key: 'id' },
         onDelete: 'CASCADE'
       },
       startDate: {

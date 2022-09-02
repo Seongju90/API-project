@@ -23,7 +23,7 @@ const spots = [
     lng: 50,
     name: 'Land of Gamers',
     description: 'House suited for gaming nerds',
-    price: '80',
+    price: 80,
   },
   {
     ownerId: 3,

@@ -45,12 +45,49 @@ router.post(
       // add the firstName lastName attributes here to make a post request of a signup
       const { firstName, lastName, email, password, username } = req.body;
       // it uses the static signup function in user.js on line 45 to create a user
+
+      const existingEmail = await User.findOne({
+        where: {
+          email
+        }
+      })
+
+      const existingUsername = await User.findOne({
+        where: {
+          username
+        }
+      })
+
+      if (existingEmail) {
+        res.status(403)
+        res.json({
+          "message": "User already exists",
+          "statusCode": 403,
+          "errors": {
+            "email": "User with that email already exists"
+          }
+        })
+      }
+
+      if (existingUsername) {
+        res.status(403)
+        res.json({
+            "message": "User already exists",
+            "statusCode": 403,
+            "errors": {
+              "username": "User with that username already exists"
+            }
+        })
+      }
+
       const user = await User.signup({ firstName, lastName, email, username, password });
 
-      await setTokenCookie(res, user);
+      let token = await setTokenCookie(res, user);
+      token.toJSON() = token
 
       return res.json({
         user,
+        token
       });
     }
   );
