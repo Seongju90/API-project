@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     endDate: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     }
   }, {
     sequelize,

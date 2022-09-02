@@ -7,13 +7,12 @@ const router = express.Router();
 /* --------------------------- ROUTERS -------------------------------*/
 
 router.get('/current', requireAuth, async (req, res, next) => {
-    // const userId = req.user.id;
-    const userId = 3
+    const userId = req.user.id;
 
     // eager load all the reviews where current user has
     let reviews = await Review.findAll({
         where: {
-            userId,
+            userId
         },
         include: [
             {
@@ -29,38 +28,29 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 attributes: ['id', 'url']
             }
         ],
+        // returns raw data of promises
         raw: true,
-        // if you have associations with include that gets flatten, use nest parameter to counter that.
+        // If an attribute name of the table contains dots,
+        // the resulting objects can become nested objects
         nest: true
     })
 
     // adding previewImage to Spot in the response
     for (let review of reviews) {
-        // find the spot where the ID of spot is connected to spotID review
-        let spot = await Spot.findOne({
-            where: {
-                id: review.spotId
-            },
-            raw: true
-        });
-
         // finding all the spotImages where spotId matches
         let spotImgs = await SpotImage.findAll({
             where: {
-                spotId: spot.id
+                spotId: review.Spot.id
             },
             raw: true
         });
 
         // foreach image, if the spot id matches the spot, I want to add previewImage with spot img url
         spotImgs.forEach(spotImg => {
-            if (spotImg.spotId === spot.id) {
+            if (spotImg.spotId === review.Spot.id) {
                 review.Spot.previewImage = spotImg.url
             }
         })
-
-        // shove the review images in an array
-        review.ReviewImages = [review.ReviewImages]
     }
 
     res.json({Reviews: reviews})
@@ -97,16 +87,21 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         })
     }
 
-    let newReviewImage = await ReviewImage.create({
-        url
-    })
+    // Review must belong to the current user
+    if (userId === reviews.userId) {
+        let newReviewImage = await ReviewImage.create({
+            reviewId,
+            url
+        })
 
-    // formatting the response
-    newReviewImage = newReviewImage.toJSON()
-    delete newReviewImage["createdAt"]
-    delete newReviewImage["updatedAt"]
+        // formatting the response
+        newReviewImage = newReviewImage.toJSON()
+        delete newReviewImage['reviewId']
+        delete newReviewImage["createdAt"]
+        delete newReviewImage["updatedAt"]
 
-    res.json(newReviewImage)
+        res.json(newReviewImage)
+    }
 })
 
 // Edit a Review
@@ -149,7 +144,7 @@ router.delete('/:reviewId', requireAuth, async(req, res, next) => {
         res.json({
             "message": "Review couldn't be found",
             "statusCode": 404
-          })
+        })
     }
 
     if (userId === reviewToDestroy.userId) {
