@@ -54,12 +54,13 @@ router.get('/', async(req, res, next) => {
 
     // Add avgRating Data to Spot response
     for (let spot of spots) {
+        console.log('.....', spot)
         // manually calculate avg because can't eagar load aggregate
         const numberReviews = await Review.count({
             where: {
                 spotId: spot.id
             },
-            group: ['spotId'],
+            // group: ['spotId'],
             raw: true
         })
 
@@ -67,12 +68,15 @@ router.get('/', async(req, res, next) => {
             where: {
                 spotId: spot.id
             },
-            group: ['spotId'],
+            // group: ['spotId'],
             raw: true
         })
 
         // count returns an array
-        const avgRating = numberReviews[0].count / totalReviews
+        console.log(numberReviews)
+        console.log(totalReviews)
+        // const avgRating = numberReviews[0].count / totalReviews *this doesn't work*
+        const avgRating = numberReviews/ totalReviews
         spot.avgRating = avgRating
     }
 
@@ -250,22 +254,25 @@ router.get('/:spotId', async (req, res, next) => {
 
 // Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async(req, res, next) => {
+    const userId = req.user.id
     const id = req.params.spotId;
     const { url, previewImage } = req.body;
 
     // if previewImage exists in Spot set that value to false then
     // add new SpotImage to that spot (LATER WE NEED THIS LOGIC)
 
-    const spotExists = await Spot.findByPk(id)
+    const spot = await Spot.findByPk(id)
 
     // if spot doesn't exists throw an error
-    if (!spotExists) {
+    if (!spot) {
         res.status(404)
         res.json({
             "message": "Spot couldn't be found",
             "statusCode": 404
         })
-    } else {
+    }
+
+    if (userId === spot.ownerId) {
         // else create a new spotimage at that spot
         const newSpotImg = await SpotImage.create({
             spotId: id,
@@ -280,6 +287,12 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         })
 
         res.json(formatSpotImg)
+    } else {
+        res.status(403)
+        res.json({
+            message: "You do not have authorization to add images to this spot",
+            statusCode: 403
+        })
     }
 });
 
