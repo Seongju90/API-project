@@ -46,6 +46,7 @@ router.get('/', async(req, res, next) => {
 
     // find all spots with pagination
     let spots = await Spot.findAll({
+
         raw: true,
         limit: size,
         offset: (page - 1) * size
@@ -540,7 +541,7 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
         res.json(newBooking)
     } else {
         // loop through the bookings, if start date greater than exist start
-        // && or end date exist inbetween
+        // && end date is less than exist end throw error
         for (let bookings of existingBookings) {
             let existStartDate = Date.parse(bookings.startDate)
             let existEndDate = Date.parse(bookings.endDate)
