@@ -9,6 +9,45 @@ const { Op } = require('sequelize');
 
 const router = express.Router();
 
+/* -------------------------- VALIDATIONS --------------------------- */
+const validateSpot = [
+    check('address')
+        // fields with falsy values will also not exist, different then undefined
+        .exists({ checkFalsy: true })
+        .isAlphanumeric('en-US', {ignore: ' '}) // ignore ' ' will ignore white space
+        .withMessage('Street address is required'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .isAlpha('en-US', {ignore: ' '})
+        .withMessage('City is required'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .isAlpha()
+        .withMessage('State is required'),
+    check('country')
+        .exists({ checkFalsy: true })
+        .isAlpha('en-US', {ignore: ' '})
+        .withMessage('Country is required'),
+    check('lat')
+        .isDecimal() // check if STRING represents decimal number
+        .withMessage('Latitude is not valid'),
+    check('lng')
+        .isDecimal()
+        .withMessage('Longitude is not valid'),
+    check('name')
+        .exists({ checkFalsy: true })
+        .isAlpha('en-US', {ignore: ' '})
+        .isLength({max: 49})
+        .withMessage('Name must be less than 50 characters'),
+    check('description')
+        .exists({ checkFalsy: true })
+        .withMessage('Description is required'),
+    check('price')
+        .exists({ checkFalsy: true })
+        .isNumeric() // check only for numbers
+        .withMessage('Price per day is required'),
+    handleValidationErrors
+]
 /* --------------------------- ROUTERS -------------------------------*/
 
 // Get all spots
@@ -54,13 +93,12 @@ router.get('/', async(req, res, next) => {
 
     // Add avgRating Data to Spot response
     for (let spot of spots) {
-        console.log('.....', spot)
+
         // manually calculate avg because can't eagar load aggregate
         const numberReviews = await Review.count({
             where: {
                 spotId: spot.id
             },
-            // group: ['spotId'],
             raw: true
         })
 
@@ -68,13 +106,9 @@ router.get('/', async(req, res, next) => {
             where: {
                 spotId: spot.id
             },
-            // group: ['spotId'],
             raw: true
         })
 
-        // count returns an array
-        console.log(numberReviews)
-        console.log(totalReviews)
         // const avgRating = numberReviews[0].count / totalReviews *this doesn't work*
         const avgRating = numberReviews/ totalReviews
         spot.avgRating = avgRating
@@ -104,9 +138,6 @@ router.get('/', async(req, res, next) => {
 router.get('/current', requireAuth, async (req, res, next) => {
     // pulled from requireAuth -> restore User
     const userId = req.user.id
-
-    //testing
-    // const userId = 1
 
     let spots = await Spot.findAll({
         where: {
@@ -154,7 +185,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
 })
 
 // Create a Spot
-router.post('/', requireAuth, async (req, res, next) => {
+router.post('/', requireAuth, validateSpot, async (req, res, next) => {
     const userId = req.user.id;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
@@ -173,24 +204,6 @@ router.post('/', requireAuth, async (req, res, next) => {
         })
 
         res.json(newSpot)
-    } else {
-        // need to change this to sequelize validations later
-        res.status(400)
-        res.json({
-            "message": "Validation Error",
-            "statusCode": 400,
-            "errors": {
-              "address": "Street address is required",
-              "city": "City is required",
-              "state": "State is required",
-              "country": "Country is required",
-              "lat": "Latitude is not valid",
-              "lng": "Longitude is not valid",
-              "name": "Name must be less than 50 characters",
-              "description": "Description is required",
-              "price": "Price per day is required"
-            }
-          })
     }
 });
 
