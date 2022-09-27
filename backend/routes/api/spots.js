@@ -333,6 +333,7 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res, next) => {
             "statusCode": 401,
         })
     }
+
     // check if spot to be updated exists and if spot belongs to current user
     if(spot && userId === spot.ownerId) {
         spot.set({
@@ -355,9 +356,6 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res, next) => {
 // Get all Reviews by a Spot's id
 router.get('/:spotId/reviews', async (req, res, next) => {
     const spotId = req.params.spotId;
-
-    // testing
-    // const spotId = 1;
 
     const spot = await Spot.findByPk(spotId);
 

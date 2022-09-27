@@ -30,8 +30,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
         ],
         // returns raw data of promises
         raw: true,
-        // If an attribute name of the table contains dots,
-        // the resulting objects can become nested objects
+        // associations with include become flatten, to counteract that we use
+        // the nest: true
         nest: true
     })
 
@@ -40,6 +40,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         // finding all the spotImages where spotId matches
         let spotImgs = await SpotImage.findAll({
             where: {
+                // review.Spot.id because if you flatten the first query, Spot.id is a key in the object
                 spotId: review.Spot.id
             },
             raw: true
