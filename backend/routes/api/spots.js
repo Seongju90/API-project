@@ -454,10 +454,11 @@ router.get('/:spotId/bookings', requireAuth, async(req, res, next) => {
         })
     }
 
-    // need this below the if statement on 413 because the functions below depend on
+    // need this below the if statement above because the functions below depend on
     // ownerID to exist
     const ownerId = spot.ownerId
 
+    // if the user isn't the owner we want to find all bookings
     if(userId !== ownerId) {
         const bookings = await Booking.findAll({
             where: {
@@ -469,6 +470,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res, next) => {
         res.json(bookings)
     }
 
+    // if user is the owner we want a different structured response
     if(userId === ownerId) {
         const bookings = await Booking.findAll({
             where: {
