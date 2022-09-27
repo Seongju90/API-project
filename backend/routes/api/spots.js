@@ -269,7 +269,7 @@ router.get('/:spotId', async (req, res, next) => {
 router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     const userId = req.user.id
     const id = req.params.spotId;
-    const { url, previewImage } = req.body;
+    const { url, preview } = req.body;
 
     // if previewImage exists in Spot set that value to false then
     // add new SpotImage to that spot (LATER WE NEED THIS LOGIC)
@@ -290,7 +290,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         const newSpotImg = await SpotImage.create({
             spotId: id,
             url,
-            preview: previewImage
+            preview
         })
 
         let jsonSpotImg = newSpotImg.toJSON()
