@@ -1,7 +1,7 @@
 const express = require('express')
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { check } = require('express-validator');
+const { check, sanitize } = require('express-validator');
 const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = require('../../db/models');
 const { raw } = require('express');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -46,6 +46,20 @@ const validateSpot = [
         .isNumeric() // check only for numbers
         .withMessage('Price per day is required'),
     handleValidationErrors
+]
+
+const validateEndDate = [
+    // using the toDate() sanitizer to convert the "startDate string to date"
+    sanitize('startDate').toDate(),
+    check('endDate').toDate()
+        // use a custom validator to check endDate is after startDate
+        .custom((date, { req }) => {
+            // req = request body containing the keys startDate and endDate
+            // using getTime() method to convert date to miliseconds to compare
+            if (date.getTime() <= req.body.startDate.getTime()) {
+                throw new Error("endDate cannot be on or before startDate")
+            }
+        }),
 ]
 /* --------------------------- ROUTERS -------------------------------*/
 
@@ -487,12 +501,12 @@ router.get('/:spotId/bookings', requireAuth, async(req, res, next) => {
 })
 
 // Create a Booking from a Spot based on the Spot's id
-router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
+router.post('/:spotId/bookings', requireAuth, validateEndDate, async(req, res, next) => {
     const userId = req.user.id
     const spotId = req.params.spotId
 
     const { startDate, endDate } = req.body
-
+    //validateEndDate middleware converts the startDate && endDate strings to a Date Object
     const spot = await Spot.findByPk(spotId)
 
     if (!spot) {
@@ -503,31 +517,6 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
         })
     }
 
-    // Spot must NOT belong to the current user
-    // If the userId matches ownerID and spotId
-    // if (userId === spot.ownerId) {
-    //     res.status(403)
-    //     res.json({
-    //         "message": "Forbidden",
-    //         "statusCode": 403
-    //     })
-    // }
-
-    let endDateParsed = new Date(endDate)
-    let startDateParsed = new Date(startDate)
-
-    if (endDateParsed <= startDateParsed) {
-        res.status(404)
-        res.json({
-            "message": "Validation error",
-            "statusCode": 400,
-            "errors": {
-              "endDate": "endDate cannot be on or before startDate"
-            }
-        })
-    }
-    console.log(spotId)
-    console.log(userId)
     // find all the bookings
     let existingBookings = await Booking.findAll({
         where: {
@@ -596,40 +585,7 @@ router.delete('/:spotId', requireAuth, async(req, res, next) => {
 module.exports = router;
 
 /*
---------------------CODE THAT WOULD WORK WITH SQLITE3 BUT NOT POSTGRESSQL-------------
-let spots = await Spot.findAll({
-        attributes: {
-            include: [
-                [
-                    sequelize.fn("AVG", sequelize.col("Reviews.stars")),
-                    "avgRating"
-                ]
-            ],
-        },
-        include: [
-            {
-                model: Review,
-                attributes: []
-            },
-            {
-                model: SpotImage,
-                attributes: ['url'], // eager loaded url here
-                where: {
-                    preview: true
-                }
-            },
-        ],
-        group: ['Spot.id'],
-        raw: true
-    })
-
-    spots.map(spot => {
-        // creating previewImage setting the value to the url (renaming)
-        spot.previewImage = spot["SpotImages.url"]
-        // delete the old key-value that is the same
-        delete spot["SpotImages.url"]
-        return spot
-    })
+--------------------CODE THAT WOULD WORK WITH SQLITE3 BUT NOT POSTGRESSQL------------
 
     }
     let parsedMinLat = parseInt(minLat)
