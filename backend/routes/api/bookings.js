@@ -70,7 +70,7 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
     const bookingEndDate = Date.parse(booking.endDate)
     const todayDate = Date.parse(new Date())
 
-   if (reqEndDate <= reqStartDate) {
+    if (reqEndDate <= reqStartDate) {
         res.status(400)
         res.json({
             "message": "Validation error",
@@ -79,36 +79,45 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
               "endDate": "endDate cannot come before startDate"
             }
         })
-   }
+    }
 
-   if (todayDate >= bookingEndDate) {
+    // if the request start date of booking is less than today's date it is in the past.
+    if (todayDate >= reqStartDate) {
         res.status(403)
         res.json({
             "message": "Past bookings can't be modified",
             "statusCode": 403
         })
-   }
-
-   if (reqStartDate >= bookingStartDate && reqStartDate <= bookingEndDate) {
-        res.status(403)
-        res.json({
-            "message": "Sorry, this spot is already booked for the specified dates",
-            "statusCode": 403,
-            "errors": {
-              "startDate": "Start date conflicts with an existing booking",
-            }
-        })
     }
 
-   if (reqEndDate >= bookingStartDate && reqEndDate <= bookingEndDate) {
-        res.status(403)
-        res.json({
-            "message": "Sorry, this spot is already booked for the specified dates",
-            "statusCode": 403,
-            "errors": {
-               "endDate": "End date conflicts with an existing booking",
+    // create and empty error object
+    const err = [];
+    if (reqStartDate >= bookingStartDate && reqStartDate <= bookingEndDate) {
+        err.push("Start date conflicts with an existing booking")
+    }
+
+    if (reqEndDate >= bookingStartDate && reqEndDate <= bookingEndDate) {
+       err.push("End date conflicts with an existing booking")
+    }
+
+    if (err.length) {
+        // create an error object
+        const errorResponse = {}
+        errorResponse.message = "Sorry, this spot is already booked for the specified dates";
+        errorResponse.statusCode = 403;
+        errorResponse.errors = {};
+        // because errors is nested, create another object
+        for (let error of err) {
+            // checking if my error messages has the word Start to differentiate start and end date
+            // note to self: includes() is case-sensitive
+            if (error.includes('Start')) {
+                errorResponse.errors.startDate = error
+            } else {
+                errorResponse.errors.endDate = error
             }
-        })
+        }
+    res.status(403)
+    res.json(errorResponse)
     }
 
     if (userId === booking.userId) {
