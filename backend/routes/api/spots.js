@@ -505,23 +505,15 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
     }
 
     // Spot must not belong to current user
-    // if(userId === spot.ownerId) {
-        //     res.status(403)
-        //     res.json({
-            //         "message": "Spot must not belong to current user"
-            //     })
-            // }
-
-            // End date cannot be on or before start date
-            if (endDate <= startDate) {
-                res.status(404)
-                res.json({
-                    "message": "Validation error",
-                    "statusCode": 400,
-                    "errors": {
-                        "endDate": "endDate cannot be on or before startDate"
-                    }
-                })
+    if (endDate <= startDate) {
+        res.status(404)
+        res.json({
+            "message": "Validation error",
+            "statusCode": 400,
+            "errors": {
+            "endDate": "endDate cannot be on or before startDate"
+            }
+        })
     }
 
     // find all the bookings
@@ -533,7 +525,41 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
     })
 
     for (let booking of existingBookings) {
-        console.log(booking)
+        // parse the existing and user.req dates to compare values
+        let existingStartDate = Date.parse(booking.startDate)
+        let existingEndDate = Date.parse(booking.endDate)
+        let startDateParsed = Date.parse(startDate)
+        let endDateParsed = Date.parse(endDate)
+
+        // create and empty error object
+        const err = [];
+        if (startDateParsed >= existingStartDate && startDateParsed <= existingEndDate) {
+            err.push("Start date conflicts with an existing booking")
+        }
+
+        if (endDateParsed >= existingStartDate && endDateParsed <= existingEndDate) {
+           err.push("End date conflicts with an existing booking")
+        }
+
+        if (err.length) {
+            // create an error object
+            const errorResponse = {}
+            errorResponse.message = "Sorry, this spot is already booked for the specified dates";
+            errorResponse.statusCode = 403;
+            errorResponse.errors = {};
+            // because errors is nested, create another object
+            for (let error of err) {
+                // checking if my error messages has the word Start to differentiate start and end date
+                // note to self: includes() is case-sensitive
+                if (error.includes('Start')) {
+                    errorResponse.errors.startDate = error
+                } else {
+                    errorResponse.errors.endDate = error
+                }
+            }
+        res.status(403)
+        res.json(errorResponse)
+        }
     }
 
     const newBooking = await Booking.create({
@@ -545,43 +571,6 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
 
     res.json(newBooking)
 });
-
-// for (let booking of existingBookings) {
-//     // parse the existing and user.req dates to compare values
-//     let existingStartDate = Date.parse(booking.startDate)
-//     let existingEndDate = Date.parse(booking.endDate)
-//     let startDateParsed = Date.parse(startDate)
-//     let endDateParsed = Date.parse(endDate)
-
-//     // create and empty error object
-//     const err = [];
-//     if (startDateParsed >= existingStartDate && startDateParsed <= existingEndDate) {
-//         err.push("Start date conflicts with an existing booking")
-//     }
-
-//    if (endDateParsed >= existingStartDate && endDateParsed <= existingEndDate) {
-//        err.push("End date conflicts with an existing booking")
-//     }
-
-//     if (err.length) {
-//         // create an error object
-//         const errorResponse = {}
-//         errorResponse.message = "Sorry, this spot is already booked for the specified dates";
-//         errorResponse.statusCode = 403;
-//         errorResponse.errors = {};
-//         // because errors is nested, create another object
-//         for (let error of err) {
-//             // checking if my error messages has the word Start to differentiate start and end date
-//             // note to self: includes() is case-sensitive
-//             if (error.includes('Start')) {
-//                 errorResponse.errors.startDate = error
-//             } else {
-//                 errorResponse.errors.endDate = error
-//             }
-//         }
-//         res.json(errorResponse)
-//     }
-// }
 
 // Delete a Spot
 router.delete('/:spotId', requireAuth, async(req, res, next) => {
