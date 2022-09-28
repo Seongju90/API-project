@@ -2,8 +2,22 @@ const express = require('express')
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, sequelize, ReviewImage } = require('../../db/models');
+const { handleValidationErrors } = require('../../utils/validation');
+const { check } = require('express-validator');
 
 const router = express.Router();
+
+const validateReview = [
+    check('review')
+        .exists({checkFalsy: true})
+        .isLength({min: 10, max: 255})
+        .withMessage('Review must have 1 to 255 letters'),
+    check('stars')
+        .isFloat({min:0 , max:5})
+        .withMessage('Stars can only be from 1 to 5'),
+    handleValidationErrors
+]
+
 /* --------------------------- ROUTERS -------------------------------*/
 
 router.get('/current', requireAuth, async (req, res, next) => {
@@ -30,8 +44,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
         ],
         // returns raw data of promises
         raw: true,
-        // If an attribute name of the table contains dots,
-        // the resulting objects can become nested objects
+        // associations with include become flatten, to counteract that we use
+        // the nest: true
         nest: true
     })
 
@@ -40,6 +54,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         // finding all the spotImages where spotId matches
         let spotImgs = await SpotImage.findAll({
             where: {
+                // review.Spot.id because if you flatten the first query, Spot.id is a key in the object
                 spotId: review.Spot.id
             },
             raw: true
@@ -105,7 +120,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 })
 
 // Edit a Review
-router.put('/:reviewId', requireAuth, async(req, res, next) => {
+router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) => {
     const userId = req.user.id;
     const reviewId = req.params.reviewId
     const { review , stars} = req.body
