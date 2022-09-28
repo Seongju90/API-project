@@ -48,6 +48,17 @@ const validateSpot = [
         .withMessage('Price per day is required'),
     handleValidationErrors
 ]
+
+const validateReview = [
+    check('review')
+        .exists({checkFalsy: true})
+        .isLength({min: 10, max: 255})
+        .withMessage('Review must have 1 to 255 letters'),
+    check('stars')
+        .isFloat({min:0 , max:5})
+        .withMessage('Stars can only be from 1 to 5'),
+    handleValidationErrors
+]
 /* --------------------------- ROUTERS -------------------------------*/
 
 // Get all spots
@@ -387,7 +398,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
 })
 
 // Create a Review for a Spot based on the Spot's id
-router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
+router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, next) => {
     const userId = req.user.id;
     const spotId = req.params.spotId;
     const { review, stars } = req.body
