@@ -282,6 +282,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     const id = req.params.spotId;
     const { url, preview } = req.body;
 
+    // test Preview working on dev but not on main
     // if previewImage exists in Spot set that value to false then
     // add new SpotImage to that spot (LATER WE NEED THIS LOGIC)
 
