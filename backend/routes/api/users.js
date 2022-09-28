@@ -7,6 +7,8 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
+/* -------------------------- VALIDATIONS --------------------------- */
+
 const validateSignup = [
   // add attribute validations here because it checks this function when creating a VALID user.
   check('firstName')
@@ -37,6 +39,8 @@ const validateSignup = [
     .withMessage('Password must be 6 characters or more.'),
   handleValidationErrors
 ];
+
+/* --------------------------- ROUTERS -------------------------------*/
 
 router.post(
     '/',

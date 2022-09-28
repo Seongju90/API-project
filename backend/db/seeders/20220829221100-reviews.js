@@ -22,25 +22,25 @@ const reviews = [
   {
     userId: 3,
     spotId: 2,
-    review: 'I will never come back to this place ever',
+    review: 'Do not come here, this place is awful',
     stars: 1,
   },
   {
     userId: 3,
     spotId: 3,
-    review: 'I will never come back to this place ever',
+    review: 'Great place to be on vacation',
     stars: 4,
   },
   {
     userId: 3,
     spotId: 1,
-    review: 'I will never come back to this place ever......',
+    review: 'Not to bad and not to good',
     stars: 3,
   },
   {
     userId: 3,
     spotId: 1,
-    review: 'I will never come back to this place ever......',
+    review: 'Yikes, avoid if possible',
     stars: 2,
   },
 ]
