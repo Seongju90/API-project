@@ -468,7 +468,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res, next) => {
             attributes: ['spotId', 'startDate', 'endDate']
         })
 
-        res.json(bookings)
+        res.json({Bookings: bookings})
     }
 
     // if user is the owner we want a different structured response
@@ -504,7 +504,16 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
         })
     }
 
-    // Spot must not belong to current user
+    // Spot must NOT belong to the current user
+    if (userId === spot.ownerId) {
+        res.status(403)
+        res.json({
+            "message": "Spot must not belong to the current user",
+            "statusCode": 403
+        })
+    }
+
+    // endDate cannot be on or before startDate
     if (endDate <= startDate) {
         res.status(404)
         res.json({
@@ -602,42 +611,6 @@ module.exports = router;
 
 /*
 --------------------CODE THAT WOULD WORK WITH SQLITE3 BUT NOT POSTGRESSQL------------
-
- // if there are existing bookings, check to see if there are overlapping dates
-    for (let booking of existingBookings) {
-        // create and empty error object
-        const err = [];
-        // parse the existing and user.req dates to compare values
-        let existingStartDate = Date.parse(booking.startDate)
-        let existingEndDate = Date.parse(booking.endDate)
-
-        if (startDateParsed >= existingStartDate && startDateParsed <= existingEndDate) {
-            err.push("Start date conflicts with an existing booking")
-        }
-
-        if (endDateParsed >= existingStartDate && endDateParsed <= existingEndDate) {
-            err.push("End date conflicts with an existing booking")
-        }
-
-        if (err.length) {
-            // create an error object
-            const errorResponse = {}
-            errorResponse.message = "Sorry, this spot is already booked for the specified dates";
-            errorResponse.statusCode = 403;
-            errorResponse.errors = {};
-            // because errors is nested, create another object
-            for (let error of err) {
-                // checking if my error messages has the word Start to differentiate start and end date
-                // note to self: includes() is case-sensitive
-                if (error.includes('Start')) {
-                    errorResponse.errors.startDate = error
-                } else {
-                    errorResponse.errors.endDate = error
-                }
-            }
-            res.json(errorResponse)
-        }
-    }
 
     ----------------------------------------------
     }
