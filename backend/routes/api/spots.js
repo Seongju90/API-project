@@ -113,6 +113,7 @@ router.get('/', validateQuery, async(req, res, next) => {
             }
         })
     }
+
     if (size <= 0) {
         res.status(400)
         res.json({
