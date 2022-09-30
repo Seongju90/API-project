@@ -6,7 +6,6 @@ const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = requi
 const { raw } = require('express');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
-const e = require('express');
 
 const router = express.Router();
 
