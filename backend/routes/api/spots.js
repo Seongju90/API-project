@@ -279,14 +279,10 @@ router.get('/:spotId', async (req, res, next) => {
 // Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     const userId = req.user.id
-    const id = req.params.spotId;
+    const spotId = req.params.spotId;
     const { url, preview } = req.body;
 
-    // test Preview working on dev but not on main
-    // if previewImage exists in Spot set that value to false then
-    // add new SpotImage to that spot (LATER WE NEED THIS LOGIC)
-
-    const spot = await Spot.findByPk(id)
+    const spot = await Spot.findByPk(spotId)
 
     // if spot doesn't exists throw an error
     if (!spot) {
@@ -297,28 +293,54 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         })
     }
 
-    if (userId === spot.ownerId) {
-        // else create a new spotimage at that spot
-        const newSpotImg = await SpotImage.create({
-            spotId: id,
-            url,
-            preview
-        })
-
-        let jsonSpotImg = newSpotImg.toJSON()
-        // query for the new spot to edit format of the response
-        let formatSpotImg = await SpotImage.findByPk(jsonSpotImg.id, {
-            attributes: ['id', 'url', 'preview']
-        })
-
-        res.json(formatSpotImg)
-    } else {
+    // if user is not the owner of the spot throw authorization error
+    if (userId !== spot.ownerId) {
         res.status(403)
         res.json({
             message: "You do not have authorization to add images to this spot",
             statusCode: 403
         })
     }
+
+    // if yes, then iterate through all images of the spot, find the old preview image, and update the
+    // boolean to be false then, add new image as preview image
+    if (preview === true) {
+
+        const spotImgs = await SpotImage.findAll({
+            where: {
+                spotId
+            },
+            // raw: true
+        })
+
+        // Because we need to change existing data in the database we need set and save!
+        // comment out raw:true because set and save method only work with promises!
+        for (let img of spotImgs) {
+            if (img.preview === true) {
+                // set the preview to false
+                img.set({
+                    preview: false
+                })
+
+                await img.save()
+            }
+        }
+    }
+
+    // After updating data create a new image and send it after formatting, if preview = false it
+    // jumps straight to this line of code
+    const spotImg = await SpotImage.create({
+        spotId,
+        url,
+        preview
+    })
+
+    let spotImgJson = spotImg.toJSON()
+     // query for the new spot to edit format of the response
+     let formatSpotImg = await SpotImage.findByPk(spotImgJson.id, {
+        attributes: ['id', 'url', 'preview']
+    })
+    res.json(formatSpotImg)
 });
 
 // Edit a Spot
