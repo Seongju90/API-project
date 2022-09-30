@@ -1,7 +1,7 @@
 const express = require('express')
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { check, sanitize } = require('express-validator');
+const { check, query } = require('express-validator');
 const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = require('../../db/models');
 const { raw } = require('express');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -59,19 +59,49 @@ const validateReview = [
         .withMessage('Stars can only be from 1 to 5'),
     handleValidationErrors
 ]
+
+// isDecimal does not have min max options, isFloat does.
+// this will only check to see if query parameters are valid, it will not search the database
+// must write a custom validation to search the DB.
+const validateQuery = [
+    query('minLat')
+        .isDecimal()
+        // optional makes the query paramter optional, checkfalsy=true to make 0 a valid parameter.
+        .optional({checkFalsy: true})
+        .withMessage("Minimum latitude is invalid"),
+    query('maxLat')
+        .isDecimal()
+        .optional({checkFalsy: true})
+        .withMessage("Maximum latitude is invalid"),
+    query('minLng')
+        .isDecimal()
+        .optional({checkFalsy: true})
+        .withMessage("Minimum longitude is invalid"),
+    query('maxLng')
+        .isDecimal()
+        .optional({checkFalsy: true})
+        .withMessage("Maximum longitude is invalid"),
+    query('minPrice')
+        .isFloat({min: 0})
+        .optional({checkFalsy: true})
+        .withMessage("Minimum price must be greater than or equal to 0"),
+    query('maxPrice')
+        .isFloat({min: 0})
+        .optional({checkFalsy: true})
+        .withMessage("Maximum price must be greater than or equal to 0"),
+    handleValidationErrors
+]
+
 /* --------------------------- ROUTERS -------------------------------*/
 
 // Get all spots
-router.get('/', async(req, res, next) => {
-    // Return spots filtered by query parameters.
-
-    // minLat, maxLat, minLng, maxLng, minPrice, maxPrice,
+router.get('/', validateQuery, async(req, res, next) => {
+    // Pagination
 
     let {page, size } = req.query
 
-
-    if (page > 10 || !page) page = 1
-    if (size > 20 || !size) size = 20
+    if (!page) page = 1
+    if (!size) size = 20
 
     if (page <= 0) {
         res.status(400)
