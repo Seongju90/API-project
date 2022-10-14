@@ -52,6 +52,7 @@ export const signup = (user) => async (dispatch) => {
   const { firstName, lastName, username, email, password } = user;
   const response = await csrfFetch("/api/users", {
     method: "POST",
+    // added firstName, lastName attributes to signup
     body: JSON.stringify({
       firstName,
       lastName,
