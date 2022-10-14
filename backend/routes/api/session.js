@@ -58,21 +58,25 @@ router.post(
         return next(err);
       }
 
-      let token = await setTokenCookie(res, user);
+      await setTokenCookie(res, user);
 
-      let userData = {}
-      userData.id = user.id
-      userData.firstName = user.firstName
-      userData.lastName = user.lastName
-      userData.email = user.email
-      userData.username = user.username
-      userData.token = token
+      return res.json({
+        user
+    });
+  }
+);
+// manipulating the data here broke my front end thunk action creator for login
+  //   let userData = {}
+  //   userData.id = user.id
+  //   userData.firstName = user.firstName
+  //   userData.lastName = user.lastName
+  //   userData.email = user.email
+  //   userData.username = user.username
+  //   userData.token = token
 
-      res.json({
-        ...userData
-      });
-    }
-  );
+  //   res.json({
+  //     ...userData
+  //   });
 
 router.delete(
   '/',
