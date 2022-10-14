@@ -490,6 +490,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
             review,
             stars
         })
+        console.log(newReview)
         res.json(newReview)
     } else {
         // need to make custom validators for sequelize later
