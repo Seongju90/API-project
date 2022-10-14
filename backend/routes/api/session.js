@@ -34,10 +34,10 @@ router.get(
         email,
         username
       });
-    } else return res.status(401).json({
-      "message": "Authentication required",
-      "statusCode": 401
-    });
+    } else {
+      // if there is no user logged in do nothing, if you throw error here it will break
+      res.json(null)
+    }
   }
 );
 
