@@ -34,10 +34,10 @@ router.get(
         email,
         username
       });
-    } else return res.status(401).json({
-      "message": "Authentication required",
-      "statusCode": 401
-    });
+    } else {
+      // if there is no user logged in do nothing, if you throw error here it will break
+      res.json(null)
+    }
   }
 );
 
@@ -60,6 +60,7 @@ router.post(
 
       let token = await setTokenCookie(res, user);
 
+      // manipulating the data here broke my front end thunk action creator for login
       let userData = {}
       userData.id = user.id
       userData.firstName = user.firstName
@@ -71,8 +72,9 @@ router.post(
       res.json({
         ...userData
       });
-    }
-  );
+      // res.json({user})
+  }
+);
 
 router.delete(
   '/',

@@ -1,12 +1,11 @@
 const express = require('express')
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { check, sanitize } = require('express-validator');
+const { check, query } = require('express-validator');
 const { User, Spot, Review, SpotImage, sequelize, ReviewImage, Booking } = require('../../db/models');
 const { raw } = require('express');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
-const e = require('express');
 
 const router = express.Router();
 
@@ -59,19 +58,49 @@ const validateReview = [
         .withMessage('Stars can only be from 1 to 5'),
     handleValidationErrors
 ]
+
+// isDecimal does not have min max options, isFloat does.
+// this will only check to see if query parameters are valid, it will not search the database
+// must write a custom validation to search the DB.
+const validateQuery = [
+    query('minLat')
+        .isDecimal()
+        // optional makes the query paramter optional, checkfalsy=true to make 0 a valid parameter.
+        .optional({checkFalsy: true})
+        .withMessage("Minimum latitude is invalid"),
+    query('maxLat')
+        .isDecimal()
+        .optional({checkFalsy: true})
+        .withMessage("Maximum latitude is invalid"),
+    query('minLng')
+        .isDecimal()
+        .optional({checkFalsy: true})
+        .withMessage("Minimum longitude is invalid"),
+    query('maxLng')
+        .isDecimal()
+        .optional({checkFalsy: true})
+        .withMessage("Maximum longitude is invalid"),
+    query('minPrice')
+        .isFloat({min: 0})
+        .optional({checkFalsy: true})
+        .withMessage("Minimum price must be greater than or equal to 0"),
+    query('maxPrice')
+        .isFloat({min: 0})
+        .optional({checkFalsy: true})
+        .withMessage("Maximum price must be greater than or equal to 0"),
+    handleValidationErrors
+]
+
 /* --------------------------- ROUTERS -------------------------------*/
 
 // Get all spots
-router.get('/', async(req, res, next) => {
-    // Return spots filtered by query parameters.
-
-    // minLat, maxLat, minLng, maxLng, minPrice, maxPrice,
+router.get('/', validateQuery, async(req, res, next) => {
+    // Pagination
 
     let {page, size } = req.query
 
-
-    if (page > 10 || !page) page = 1
-    if (size > 20 || !size) size = 20
+    if (!page) page = 1
+    if (!size) size = 20
 
     if (page <= 0) {
         res.status(400)
@@ -83,6 +112,7 @@ router.get('/', async(req, res, next) => {
             }
         })
     }
+
     if (size <= 0) {
         res.status(400)
         res.json({
@@ -279,14 +309,10 @@ router.get('/:spotId', async (req, res, next) => {
 // Add an Image to a Spot based on the Spot's id
 router.post('/:spotId/images', requireAuth, async(req, res, next) => {
     const userId = req.user.id
-    const id = req.params.spotId;
+    const spotId = req.params.spotId;
     const { url, preview } = req.body;
 
-    // test Preview working on dev but not on main
-    // if previewImage exists in Spot set that value to false then
-    // add new SpotImage to that spot (LATER WE NEED THIS LOGIC)
-
-    const spot = await Spot.findByPk(id)
+    const spot = await Spot.findByPk(spotId)
 
     // if spot doesn't exists throw an error
     if (!spot) {
@@ -297,28 +323,54 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
         })
     }
 
-    if (userId === spot.ownerId) {
-        // else create a new spotimage at that spot
-        const newSpotImg = await SpotImage.create({
-            spotId: id,
-            url,
-            preview
-        })
-
-        let jsonSpotImg = newSpotImg.toJSON()
-        // query for the new spot to edit format of the response
-        let formatSpotImg = await SpotImage.findByPk(jsonSpotImg.id, {
-            attributes: ['id', 'url', 'preview']
-        })
-
-        res.json(formatSpotImg)
-    } else {
+    // if user is not the owner of the spot throw authorization error
+    if (userId !== spot.ownerId) {
         res.status(403)
         res.json({
             message: "You do not have authorization to add images to this spot",
             statusCode: 403
         })
     }
+
+    // if yes, then iterate through all images of the spot, find the old preview image, and update the
+    // boolean to be false then, add new image as preview image
+    if (preview === true) {
+
+        const spotImgs = await SpotImage.findAll({
+            where: {
+                spotId
+            },
+            // raw: true
+        })
+
+        // Because we need to change existing data in the database we need set and save!
+        // comment out raw:true because set and save method only work with promises!
+        for (let img of spotImgs) {
+            if (img.preview === true) {
+                // set the preview to false
+                img.set({
+                    preview: false
+                })
+
+                await img.save()
+            }
+        }
+    }
+
+    // After updating data create a new image and send it after formatting, if preview = false it
+    // jumps straight to this line of code
+    const spotImg = await SpotImage.create({
+        spotId,
+        url,
+        preview
+    })
+
+    let spotImgJson = spotImg.toJSON()
+     // query for the new spot to edit format of the response
+     let formatSpotImg = await SpotImage.findByPk(spotImgJson.id, {
+        attributes: ['id', 'url', 'preview']
+    })
+    res.json(formatSpotImg)
 });
 
 // Edit a Spot
@@ -438,6 +490,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
             review,
             stars
         })
+        // console.log(newReview)
         res.json(newReview)
     } else {
         // need to make custom validators for sequelize later
