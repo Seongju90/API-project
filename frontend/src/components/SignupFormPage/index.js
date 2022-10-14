@@ -8,7 +8,7 @@ function SignupFormPage() {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const [firstName, setFirstName] = useState("")
-  const [lastName, setLastname] = useState("")
+  const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +50,7 @@ function SignupFormPage() {
         <input
           type="text"
           value={lastName}
-          onChange={(e) => setLastname(e.target.value)}
+          onChange={(e) => setLastName(e.target.value)}
           required
         />
       </label>
