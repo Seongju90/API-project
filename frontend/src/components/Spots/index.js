@@ -9,7 +9,7 @@ const SpotBrowser = () => {
     const spotObj = useSelector(state => state.spot)
     // turn normalized data into Array to use map
     const spots = Object.values(spotObj)
-
+    // console.log('home', spots)
     useEffect(() => {
         dispatch(getAllSpots())
     }, [dispatch])
@@ -17,7 +17,7 @@ const SpotBrowser = () => {
     // Each image of spot, will redirect to SpotCard
     return (
         <div>
-            {spots.forEach(spot => (
+            {spots.map(spot => (
                 <SpotCard key={spot.id} spot={spot}/>
             ))}
         </div>

@@ -58,6 +58,8 @@ const spotReducer = (state = {}, action) => {
             newState = {...normalizeData}
             return newState
         case LOADONESPOT:
+            newState = {...action.spot}
+            // console.log('state', newState)
             return newState;
         default:
             return state
