@@ -1,7 +1,7 @@
 /* ---------- TYPE VARIABLES ---------- */
 const LOAD = 'spots/loadSpots';
 const LOADONESPOT = 'spots/loadOneSpot'
-// const CREATE = 'spots/createSpots';
+const CREATE = 'spots/createSpots';
 // const EDIT = 'spots/editSpots';
 // const DELETE ='spots/deleteSpots';
 
@@ -22,6 +22,12 @@ const actionloadOneSpot = (spot) => {
     }
 }
 
+const actionCreateASpot = (spotForm) => {
+    return {
+        type: CREATE,
+        spotForm
+    }
+}
 
 
 /* ---------- THUNK ACTION CREATORS ---------- */
@@ -48,19 +54,20 @@ export const getOneSpot = (id) => async(dispatch) => {
 
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
 
-const spotReducer = (state = {}, action) => {
+const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
     let newState = {...state}
     switch(action.type) {
         case LOAD:
             // console.log('spots', action.spots.Spots)
             // action.spots returns an obj, key into Spots to get the array
-            let normalizeData = normalizeArray(action.spots.Spots)
-            newState = {...normalizeData}
+            newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
         case LOADONESPOT:
             newState = {...action.spot}
             // console.log('state', newState)
             return newState;
+        case CREATE:
+
         default:
             return state
     }

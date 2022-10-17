@@ -7,7 +7,8 @@ const SpotDetails = () => {
     // extract the spotId from the parameter
     const { spotId } = useParams()
     // select the spotDetail action creator thunk
-    const spot = useSelector((state) => console.log('spot detail', state))
+    const spot = useSelector((state) => state.spots)
+    console.log('spot detail', spot)
     const dispatch = useDispatch()
 
 

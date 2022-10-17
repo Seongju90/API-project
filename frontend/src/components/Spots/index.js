@@ -6,10 +6,10 @@ import SpotCard from '../SpotCard'
 const SpotBrowser = () => {
     const dispatch = useDispatch()
     // state has key spot with normalized array
-    const spotObj = useSelector(state => state.spot)
+    const spotObj = useSelector(state => state.spots.allSpots)
     // turn normalized data into Array to use map
     const spots = Object.values(spotObj)
-    // console.log('home', spots)
+    console.log('home', spots)
     useEffect(() => {
         dispatch(getAllSpots())
     }, [dispatch])

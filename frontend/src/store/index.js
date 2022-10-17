@@ -5,7 +5,7 @@ import spotReducer from "./spots";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
-  spot: spotReducer
+  spots: spotReducer
 });
 
 let enhancer;
