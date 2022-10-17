@@ -5,7 +5,7 @@ import  { csrfFetch } from "./csrf";
 const LOAD = 'spots/loadSpots';
 const LOADONESPOT = 'spots/loadOneSpot'
 const CREATE = 'spots/createSpots';
-// const EDIT = 'spots/editSpots';
+const EDIT = 'spots/editSpots';
 // const DELETE ='spots/deleteSpots';
 
 
@@ -26,13 +26,18 @@ const actionloadOneSpot = (spot) => {
 }
 
 export const actionCreateASpot = (spot) => {
-
     return {
         type: CREATE,
         spot
     }
 }
 
+export const actionEditASpot = (spot) => {
+    return {
+        type: EDIT,
+        spot
+    }
+}
 
 /* ---------- THUNK ACTION CREATORS ---------- */
 export const getAllSpots = () => async (dispatch) => {
@@ -68,6 +73,26 @@ export const createASpot = (spot) => async (dispatch) => {
     if(response.ok) {
         const newSpot = await response.json()
         dispatch(actionCreateASpot(newSpot))
+        // return the newspot to extract ID in component
+        return newSpot
+    }
+}
+
+export const editASpot = (spot) => async (dispatch) => {
+    // adding the id to find the spot to edit
+    const response = await csrfFetch(`/api/spots/${spot.id}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(spot)
+    })
+
+    if(response.ok) {
+        const edittedSpot = await response.json()
+        dispatch(actionEditASpot(edittedSpot))
+        // return the edittedSpot to extract ID in component
+        return edittedSpot
     }
 }
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
@@ -87,8 +112,6 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             return newState;
         case CREATE:
             newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
-            // console.log('state', newState)
-
             // key into allspots add a key of new spotid to the value of new spot
             newState.allSpots[action.spot.id] = action.spot
             return newState;

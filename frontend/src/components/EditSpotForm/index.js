@@ -1,13 +1,18 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createASpot } from "../../store/spots"
+import { useHistory, useParams } from "react-router-dom";
+import { editASpot } from "../../store/spots"
 
-const CreateSpotForm = () => {
+const EditSpotForm = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // create states for input fields
+    // find the id of the spot from params
+    const { spotId } = useParams();
+    console.log(spotId)
+    // find the spot with the Id from params
+    const findSpot = useSelector(state => console.log(state))
+
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
@@ -35,7 +40,7 @@ const CreateSpotForm = () => {
         }
 
         // use the response from thunk to get the ID of newly created spot
-        dispatch(createASpot(spot)).then(res => {
+        dispatch(editASpot(spot)).then(res => {
             // console.log('responseid', res.id)
             //redirect to spot ID page after creating it
             history.push(`/spots/${res.id}`)
@@ -125,4 +130,4 @@ const CreateSpotForm = () => {
         );
     }
 
-export default CreateSpotForm;
+export default EditSpotForm;
