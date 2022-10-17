@@ -1,8 +1,8 @@
 const SpotDetails = () => {
     return (
-        <>
-        hi
-        </>
+        <div>
+            Spot Detail Information
+        </div>
     );
 }
 

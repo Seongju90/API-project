@@ -43,6 +43,7 @@ export const getOneSpot = (id) => async(dispatch) => {
         const spot = await response.json()
         dispatch(actionloadOneSpot(spot))
     }
+    return response
 }
 
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
@@ -56,6 +57,8 @@ const spotReducer = (state = {}, action) => {
             let normalizeData = normalizeArray(action.spots.Spots)
             newState = {...normalizeData}
             return newState
+        case LOADONESPOT:
+            return newState;
         default:
             return state
     }
