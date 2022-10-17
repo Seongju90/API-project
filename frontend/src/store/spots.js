@@ -1,3 +1,6 @@
+// csrfFetch is a custom fetch that will apply your CSRF Token to all your fetch requests
+import  { csrfFetch } from "./csrf";
+
 /* ---------- TYPE VARIABLES ---------- */
 const LOAD = 'spots/loadSpots';
 const LOADONESPOT = 'spots/loadOneSpot'
@@ -33,7 +36,7 @@ export const actionCreateASpot = (spot) => {
 
 /* ---------- THUNK ACTION CREATORS ---------- */
 export const getAllSpots = () => async (dispatch) => {
-    const response = await fetch('/api/spots/')
+    const response = await csrfFetch('/api/spots/')
     // console.log('response', response)
     if (response.ok) {
         const spots = await response.json()
@@ -44,7 +47,7 @@ export const getAllSpots = () => async (dispatch) => {
 }
 
 export const getOneSpot = (id) => async(dispatch) => {
-    const response = await fetch(`/api/spots/${id}`)
+    const response = await csrfFetch(`/api/spots/${id}`)
 
     if(response.ok) {
         const spot = await response.json()
@@ -54,7 +57,7 @@ export const getOneSpot = (id) => async(dispatch) => {
 }
 
 export const createASpot = (spot) => async (dispatch) => {
-    const response = await fetch(`/api/spots`, {
+    const response = await csrfFetch(`/api/spots`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
