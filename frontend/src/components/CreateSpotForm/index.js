@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { createASpot } from "../../store/spots"
 
 const CreateSpotForm = () => {
     const dispatch = useDispatch();
-    // const history = useHistory();
+    const history = useHistory();
 
     // create states for input fields
     const [address, setAddress] = useState('')
@@ -35,9 +35,11 @@ const CreateSpotForm = () => {
         }
 
         dispatch(createASpot(spot))
-        console.log('submit spot', spot)
+
+        // spotArr.filter(spots => spots.id === spot.id)
+        // console.log("spotArr", spotArr)
         //redirect to spot ID page after creating it
-        // history.push(`/spots/${spot.id}`)
+        history.push(`/spots/${spot.id}`)
     }
         return (
             <form onSubmit={handleSubmit}>

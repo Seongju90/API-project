@@ -77,20 +77,20 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
     let newState = {}
     switch(action.type) {
         case LOAD:
-            // console.log('spots', action.spots.Spots)
             newState = {...state}
             // action.spots returns an obj, key into Spots to get the array
             newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
         case LOADONESPOT:
-            newState = {...state}
+            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
             newState.singleSpot = action.spot
             return newState;
         case CREATE:
-            newState = {...state}
-            console.log('state', state.allSpots)
-            console.log('create spot', action.spot)
-            newState[state.allSpots] = action.spot
+            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
+            // console.log('state', newState)
+
+            // key into allspots add a key of new spotid to the value of new spot
+            newState.allSpots[action.spot.id] = action.spot
             return newState;
         default:
             return state
