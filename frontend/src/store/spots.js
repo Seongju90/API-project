@@ -22,10 +22,11 @@ const actionloadOneSpot = (spot) => {
     }
 }
 
-const actionCreateASpot = (spotForm) => {
+export const actionCreateASpot = (spot) => {
+
     return {
         type: CREATE,
-        spotForm
+        spot
     }
 }
 
@@ -52,6 +53,20 @@ export const getOneSpot = (id) => async(dispatch) => {
     return response
 }
 
+export const createASpot = (spot) => async (dispatch) => {
+    const response = await fetch(`/api/spots`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(spot)
+    })
+
+    if(response.ok) {
+        const newSpot = await response.json()
+        dispatch(actionCreateASpot(newSpot))
+    }
+}
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
 
 // set initial state to the structure of the documents
@@ -69,7 +84,11 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             newState.singleSpot = action.spot
             return newState;
         case CREATE:
-
+            newState = {...state}
+            console.log('state', state.allSpots)
+            console.log('create spot', action.spot)
+            newState[state.allSpots] = action.spot
+            return newState;
         default:
             return state
     }

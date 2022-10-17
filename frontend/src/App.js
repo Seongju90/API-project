@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import SignupFormPage from "./components/SignupFormPage";
 import * as sessionActions from "./store/session";
+
+/* --------- Components Imports ---------*/
+import SignupFormPage from "./components/SignupFormPage";
 import Navigation from "./components/Navigation";
 import SpotBrowser from "./components/Spots"
 import SpotDetails from "./components/SpotDetails";
+import CreateSpotFrom from "./components/CreateSpotForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +31,9 @@ function App() {
           </Route>
           <Route path="/spots/:spotId">
             <SpotDetails/>
+          </Route>
+          <Route path="/spots">
+            <CreateSpotFrom/>
           </Route>
         </Switch>
       )}
