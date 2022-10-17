@@ -9,7 +9,7 @@ const SpotBrowser = () => {
     const spotObj = useSelector(state => state.spots.allSpots)
     // turn normalized data into Array to use map
     const spots = Object.values(spotObj)
-    console.log('home', spots)
+    // console.log('home', spots)
     useEffect(() => {
         dispatch(getAllSpots())
     }, [dispatch])

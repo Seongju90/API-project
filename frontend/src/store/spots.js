@@ -54,17 +54,19 @@ export const getOneSpot = (id) => async(dispatch) => {
 
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
 
+// set initial state to the structure of the documents
 const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
-    let newState = {...state}
+    let newState = {}
     switch(action.type) {
         case LOAD:
             // console.log('spots', action.spots.Spots)
+            newState = {...state}
             // action.spots returns an obj, key into Spots to get the array
             newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
         case LOADONESPOT:
-            newState = {...action.spot}
-            // console.log('state', newState)
+            newState = {...state}
+            newState.singleSpot = action.spot
             return newState;
         case CREATE:
 
