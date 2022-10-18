@@ -4,6 +4,7 @@ import  { csrfFetch } from "./csrf";
 /* ---------- TYPE VARIABLES ---------- */
 const LOAD = 'spots/loadSpots';
 const LOADONESPOT = 'spots/loadOneSpot'
+const LOADOWNERSPOTS = 'spots/loadOwnerSpots'
 const CREATE = 'spots/createSpots';
 const EDIT = 'spots/editSpots';
 // const DELETE ='spots/deleteSpots';
@@ -20,6 +21,13 @@ const actionLoadOneSpot = (spot) => {
     return {
         type: LOADONESPOT,
         spot
+    }
+}
+
+const actionLoadOwnerSpots = (spots) => {
+    return {
+        type: LOADOWNERSPOTS,
+        spots
     }
 }
 
@@ -56,6 +64,16 @@ export const getOneSpot = (id) => async(dispatch) => {
     if(response.ok) {
         const spot = await response.json()
         dispatch(actionLoadOneSpot(spot))
+    }
+    return response
+}
+
+export const getOwnerSpots = () => async(dispatch) => {
+    const response = await csrfFetch(`/api/spots/current`)
+
+    if(response.ok) {
+        const spots = await response.json()
+        dispatch(actionLoadOwnerSpots(spots))
     }
     return response
 }
@@ -110,6 +128,11 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
         case LOADONESPOT:
             newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
             newState.singleSpot = action.spot
+            return newState;
+        case LOADOWNERSPOTS:
+            newState = {...state}
+            // made a new state for owner's spots
+            newState.ownerSpots = normalizeArray(action.spots.Spots)
             return newState;
         case CREATE:
             newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
