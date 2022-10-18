@@ -8,7 +8,7 @@ import SignupFormPage from "./components/SignupFormPage";
 import Navigation from "./components/Navigation";
 import SpotBrowser from "./components/Spots"
 import SpotDetails from "./components/SpotDetails";
-import CreateSpotFrom from "./components/CreateSpotForm";
+import CreateSpotForm from "./components/CreateSpotForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ function App() {
             <SpotDetails/>
           </Route>
           <Route path="/spots">
-            <CreateSpotFrom/>
+            <CreateSpotForm/>
           </Route>
         </Switch>
       )}
