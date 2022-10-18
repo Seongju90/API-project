@@ -8,8 +8,6 @@ const CREATE = 'spots/createSpots';
 const EDIT = 'spots/editSpots';
 // const DELETE ='spots/deleteSpots';
 
-
-
 /* ---------- ACTION CREATORS ---------- */
 const actionLoadSpots = (spots) => {
     return {
@@ -18,7 +16,7 @@ const actionLoadSpots = (spots) => {
     }
 }
 
-const actionloadOneSpot = (spot) => {
+const actionLoadOneSpot = (spot) => {
     return {
         type: LOADONESPOT,
         spot
@@ -39,6 +37,7 @@ export const actionEditASpot = (spot) => {
     }
 }
 
+
 /* ---------- THUNK ACTION CREATORS ---------- */
 export const getAllSpots = () => async (dispatch) => {
     const response = await csrfFetch('/api/spots/')
@@ -56,7 +55,7 @@ export const getOneSpot = (id) => async(dispatch) => {
 
     if(response.ok) {
         const spot = await response.json()
-        dispatch(actionloadOneSpot(spot))
+        dispatch(actionLoadOneSpot(spot))
     }
     return response
 }
@@ -95,6 +94,8 @@ export const editASpot = (spot) => async (dispatch) => {
         return edittedSpot
     }
 }
+
+
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
 
 // set initial state to the structure of the documents

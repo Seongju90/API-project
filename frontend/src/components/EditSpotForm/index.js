@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { editASpot } from "../../store/spots"
+import { getAllSpots } from "../../store/spots"
 
 const EditSpotForm = () => {
     const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const EditSpotForm = () => {
     const { spotId } = useParams();
     console.log(spotId)
     // find the spot with the Id from params
-    const findSpot = useSelector(state => console.log(state))
+    const allSpots = useSelector(state => console.log(state.allSpots))
 
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
@@ -22,6 +22,10 @@ const EditSpotForm = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
+
+    useEffect(() => {
+        dispatch(getAllSpots())
+    }, [dispatch])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -40,11 +44,11 @@ const EditSpotForm = () => {
         }
 
         // use the response from thunk to get the ID of newly created spot
-        dispatch(editASpot(spot)).then(res => {
-            // console.log('responseid', res.id)
-            //redirect to spot ID page after creating it
-            history.push(`/spots/${res.id}`)
-        })
+        // dispatch(editASpot(spot)).then(res => {
+        //     // console.log('responseid', res.id)
+        //     //redirect to spot ID page after creating it
+        //     history.push(`/spots/${res.id}`)
+        // })
     }
         return (
             <form onSubmit={handleSubmit}>

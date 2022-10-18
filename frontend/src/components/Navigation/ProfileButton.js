@@ -39,10 +39,10 @@ function ProfileButton({ user }) {
         <ul className="profile-dropdown">
           <li>{user.username}</li>
           <li>{user.email}</li>
-          <NavLink to="spots/:spotId" component={EditSpotForm}>Edit Spot</NavLink>
-          <li>
-            <button onClick={logout}>Log Out</button>
-          </li>
+          <NavLink to="/spots/current">Your Listings</NavLink>
+          <div>
+          <button onClick={logout}>Log Out</button>
+          </div>
         </ul>
       )}
     </>
