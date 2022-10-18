@@ -9,7 +9,7 @@ import Navigation from "./components/Navigation";
 import SpotBrowser from "./components/Spots"
 import SpotDetails from "./components/SpotDetails";
 import CreateSpotForm from "./components/CreateSpotForm";
-import OwnersSpot from "./components/OwnersSpot";
+// import OwnersSpot from "./components/OwnersSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,9 +30,9 @@ function App() {
           <Route path="/signup">
             <SignupFormPage />
           </Route>
-          <Route exact path="/spots/current">
+          {/* <Route exact path="/spots/current">
             <OwnersSpot/>
-          </Route>
+          </Route> */}
           <Route exact path="/spots/:spotId">
             <SpotDetails/>
           </Route>
