@@ -12,7 +12,7 @@ const EditSpotForm = () => {
     console.log(spotId)
     // find the spot with the Id from params
     const allSpots = useSelector(state => console.log(state.allSpots))
-
+    console.log(allSpots)
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')

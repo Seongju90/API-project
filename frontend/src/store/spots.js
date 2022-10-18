@@ -80,7 +80,7 @@ export const createASpot = (spot) => async (dispatch) => {
 export const editASpot = (spot) => async (dispatch) => {
     // adding the id to find the spot to edit
     const response = await csrfFetch(`/api/spots/${spot.id}`, {
-        method: "POST",
+        method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
