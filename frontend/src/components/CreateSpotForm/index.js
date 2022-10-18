@@ -1,22 +1,24 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createASpot } from "../../store/spots"
+import { addImgToSpot, createASpot } from "../../store/spots"
 
 const CreateSpotForm = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
     // create states for input fields
-    const [address, setAddress] = useState('')
-    const [city, setCity] = useState('')
-    const [state, setState] = useState('')
-    const [country, setCountry] = useState('')
-    const [lat, setLat] = useState(0)
-    const [lng, setLng] = useState(0)
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-    const [price, setPrice] = useState(0)
+    const [address, setAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [country, setCountry] = useState('');
+    const [lat, setLat] = useState(0);
+    const [lng, setLng] = useState(0);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [price, setPrice] = useState(0);
+    //adding url for spotImg on creation
+    const [url, setUrl] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -35,8 +37,8 @@ const CreateSpotForm = () => {
         }
 
         // use the response from thunk to get the ID of newly created spot
-        dispatch(createASpot(spot)).then(res => {
-            // console.log('responseid', res.id)
+        let createdSpot = dispatch(createASpot(spot))
+        dispatch(addImgToSpot(createdSpot)).then(res => {
             //redirect to spot ID page after creating it
             history.push(`/spots/${res.id}`)
         })
@@ -114,6 +116,14 @@ const CreateSpotForm = () => {
                     type="number"
                     value={price}
                     onChange={e => setPrice(e.target.value)}
+                    />
+                </label>
+                <label>
+                    Image url
+                    <input
+                    type="text"
+                    value={url}
+                    onChange={e => setUrl(e.target.value)}
                     />
                 </label>
                 <button

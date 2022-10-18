@@ -4,9 +4,10 @@ import  { csrfFetch } from "./csrf";
 /* ---------- TYPE VARIABLES ---------- */
 const LOAD = 'spots/loadSpots';
 const LOADONESPOT = 'spots/loadOneSpot'
-const LOADOWNERSPOTS = 'spots/loadOwnerSpots'
+// const LOADOWNERSPOTS = 'spots/loadOwnerSpots'
 const CREATE = 'spots/createSpots';
 const EDIT = 'spots/editSpots';
+const ADDIMG = '/spots/addImg'
 // const DELETE ='spots/deleteSpots';
 
 /* ---------- ACTION CREATORS ---------- */
@@ -24,12 +25,12 @@ const actionLoadOneSpot = (spot) => {
     }
 }
 
-const actionLoadOwnerSpots = (spots) => {
-    return {
-        type: LOADOWNERSPOTS,
-        spots
-    }
-}
+// const actionLoadOwnerSpots = (spots) => {
+//     return {
+//         type: LOADOWNERSPOTS,
+//         spots
+//     }
+// }
 
 export const actionCreateASpot = (spot) => {
     return {
@@ -45,6 +46,12 @@ export const actionEditASpot = (spot) => {
     }
 }
 
+const actionAddImg = (spot) => {
+    return {
+        type: ADDIMG,
+        spot
+    }
+}
 
 /* ---------- THUNK ACTION CREATORS ---------- */
 export const getAllSpots = () => async (dispatch) => {
@@ -68,15 +75,15 @@ export const getOneSpot = (id) => async(dispatch) => {
     return response
 }
 
-export const getOwnerSpots = () => async(dispatch) => {
-    const response = await csrfFetch(`/api/spots/current`)
+// export const getOwnerSpots = () => async(dispatch) => {
+//     const response = await csrfFetch(`/api/spots/current`)
 
-    if(response.ok) {
-        const spots = await response.json()
-        dispatch(actionLoadOwnerSpots(spots))
-    }
-    return response
-}
+//     if(response.ok) {
+//         const spots = await response.json()
+//         dispatch(actionLoadOwnerSpots(spots))
+//     }
+//     return response
+// }
 
 export const createASpot = (spot) => async (dispatch) => {
     const response = await csrfFetch(`/api/spots`, {
@@ -91,6 +98,7 @@ export const createASpot = (spot) => async (dispatch) => {
         const newSpot = await response.json()
         dispatch(actionCreateASpot(newSpot))
         // return the newspot to extract ID in component
+        console.log('thunk', newSpot)
         return newSpot
     }
 }
@@ -113,6 +121,21 @@ export const editASpot = (spot) => async (dispatch) => {
     }
 }
 
+export const addImgToSpot = (spot) => async(dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spot.id}/images`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(spot)
+    })
+
+    if(response.ok) {
+        const newSpotImg = await response.json()
+        dispatch(actionAddImg(spot))
+        return newSpotImg
+    }
+}
 
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
 
@@ -129,11 +152,11 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
             newState.singleSpot = action.spot
             return newState;
-        case LOADOWNERSPOTS:
-            newState = {...state}
-            // made a new state for owner's spots
-            newState.ownerSpots = normalizeArray(action.spots.Spots)
-            return newState;
+        // case LOADOWNERSPOTS:
+        //     newState = {...state}
+        //     // made a new state for owner's spots
+        //     newState.ownerSpots = normalizeArray(action.spots.Spots)
+        //     return newState;
         case CREATE:
             newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
             // key into allspots add a key of new spotid to the value of new spot
