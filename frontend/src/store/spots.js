@@ -98,7 +98,6 @@ export const createASpot = (spot) => async (dispatch) => {
         const newSpot = await response.json()
         dispatch(actionCreateASpot(newSpot))
         // return the newspot to extract ID in component
-        console.log('thunk', newSpot)
         return newSpot
     }
 }
@@ -121,18 +120,20 @@ export const editASpot = (spot) => async (dispatch) => {
     }
 }
 
-export const addImgToSpot = (spot) => async(dispatch) => {
-    const response = await csrfFetch(`/api/spots/${spot.id}/images`, {
+// thunk takes two arguments, spot / img body
+export const addImgToSpot = (newSpot, spotImgBody) => async(dispatch) => {
+    const response = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(spot)
+        body: JSON.stringify(spotImgBody)
     })
 
     if(response.ok) {
         const newSpotImg = await response.json()
-        dispatch(actionAddImg(spot))
+        // console.log('newSpotImg from thunk', newSpotImg)
+        dispatch(actionAddImg(newSpotImg))
         return newSpotImg
     }
 }

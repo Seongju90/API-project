@@ -20,7 +20,7 @@ const CreateSpotForm = () => {
     //adding url for spotImg on creation
     const [url, setUrl] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         // create a spot Obj to be in the newState
@@ -36,12 +36,20 @@ const CreateSpotForm = () => {
             price
         }
 
-        // use the response from thunk to get the ID of newly created spot
-        let createdSpot = dispatch(createASpot(spot))
-        dispatch(addImgToSpot(createdSpot)).then(res => {
-            //redirect to spot ID page after creating it
-            history.push(`/spots/${res.id}`)
-        })
+        // creating spotImg body to dispatch to thunk
+        const spotImgBody = {
+            url,
+            "preview": true
+        }
+
+        // need await because waiting for response for newly created spot
+        const newSpot = await dispatch(createASpot(spot))
+
+        // if we did create the spot
+        if (newSpot.id) {
+            // dispatch the new spot and spotimg body to img thunk, afterwards redirect to newly created spot route
+            dispatch(addImgToSpot(newSpot, spotImgBody)).then(history.push(`/spots/${newSpot.id}`))
+        }
     }
         return (
             <form onSubmit={handleSubmit}>
