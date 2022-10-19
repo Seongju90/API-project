@@ -154,7 +154,7 @@ export const deleteASpot = (id) => async(dispatch) => {
     if(response.ok) {
         const deleteMessage = await response.json()
 
-        dispatch(actionDeleteSpot(id, deleteMessage))
+        dispatch(actionDeleteSpot(id))
         return deleteMessage
     }
 }
