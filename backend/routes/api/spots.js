@@ -28,14 +28,14 @@ const validateSpot = [
         .exists({ checkFalsy: true })
         .isAlpha('en-US', {ignore: ' '})
         .withMessage('Country is required'),
-    // check('lat')
-    //     .exists({checkNull: false})
-    //     .isDecimal() // check if STRING represents decimal number
-    //     .withMessage('Latitude is not valid'),
-    // check('lng')
-    //     .exists({checkNull: false})
-    //     .isDecimal()
-    //     .withMessage('Longitude is not valid'),
+    check('lat')
+        .optional({ nullable: true })
+        .isDecimal() // check if STRING represents decimal number
+        .withMessage('Latitude is not valid'),
+    check('lng')
+        .optional({ nullable: true })
+        .isDecimal()
+        .withMessage('Longitude is not valid'),
     check('name')
         .exists({ checkFalsy: true })
         .isAlpha('en-US', {ignore: ' '})
@@ -230,7 +230,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
 // Create a Spot
 router.post('/', requireAuth, validateSpot, async (req, res, next) => {
     const userId = req.user.id;
-    const { address, city, state, country, name, description, price } = req.body;
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
     if (req.body) {
         const newSpot = await Spot.create({
@@ -239,6 +239,8 @@ router.post('/', requireAuth, validateSpot, async (req, res, next) => {
             city,
             state,
             country,
+            lat,
+            lng,
             name,
             description,
             price
@@ -377,7 +379,7 @@ router.post('/:spotId/images', requireAuth, async(req, res, next) => {
 router.put('/:spotId', requireAuth, validateSpot, async(req, res, next) => {
     const userId = req.user.id;
     const spotId = req.params.spotId;
-    const { address, city, state, country, name, description, price } = req.body;
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
     const spot = await Spot.findByPk(spotId)
 
@@ -406,6 +408,8 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res, next) => {
             city,
             state,
             country,
+            lat,
+            lng,
             name,
             description,
             price
