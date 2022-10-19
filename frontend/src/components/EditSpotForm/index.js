@@ -14,8 +14,6 @@ const EditSpotForm = () => {
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
     const [country, setCountry] = useState('')
-    const [lat, setLat] = useState(0)
-    const [lng, setLng] = useState(0)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
@@ -35,8 +33,6 @@ const EditSpotForm = () => {
             city,
             state,
             country,
-            lat,
-            lng,
             name,
             description,
             price
@@ -80,22 +76,6 @@ const EditSpotForm = () => {
                     type="text"
                     value={country}
                     onChange={e => setCountry(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Latitude
-                    <input
-                    type="number"
-                    value={lat}
-                    onChange={e => setLat(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Longitude
-                    <input
-                    type="number"
-                    value={lng}
-                    onChange={e => setLng(e.target.value)}
                     />
                 </label>
                 <label>

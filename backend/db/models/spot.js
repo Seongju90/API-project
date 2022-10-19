@@ -30,11 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     country: DataTypes.STRING,
     lat: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: true
     },
     lng: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: true
     },
     name: DataTypes.STRING,
     description: DataTypes.STRING,

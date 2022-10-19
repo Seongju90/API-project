@@ -28,11 +28,11 @@ module.exports = {
       lat: {
         type: Sequelize.DECIMAL,
         // from user experience can't know lat lng
-        allowNull: false
+        allowNull: true
       },
       lng: {
         type: Sequelize.DECIMAL,
-        allowNull: false
+        allowNull: true
       },
       name: {
         type: Sequelize.STRING(255)
