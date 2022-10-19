@@ -190,14 +190,19 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             // changing state causes re-render, overriding old spot information(...state.singleSpot) with new spot(action.spot)
             newState = {...state, singleSpot: {...state.singleSpot, ...action.spot}}
             return newState;
+        // case ADDIMG: {
+        //     newState = {...state}
+        //     return newState;
+        // }
         case DELETE:
-            console.log('action', action)
-            console.log('spotTObeDeleted', newState[action.id])
-            newState = {...state, allSpots: {...state.allSpots}}
+            // get rid of single spot infor with empty object so data doesn't get leaked
+            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {}}
+            // console.log('action', action)
+            // console.log('spotTObeDeleted', newState.allSpots[action.id])
             delete newState.allSpots[action.id]
-            return newState
+            return newState;
         default:
-            return state
+            return state;
     }
 }
 
