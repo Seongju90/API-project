@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import { Modal } from '../../context/Modal';
-import LoginForm from './LoginForm';
 
-function LoginFormModal() {
+// Custom Modal
+
+// pass props, component, or text from parent container (SpotDetails)
+function CustomModal({buttontext, Content}) {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      <button onClick={() => setShowModal(true)}>Log In</button>
+      <button onClick={() => setShowModal(true)}>{buttontext}</button>
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
-
-          <LoginForm />
+          {<Content/>}
         </Modal>
       )}
     </>
   );
 }
 
-export default LoginFormModal;
+export default CustomModal;

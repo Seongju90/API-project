@@ -25,10 +25,13 @@ function Navigation({ isLoaded }){
     return (
         <div className="navigation-container">
             <div className="home-link">
-                <NavLink exact to="/">Home</NavLink>
+              <NavLink exact to="/">Home</NavLink>
             </div>
             <div className="login-signup">
-                {isLoaded && sessionLinks}
+              <span className="create-spot">
+                <NavLink to="/spots">Become a Host</NavLink>
+              </span>
+              {isLoaded && sessionLinks}
             </div>
         </div>
     );
