@@ -8,7 +8,7 @@ const LOADONESPOT = 'spots/loadOneSpot'
 const CREATE = 'spots/createSpots';
 const EDIT = 'spots/editSpots';
 const ADDIMG = '/spots/addImg'
-// const DELETE ='spots/deleteSpots';
+const DELETE ='spots/deleteSpots';
 
 /* ---------- ACTION CREATORS ---------- */
 const actionLoadSpots = (spots) => {
@@ -50,6 +50,13 @@ const actionAddImg = (spot) => {
     return {
         type: ADDIMG,
         spot
+    }
+}
+
+const actionDeleteSpot = (id) => {
+    return {
+        type: DELETE,
+        id
     }
 }
 
@@ -138,6 +145,20 @@ export const addImgToSpot = (newSpot, spotImgBody) => async(dispatch) => {
     }
 }
 
+export const deleteASpot = (id) => async(dispatch) => {
+
+    const response = await csrfFetch(`/api/spots/${id}`, {
+        method: "DELETE",
+    })
+
+    if(response.ok) {
+        const deleteMessage = await response.json()
+
+        dispatch(actionDeleteSpot(id, deleteMessage))
+        return deleteMessage
+    }
+}
+
 /* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
 
 // set initial state to the structure of the documents
@@ -169,6 +190,12 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             // changing state causes re-render, overriding old spot information(...state.singleSpot) with new spot(action.spot)
             newState = {...state, singleSpot: {...state.singleSpot, ...action.spot}}
             return newState;
+        case DELETE:
+            console.log('action', action)
+            console.log('spotTObeDeleted', newState[action.id])
+            newState = {...state, allSpots: {...state.allSpots}}
+            delete newState.allSpots[action.id]
+            return newState
         default:
             return state
     }

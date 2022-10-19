@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react"
-import { getOneSpot } from "../../store/spots";
-import { useParams } from "react-router-dom";
+import { deleteASpot, getOneSpot } from "../../store/spots";
+import { useParams, useHistory } from "react-router-dom";
 import CustomModal from "../CustomModal";
 import EditSpotForm from "../EditSpotForm";
 
 const SpotDetails = () => {
+    const history = useHistory()
     const dispatch = useDispatch()
     // extract the spotId from the parameter
     const { spotId } = useParams()
@@ -23,6 +24,16 @@ const SpotDetails = () => {
     useEffect(() => {
         dispatch(getOneSpot(spotId))
     }, [dispatch, spotId])
+
+    const deleteSpot = async (e) => {
+        e.preventDefault()
+        await dispatch(deleteASpot(spotId)).then(res => {
+            const { message } = res
+            alert(message)
+        })
+
+        history.push("/")
+    }
 
     return (
         <div>
@@ -53,6 +64,7 @@ const SpotDetails = () => {
             {/* conditional render a modal if user is here */}
             {/* when passing a component must be Capitalized for react to know it is a component. */}
             { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
+            { userId === ownerId && <button onClick={deleteSpot}>Delete</button>}
         </div>
     );
 }
