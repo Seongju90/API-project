@@ -102,9 +102,9 @@ export const createASpot = (spot) => async (dispatch) => {
     }
 }
 
-export const editASpot = (spot) => async (dispatch) => {
+export const editASpot = (spot, spotId) => async (dispatch) => {
     // adding the id to find the spot to edit
-    const response = await csrfFetch(`/api/spots/${spot.id}`, {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -159,9 +159,15 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
         //     newState.ownerSpots = normalizeArray(action.spots.Spots)
         //     return newState;
         case CREATE:
-            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
+            // don't need singleSpot prev state, because we arn't using it in create component
+            newState = {...state, allSpots: {...state.allSpots}}
             // key into allspots add a key of new spotid to the value of new spot
             newState.allSpots[action.spot.id] = action.spot
+            return newState;
+        case EDIT:
+            // don't need allSpots slice prev state because we arn't using it in edit component
+            // changing state causes re-render, overriding old spot information(...state.singleSpot) with new spot(action.spot)
+            newState = {...state, singleSpot: {...state.singleSpot, ...action.spot}}
             return newState;
         default:
             return state

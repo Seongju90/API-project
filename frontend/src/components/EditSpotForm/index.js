@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { getOneSpot, editASpot } from "../../store/spots"
+import { getOneSpot, editASpot, addImgToSpot } from "../../store/spots"
 
-const EditSpotForm = () => {
+const EditSpotForm = ({setShowModal}) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -17,14 +17,13 @@ const EditSpotForm = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
-    const [url, setUrl] = useState('');
 
     useEffect(() => {
         // load the current spot with id from params
         dispatch(getOneSpot(spotId))
     }, [dispatch])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         // edit spot Obj to be in the newState
@@ -39,9 +38,10 @@ const EditSpotForm = () => {
         }
 
         // might need spot & spotId, error message showing undefined
-        dispatch(editASpot(spot)).then(res => {
-            history.push(`/spots/${res.id}`)
-        })
+        // make edit wait before executing the hide modal
+        await dispatch(editASpot(spot, spotId))
+        // hide modal after edit
+        setShowModal(false)
     }
         return (
             <form onSubmit={handleSubmit}>
@@ -100,14 +100,6 @@ const EditSpotForm = () => {
                     type="number"
                     value={price}
                     onChange={e => setPrice(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Image url
-                    <input
-                    type="text"
-                    value={url}
-                    onChange={e => setUrl(e.target.value)}
                     />
                 </label>
                 <button

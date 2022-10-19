@@ -15,6 +15,8 @@ const SpotDetails = () => {
     // find ownerId from spot data // type of data = number
     const ownerId = useSelector(state => state.spots.singleSpot.ownerId)
 
+    //spot selector
+    const spot = useSelector(state => state.spots.singleSpot)
 
     useEffect(() => {
         dispatch(getOneSpot(spotId))
@@ -23,6 +25,29 @@ const SpotDetails = () => {
     return (
         <div>
             <h1>Spot Detail Information</h1>
+            <ul>
+                <li>
+                    {spot.address}
+                </li>
+                <li>
+                    {spot.city}
+                </li>
+                <li>
+                    {spot.state}
+                </li>
+                <li>
+                    {spot.country}
+                </li>
+                <li>
+                    {spot.name}
+                </li>
+                <li>
+                    {spot.description}
+                </li>
+                <li>
+                    {spot.price}
+                </li>
+            </ul>
             {/* conditional render a modal if user is here */}
             {/* when passing a component must be Capitalized for react to know it is a component. */}
             { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
