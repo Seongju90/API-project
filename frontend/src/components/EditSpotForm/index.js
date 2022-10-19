@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { getAllSpots } from "../../store/spots"
+import { getOneSpot, editASpot } from "../../store/spots"
 
 const EditSpotForm = () => {
     const dispatch = useDispatch();
@@ -9,10 +9,7 @@ const EditSpotForm = () => {
 
     // find the id of the spot from params
     const { spotId } = useParams();
-    console.log(spotId)
-    // find the spot with the Id from params
-    const allSpots = useSelector(state => console.log(state.allSpots))
-    console.log(allSpots)
+
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
@@ -22,15 +19,17 @@ const EditSpotForm = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
+    const [url, setUrl] = useState('');
 
     useEffect(() => {
-        dispatch(getAllSpots())
+        // load the current spot with id from params
+        dispatch(getOneSpot(spotId))
     }, [dispatch])
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        // create a spot Obj to be in the newState
+        // edit spot Obj to be in the newState
         const spot = {
             address,
             city,
@@ -43,16 +42,14 @@ const EditSpotForm = () => {
             price
         }
 
-        // use the response from thunk to get the ID of newly created spot
-        // dispatch(editASpot(spot)).then(res => {
-        //     // console.log('responseid', res.id)
-        //     //redirect to spot ID page after creating it
-        //     history.push(`/spots/${res.id}`)
-        // })
+        // might need spot & spotId, error message showing undefined
+        dispatch(editASpot(spot)).then(res => {
+            history.push(`/spots/${res.id}`)
+        })
     }
         return (
             <form onSubmit={handleSubmit}>
-                <h1>Create a Spot</h1>
+                <h1>Edit a Spot</h1>
                 <label>
                     Address
                     <input
@@ -123,6 +120,14 @@ const EditSpotForm = () => {
                     type="number"
                     value={price}
                     onChange={e => setPrice(e.target.value)}
+                    />
+                </label>
+                <label>
+                    Image url
+                    <input
+                    type="text"
+                    value={url}
+                    onChange={e => setUrl(e.target.value)}
                     />
                 </label>
                 <button
