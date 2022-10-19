@@ -10,7 +10,9 @@ const SpotDetails = () => {
     // extract the spotId from the parameter
     const { spotId } = useParams()
     // find userId from session state // type of data = number
-    const userId = useSelector(state => state.session.user.id)
+    // question mark: optional chaining, checks to see if what before it exists
+    // and if it doesn't it stops it from continuing on with the line
+    const userId = useSelector(state => state.session.user?.id)
 
     // find ownerId from spot data // type of data = number
     const ownerId = useSelector(state => state.spots.singleSpot.ownerId)

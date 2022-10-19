@@ -150,7 +150,7 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
         case LOADONESPOT:
-            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
+            newState = {...state, singleSpot: {...state.singleSpot}}
             newState.singleSpot = action.spot
             return newState;
         // case LOADOWNERSPOTS:

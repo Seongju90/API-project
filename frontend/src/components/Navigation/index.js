@@ -29,7 +29,8 @@ function Navigation({ isLoaded }){
             </div>
             <div className="login-signup">
               <span className="create-spot">
-                <NavLink to="/spots">Become a Host</NavLink>
+                {/* conditionally render create spot, for non-users */}
+                { sessionUser && <NavLink to="/spots">Become a Host</NavLink>}
               </span>
               {isLoaded && sessionLinks}
             </div>
