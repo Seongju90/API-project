@@ -1,58 +1,51 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { getAllSpots } from "../../store/spots"
+import { getOneSpot, editASpot, addImgToSpot } from "../../store/spots"
 
-const EditSpotForm = () => {
+const EditSpotForm = ({setShowModal}) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
     // find the id of the spot from params
     const { spotId } = useParams();
-    console.log(spotId)
-    // find the spot with the Id from params
-    const allSpots = useSelector(state => console.log(state.allSpots))
-    console.log(allSpots)
+
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
     const [country, setCountry] = useState('')
-    const [lat, setLat] = useState(0)
-    const [lng, setLng] = useState(0)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
 
     useEffect(() => {
-        dispatch(getAllSpots())
+        // load the current spot with id from params
+        dispatch(getOneSpot(spotId))
     }, [dispatch])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-        // create a spot Obj to be in the newState
+        // edit spot Obj to be in the newState
         const spot = {
             address,
             city,
             state,
             country,
-            lat,
-            lng,
             name,
             description,
             price
         }
 
-        // use the response from thunk to get the ID of newly created spot
-        // dispatch(editASpot(spot)).then(res => {
-        //     // console.log('responseid', res.id)
-        //     //redirect to spot ID page after creating it
-        //     history.push(`/spots/${res.id}`)
-        // })
+        // might need spot & spotId, error message showing undefined
+        // make edit wait before executing the hide modal
+        await dispatch(editASpot(spot, spotId))
+        // hide modal after edit
+        setShowModal(false)
     }
         return (
             <form onSubmit={handleSubmit}>
-                <h1>Create a Spot</h1>
+                <h1>Edit a Spot</h1>
                 <label>
                     Address
                     <input
@@ -83,22 +76,6 @@ const EditSpotForm = () => {
                     type="text"
                     value={country}
                     onChange={e => setCountry(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Latitude
-                    <input
-                    type="number"
-                    value={lat}
-                    onChange={e => setLat(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Longitude
-                    <input
-                    type="number"
-                    value={lng}
-                    onChange={e => setLng(e.target.value)}
                     />
                 </label>
                 <label>
