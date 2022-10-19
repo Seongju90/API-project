@@ -29,9 +29,11 @@ const validateSpot = [
         .isAlpha('en-US', {ignore: ' '})
         .withMessage('Country is required'),
     check('lat')
+        .optional({ nullable: true })
         .isDecimal() // check if STRING represents decimal number
         .withMessage('Latitude is not valid'),
     check('lng')
+        .optional({ nullable: true })
         .isDecimal()
         .withMessage('Longitude is not valid'),
     check('name')

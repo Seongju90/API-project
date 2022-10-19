@@ -12,7 +12,7 @@ function CustomModal({buttontext, Content}) {
       <button onClick={() => setShowModal(true)}>{buttontext}</button>
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
-          {<Content/>}
+          {<Content setShowModal={setShowModal}/>}
         </Modal>
       )}
     </>
