@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSpots } from '../../store/spots';
 import SpotCard from '../SpotCard'
+import './Spot.css';
 
 const SpotBrowser = () => {
     const dispatch = useDispatch()
@@ -16,7 +17,7 @@ const SpotBrowser = () => {
 
     // Each image of spot, will redirect to SpotCard
     return (
-        <div>
+        <div className="spot-card-container">
             {spots.map(spot => (
                 <SpotCard key={spot.id} spot={spot}/>
             ))}

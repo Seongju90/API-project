@@ -1,11 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { getOneSpot, editASpot, addImgToSpot } from "../../store/spots"
+import { useParams } from "react-router-dom";
+import { getOneSpot, editASpot } from "../../store/spots"
 
 const EditSpotForm = ({setShowModal}) => {
     const dispatch = useDispatch();
-    const history = useHistory();
 
     // find the id of the spot from params
     const { spotId } = useParams();
@@ -21,7 +20,7 @@ const EditSpotForm = ({setShowModal}) => {
     useEffect(() => {
         // load the current spot with id from params
         dispatch(getOneSpot(spotId))
-    }, [dispatch])
+    }, [dispatch, spotId])
 
     const handleSubmit = async (e) => {
         e.preventDefault()

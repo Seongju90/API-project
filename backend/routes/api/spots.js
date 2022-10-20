@@ -43,6 +43,7 @@ const validateSpot = [
         .withMessage('Name must be less than 50 characters'),
     check('description')
         .exists({ checkFalsy: true })
+        .isAlpha('en-US', {ignore: ' '})
         .withMessage('Description is required'),
     check('price')
         .isNumeric() // check only for numbers
@@ -53,7 +54,7 @@ const validateSpot = [
 const validateReview = [
     check('review')
         .exists({checkFalsy: true})
-        .isLength({min: 10, max: 255})
+        .isLength({min: 1, max: 255})
         .withMessage('Review must have 1 to 255 letters'),
     check('stars')
         .isFloat({min:0 , max:5})
@@ -153,8 +154,9 @@ router.get('/', validateQuery, async(req, res, next) => {
         })
 
         // const avgRating = numberReviews[0].count / totalReviews *this doesn't work*
-        const avgRating = numberReviews/ totalReviews
-        spot.avgRating = avgRating
+
+        const avgRating = totalReviews / numberReviews
+        spot.avgRating = avgRating.toFixed(1)
     }
 
     // Add previewImage to Spot response
@@ -277,8 +279,8 @@ router.get('/:spotId', async (req, res, next) => {
             raw: true
         });
 
-        // calculate avgstar by # of reviews / # of stars total
-        spotJson.avgStarRating = numReview / sumReview;
+        // calculate avgstar by # of stars total / # of reviews /
+        spotJson.avgStarRating = (sumReview / numReview).toFixed(1);
 
         // add spotImages to the response excluding some attributes
         let spotImages = await SpotImage.findAll({
@@ -481,11 +483,11 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
         res.json({
             "message": "User already has a review for this spot",
             "statusCode": 403
-          })
+        })
     }
 
-    // if I have req body make a new review
-    if (req.body) {
+    // if I have req body make a new review and no existing review
+    if (!existingReview && req.body) {
         const newReview = await Review.create({
             userId,
             spotId,
@@ -494,17 +496,6 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
         })
         // console.log(newReview)
         res.json(newReview)
-    } else {
-        // need to make custom validators for sequelize later
-        res.status(400)
-        res.json({
-            "message": "Validation error",
-            "statusCode": 400,
-            "errors": {
-              "review": "Review text is required",
-              "stars": "Stars must be an integer from 1 to 5",
-            }
-        })
     }
 })
 
