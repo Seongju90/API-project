@@ -78,8 +78,8 @@ export const getOneSpot = (id) => async(dispatch) => {
     if(response.ok) {
         const spot = await response.json()
         dispatch(actionLoadOneSpot(spot))
+        return response
     }
-    return response
 }
 
 // export const getOwnerSpots = () => async(dispatch) => {
@@ -159,7 +159,7 @@ export const deleteASpot = (id) => async(dispatch) => {
     }
 }
 
-/* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
+/* ---------- SPOT REDUCERS W/ INITIAL STATE ---------- */
 
 // set initial state to the structure of the documents
 const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {

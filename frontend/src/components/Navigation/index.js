@@ -28,7 +28,7 @@ function Navigation({ isLoaded }){
             <div className="home-link">
               <Ground/>
               <div className="groundbnb-text">
-                <Link exact to="/">groundbnb</Link>
+                <Link to="/">groundbnb</Link>
               </div>
             </div>
             <div className="login-signup">
