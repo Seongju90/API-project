@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { deleteASpot, getOneSpot } from "../../store/spots";
 import { getReviewsOfSpot } from "../../store/review";
 import { useParams, useHistory } from "react-router-dom";
@@ -78,7 +78,7 @@ const SpotDetails = () => {
             <h2>Reviews</h2>
             <div className="reviews-container">
                 {reviews.map(review => (
-                    <SpotReviews key={review.id} review={review}/>
+                    <SpotReviews key={review.id} review={review} userId={userId}/>
                 ))}
             </div>
             {/* conditionally render the create review */}
