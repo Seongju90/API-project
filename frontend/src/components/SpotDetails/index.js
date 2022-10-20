@@ -7,6 +7,7 @@ import { useParams, useHistory } from "react-router-dom";
 import CustomModal from "../CustomModal";
 import EditSpotForm from "../EditSpotForm";
 import SpotReviews from "../SpotReviews";
+import CreateReviewForm from "../CreateReviewForm";
 
 const SpotDetails = () => {
     const history = useHistory()
@@ -80,6 +81,7 @@ const SpotDetails = () => {
                     <SpotReviews key={review.id} review={review}/>
                 ))}
             </div>
+            <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
         </div>
     );
 }

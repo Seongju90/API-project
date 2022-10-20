@@ -32,16 +32,32 @@ const actionDeleteReview = (id) => {
 
 // Getting all the reviews of each spot
 export const getReviewsOfSpot = (id) => async(dispatch) => {
-    const response = await csrfFetch(`/api/spots/${id}/reviews`)
+    const response = await csrfFetch(`/api/spots/${id}/reviews`);
+
     if(response.ok) {
         const reviews = await response.json()
         // console.log('thunk response', reviews)
         dispatch(actionLoadReviews(reviews))
         return response
-    }
+    };
 }
 
+export const createReviewOfSpot = (review, spotId) => async(dispatch) => {
+    console.log('reviewthunk', review)
+    console.log('reviewthunk', spotId)
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(review)
+    });
 
+    if(response.ok) {
+        const newReview = await response.json();
+        dispatch(actionCreateReview(newReview));
+    };
+}
 
 /* ---------- REVIEWS REDUCERS W/ INITIAL STATE ---------- */
 
@@ -52,6 +68,11 @@ const reviewsReducer = (state = {spot: {}, user:{}}, action) => {
             newState = {...state}
             newState.spot = normalizeArray(action.reviews.Reviews)
             return newState;
+        case CREATE:
+            newState = {...state, spot: {...state.spot}}
+            console.log("action", action)
+            newState.spot[action.Reviews.id] = action.review
+            return newState
         default:
             return state;
     }

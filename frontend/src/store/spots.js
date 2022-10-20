@@ -99,11 +99,11 @@ export const createASpot = (spot) => async (dispatch) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(spot)
-    })
+    });
 
     if(response.ok) {
-        const newSpot = await response.json()
-        dispatch(actionCreateASpot(newSpot))
+        const newSpot = await response.json();
+        dispatch(actionCreateASpot(newSpot));
         // return the newspot to extract ID in component
         return newSpot
     }

@@ -3,9 +3,11 @@
 const SpotReviews = ({review}) => {
 
     return (
-        <div>
-            {review.review}
-        </div>
+        <>
+            <div>
+                {review.review}
+            </div>
+        </>
     );
 }
 
