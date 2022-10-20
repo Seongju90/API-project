@@ -1,8 +1,25 @@
 .image-links-container{
     margin: 0.5em;
+    width: 15%;
+    height: 100%;
+    border: thick solid red;
 }
 
-.image {
-   width: 20%;
-   height: 20%;
+.spot-card-img {
+    /* allow img to fill the div that it is in */
+    object-fit: cover;
+    width: 100%;
+    height: 250px;
+}
+
+.img-link {
+    width: 100%;
+}
+
+.address {
+    width: 100%
+}
+
+.other-info {
+    width: 100%
 }

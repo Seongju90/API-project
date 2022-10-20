@@ -5,17 +5,16 @@ const SpotCard = ({spot}) => {
 
     return (
         <div className="image-links-container">
-            <div className="image">
-                <Link to={`/spots/${spot.id}`}>
-                    <img
-                        src={spot.previewImage}
-                    />
-                </Link>
-            </div>
-            <div>
+            <Link className="img-link" to={`/spots/${spot.id}`}>
+                <img
+                    className="spot-card-img"
+                    src={spot.previewImage}
+                />
+            </Link>
+            <div className="address">
                 address / stars
             </div>
-            <div>
+            <div className="other-info">
                 Other information
             </div>
         </div>

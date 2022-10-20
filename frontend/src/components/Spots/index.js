@@ -17,12 +17,10 @@ const SpotBrowser = () => {
 
     // Each image of spot, will redirect to SpotCard
     return (
-        <div className="main-parent-container">
-            <div className="spot-card-container">
-                    {spots.map(spot => (
-                        <SpotCard key={spot.id} spot={spot}/>
-                    ))}
-            </div>
+        <div className="spot-card-container">
+            {spots.map(spot => (
+                <SpotCard key={spot.id} spot={spot}/>
+            ))}
         </div>
     );
 }
