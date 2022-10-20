@@ -43,6 +43,7 @@ const validateSpot = [
         .withMessage('Name must be less than 50 characters'),
     check('description')
         .exists({ checkFalsy: true })
+        .isAlpha('en-US', {ignore: ' '})
         .withMessage('Description is required'),
     check('price')
         .isNumeric() // check only for numbers
