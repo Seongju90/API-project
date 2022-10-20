@@ -1,9 +1,10 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
+import Ground from '../SVG/ground';
 
 function Navigation({ isLoaded }){
     const sessionUser = useSelector(state => state.session.user);
@@ -25,7 +26,10 @@ function Navigation({ isLoaded }){
     return (
         <div className="navigation-container">
             <div className="home-link">
-              <NavLink exact to="/">Home</NavLink>
+              <Ground/>
+              <div className="groundbnb-text">
+                <Link exact to="/">groundbnb</Link>
+              </div>
             </div>
             <div className="login-signup">
               <span className="create-spot">
