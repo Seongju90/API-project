@@ -153,8 +153,9 @@ router.get('/', validateQuery, async(req, res, next) => {
         })
 
         // const avgRating = numberReviews[0].count / totalReviews *this doesn't work*
-        const avgRating = numberReviews/ totalReviews
-        spot.avgRating = avgRating.toFixed(2)
+
+        const avgRating = totalReviews / numberReviews
+        spot.avgRating = avgRating.toFixed(1)
     }
 
     // Add previewImage to Spot response
@@ -277,8 +278,8 @@ router.get('/:spotId', async (req, res, next) => {
             raw: true
         });
 
-        // calculate avgstar by # of reviews / # of stars total
-        spotJson.avgStarRating = (numReview / sumReview).toFixed(2);
+        // calculate avgstar by # of stars total / # of reviews /
+        spotJson.avgStarRating = (sumReview / numReview).toFixed(1);
 
         // add spotImages to the response excluding some attributes
         let spotImages = await SpotImage.findAll({

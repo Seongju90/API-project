@@ -22,8 +22,8 @@ const reviews = [
   {
     userId: 3,
     spotId: 2,
-    review: 'Do not come here, this place is awful',
-    stars: 1,
+    review: 'So-So',
+    stars: 4,
   },
   {
     userId: 2,
@@ -40,8 +40,8 @@ const reviews = [
   {
     userId: 1,
     spotId: 4,
-    review: 'Yikes, avoid if possible',
-    stars: 2,
+    review: 'Great Sunset',
+    stars: 5,
   },
   {
     userId: 1,
@@ -58,8 +58,8 @@ const reviews = [
   {
     userId: 3,
     spotId: 7,
-    review: 'Who would pay for this kind of place',
-    stars: 1,
+    review: 'Could not be any better, I think...',
+    stars: 4,
   },
   {
     userId: 1,
