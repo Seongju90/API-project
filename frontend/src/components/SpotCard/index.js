@@ -3,6 +3,9 @@ import './SpotCard.css';
 
 const SpotCard = ({spot}) => {
 
+// extract address, price, and review from prop
+const { address, price, avgRating } = spot;
+
     return (
         <div className="image-links-container">
             <Link className="img-link" to={`/spots/${spot.id}`}>
@@ -11,11 +14,10 @@ const SpotCard = ({spot}) => {
                     src={spot.previewImage}
                 />
             </Link>
-            <div className="address">
-                address / stars
-            </div>
-            <div className="other-info">
-                Other information
+            <div className="spot-info-container">
+                <span className="address">{address}</span>
+                <span className="ratings">{avgRating}</span>
+                <div className="other-info">{price}</div>
             </div>
         </div>
     );

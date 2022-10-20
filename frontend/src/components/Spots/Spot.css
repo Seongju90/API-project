@@ -13,3 +13,7 @@
     height: 100%;
     border: thick solid black
 }
+
+.spot-card-img {
+    border-radius: 30px;
+}

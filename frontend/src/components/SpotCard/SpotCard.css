@@ -16,10 +16,17 @@
     width: 100%;
 }
 
-.address {
-    width: 100%
+.ratings {
+    /* this will move the ratings to the right side */
+    margin-left: auto;
 }
 
 .other-info {
     width: 100%
+}
+
+.spot-info-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.5em;
 }
