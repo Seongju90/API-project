@@ -55,6 +55,7 @@ export const createReviewOfSpot = (review, spotId) => async(dispatch) => {
 
     if(response.ok) {
         const newReview = await response.json();
+        console.log('newreview in thunk', newReview)
         dispatch(actionCreateReview(newReview));
     };
 }
@@ -70,8 +71,9 @@ const reviewsReducer = (state = {spot: {}, user:{}}, action) => {
             return newState;
         case CREATE:
             newState = {...state, spot: {...state.spot}}
-            console.log("action", action)
-            newState.spot[action.Reviews.id] = action.review
+            // console.log("action", action.review)
+            // console.log("id", action.review.id)
+            newState.spot[action.review.id] = action.review
             return newState
         default:
             return state;

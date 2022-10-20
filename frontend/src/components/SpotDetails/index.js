@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { deleteASpot, getOneSpot } from "../../store/spots";
 import { getReviewsOfSpot } from "../../store/review";
 import { useParams, useHistory } from "react-router-dom";
@@ -12,25 +12,25 @@ import CreateReviewForm from "../CreateReviewForm";
 const SpotDetails = () => {
     const history = useHistory()
     const dispatch = useDispatch()
+
     // extract the spotId from the parameter
     const { spotId } = useParams()
     // find userId from session state // type of data = number
     // question mark: optional chaining, checks to see if what before it exists
     // and if it doesn't it stops it from continuing on with the line
     const userId = useSelector(state => state.session.user?.id)
-
     // find ownerId from spot data // type of data = number
     const ownerId = useSelector(state => state.spots.singleSpot.ownerId)
-
     //spot selector
     const spot = useSelector(state => state.spots.singleSpot)
-
     //reviews selector
     const reviewsObj = useSelector(state => state.reviews.spot)
     // turn list of review obj into an array to iterate
     const reviews = Object.values(reviewsObj)
 
-    useEffect(() => {
+    const existingReview = reviews.find(review => review.userId === userId)
+
+     useEffect(() => {
         dispatch(getOneSpot(spotId))
         dispatch(getReviewsOfSpot(spotId))
     }, [dispatch, spotId])
@@ -81,7 +81,10 @@ const SpotDetails = () => {
                     <SpotReviews key={review.id} review={review}/>
                 ))}
             </div>
-            <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
+            {/* conditionally render the create review */}
+            {!existingReview &&
+                <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
+            }
         </div>
     );
 }

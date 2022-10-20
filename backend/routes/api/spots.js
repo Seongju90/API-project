@@ -54,7 +54,7 @@ const validateSpot = [
 const validateReview = [
     check('review')
         .exists({checkFalsy: true})
-        .isLength({min: 10, max: 255})
+        .isLength({min: 1, max: 255})
         .withMessage('Review must have 1 to 255 letters'),
     check('stars')
         .isFloat({min:0 , max:5})
@@ -483,11 +483,11 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
         res.json({
             "message": "User already has a review for this spot",
             "statusCode": 403
-          })
+        })
     }
 
-    // if I have req body make a new review
-    if (req.body) {
+    // if I have req body make a new review and no existing review
+    if (!existingReview && req.body) {
         const newReview = await Review.create({
             userId,
             spotId,
@@ -496,17 +496,6 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
         })
         // console.log(newReview)
         res.json(newReview)
-    } else {
-        // need to make custom validators for sequelize later
-        res.status(400)
-        res.json({
-            "message": "Validation error",
-            "statusCode": 400,
-            "errors": {
-              "review": "Review text is required",
-              "stars": "Stars must be an integer from 1 to 5",
-            }
-        })
     }
 })
 

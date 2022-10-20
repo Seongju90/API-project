@@ -5,7 +5,7 @@ import { createReviewOfSpot } from "../../store/review";
 
 const CreateReviewForm = ({spotId, setShowModal}) => {
     const dispatch = useDispatch();
-    // const history = useHistory();
+    const history = useHistory();
     // console.log('create', spotId)
     const [review, setReview] = useState("")
     const [stars, setStars] = useState(0)
@@ -20,7 +20,7 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
 
         await dispatch(createReviewOfSpot(newReview, spotId))
         setShowModal(false)
-        // history.push(`/spots/${spotId}`)
+        history.push(`/spots/${spotId}`)
     }
 
     return (
