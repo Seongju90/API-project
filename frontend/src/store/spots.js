@@ -8,7 +8,7 @@ const LOADONESPOT = 'spots/loadOneSpot'
 const CREATE = 'spots/createSpots';
 const EDIT = 'spots/editSpots';
 const ADDIMG = '/spots/addImg'
-// const DELETE ='spots/deleteSpots';
+const DELETE ='spots/deleteSpots';
 
 /* ---------- ACTION CREATORS ---------- */
 const actionLoadSpots = (spots) => {
@@ -53,6 +53,13 @@ const actionAddImg = (spot) => {
     }
 }
 
+const actionDeleteSpot = (id) => {
+    return {
+        type: DELETE,
+        id
+    }
+}
+
 /* ---------- THUNK ACTION CREATORS ---------- */
 export const getAllSpots = () => async (dispatch) => {
     const response = await csrfFetch('/api/spots/')
@@ -71,8 +78,8 @@ export const getOneSpot = (id) => async(dispatch) => {
     if(response.ok) {
         const spot = await response.json()
         dispatch(actionLoadOneSpot(spot))
+        return response
     }
-    return response
 }
 
 // export const getOwnerSpots = () => async(dispatch) => {
@@ -92,11 +99,11 @@ export const createASpot = (spot) => async (dispatch) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(spot)
-    })
+    });
 
     if(response.ok) {
-        const newSpot = await response.json()
-        dispatch(actionCreateASpot(newSpot))
+        const newSpot = await response.json();
+        dispatch(actionCreateASpot(newSpot));
         // return the newspot to extract ID in component
         return newSpot
     }
@@ -138,7 +145,21 @@ export const addImgToSpot = (newSpot, spotImgBody) => async(dispatch) => {
     }
 }
 
-/* ---------- SESSION REDUCERS W/ INITIAL STATE ---------- */
+export const deleteASpot = (id) => async(dispatch) => {
+
+    const response = await csrfFetch(`/api/spots/${id}`, {
+        method: "DELETE",
+    })
+
+    if(response.ok) {
+        const deleteMessage = await response.json()
+
+        dispatch(actionDeleteSpot(id))
+        return deleteMessage
+    }
+}
+
+/* ---------- SPOT REDUCERS W/ INITIAL STATE ---------- */
 
 // set initial state to the structure of the documents
 const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
@@ -150,7 +171,7 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
         case LOADONESPOT:
-            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {...state.singleSpot}}
+            newState = {...state, singleSpot: {...state.singleSpot}}
             newState.singleSpot = action.spot
             return newState;
         // case LOADOWNERSPOTS:
@@ -169,8 +190,19 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
             // changing state causes re-render, overriding old spot information(...state.singleSpot) with new spot(action.spot)
             newState = {...state, singleSpot: {...state.singleSpot, ...action.spot}}
             return newState;
+        // case ADDIMG: {
+        //     newState = {...state}
+        //     return newState;
+        // }
+        case DELETE:
+            // get rid of single spot infor with empty object so data doesn't get leaked
+            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {}}
+            // console.log('action', action)
+            // console.log('spotTObeDeleted', newState.allSpots[action.id])
+            delete newState.allSpots[action.id]
+            return newState;
         default:
-            return state
+            return state;
     }
 }
 
