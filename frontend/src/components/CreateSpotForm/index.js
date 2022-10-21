@@ -21,7 +21,7 @@ const CreateSpotForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setErrors([]);
+        const error = [];
         // create a spot Obj to be in the newState
         const spot = {
             address,
@@ -39,19 +39,31 @@ const CreateSpotForm = () => {
             "preview": true
         }
 
-        // need await because waiting for response for newly created spot
-        const newSpot = await dispatch(createASpot(spot)).catch(
-            async (res) => {
-                const data = await res.json();
-                if (data && data.errors) setErrors(data.errors)
-            }
-        )
+        //front-end spot validation
+        if (!address.length) error.push("Street address is required")
+        if (!city.length) error.push("City is required")
+        if (!state.length) error.push("State is required")
+        if (!country.length) error.push("Country is required")
+        if (name.length > 50) error.push("Name must be less than 50 characters")
+        if (!description.length) error.push("Description is required")
+        // e.target.value is a string not a number
+        if (price === "0" || !price) error.push("Price per day is required")
 
         // check if url is an image or not
-        console.log(url)
-        console.log(url.split("."))
         const splitUrl = url.split(".")
-        console.log(splitUrl.find("jpg"))
+        const validImageTypes = ["png", "jpeg", "jpg"]
+        // some() tests whether at least one element in the array passes the test implemented by the provided function.
+        const validUrl = splitUrl.some(urlString => validImageTypes.includes(urlString))
+
+        if (!validUrl) {
+            error.push("Images must be png, jpeg, or jpg format")
+        }
+
+        // If I have any errors set them, otherwise create a new spot
+        setErrors(error)
+
+        // need await because waiting for response for newly created spot
+        const newSpot = await dispatch(createASpot(spot))
 
         // if we did create the spot
         if (newSpot.id) {
