@@ -163,7 +163,7 @@ export const deleteASpot = (id) => async(dispatch) => {
 
 // set initial state to the structure of the documents
 const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
-    let newState = {}
+    let newState;
     switch(action.type) {
         case LOAD:
             newState = {...state}
