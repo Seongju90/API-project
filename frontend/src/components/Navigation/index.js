@@ -5,6 +5,7 @@ import ProfileButton from './ProfileButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
 import Ground from '../SVG/ground';
+import titleImage from './groundbnb.png';
 
 function Navigation({ isLoaded }){
     const sessionUser = useSelector(state => state.session.user);
@@ -28,7 +29,7 @@ function Navigation({ isLoaded }){
             <div className="home-link">
               <Ground/>
               <div className="groundbnb-text">
-                <Link to="/">groundbnb</Link>
+                <Link to="/"><img src={titleImage}/></Link>
               </div>
             </div>
             <div className="login-signup">
