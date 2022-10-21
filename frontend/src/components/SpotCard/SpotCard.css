@@ -1,6 +1,7 @@
 .image-links-container{
     margin: 0.5em;
     width: 17%;
+    min-width: 17%;
     height: 100%;
     /* border: thick solid red; */
 }

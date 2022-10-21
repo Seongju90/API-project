@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { addImgToSpot, createASpot } from "../../store/spots"
 
@@ -17,10 +17,11 @@ const CreateSpotForm = () => {
     const [price, setPrice] = useState(0);
     //adding url for spotImg on creation
     const [url, setUrl] = useState('');
+    const [errors, setErrors] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
+        setErrors([]);
         // create a spot Obj to be in the newState
         const spot = {
             address,
@@ -39,7 +40,18 @@ const CreateSpotForm = () => {
         }
 
         // need await because waiting for response for newly created spot
-        const newSpot = await dispatch(createASpot(spot))
+        const newSpot = await dispatch(createASpot(spot)).catch(
+            async (res) => {
+                const data = await res.json();
+                if (data && data.errors) setErrors(data.errors)
+            }
+        )
+
+        // check if url is an image or not
+        console.log(url)
+        console.log(url.split("."))
+        const splitUrl = url.split(".")
+        console.log(splitUrl.find("jpg"))
 
         // if we did create the spot
         if (newSpot.id) {
@@ -50,6 +62,11 @@ const CreateSpotForm = () => {
         return (
             <form onSubmit={handleSubmit}>
                 <h1>Create a Spot</h1>
+                <ul>
+                    {errors.map((error, idx) => (
+                    <li key={idx}>{error}</li>
+                    ))}
+                </ul>
                 <label>
                     Address
                     <input

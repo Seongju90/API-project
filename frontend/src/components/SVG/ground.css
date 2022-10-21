@@ -2,7 +2,7 @@
 /* o filter to a specific color, use the following Codepen(Click Here to open codepen) to convert a hex color code to a CSS filter: */
     filter: invert(36%) sepia(60%) saturate(3516%) hue-rotate(328deg) brightness(100%) contrast(103%);
     /* #ff385c hexcode color */
-    width: 20%;
+    min-width: 20%;
     height: 20%;
     margin-right: 1em;
 }

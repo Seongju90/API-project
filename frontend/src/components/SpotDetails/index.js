@@ -31,12 +31,17 @@ const SpotDetails = () => {
     const existingReview = reviews.find(review => review.userId === userId)
 
     // added this async function so spot will load first then reviews
-    const getData = async() => {
-        await dispatch(getOneSpot(spotId))
-        await dispatch(getReviewsOfSpot(spotId))
-    }
+    // const getData = async() => {
+    //     await dispatch(getOneSpot(spotId))
+    //     await dispatch(getReviewsOfSpot(spotId))
+    // }
+
      useEffect(() => {
-        getData()
+        const getData = async() => {
+            await dispatch(getOneSpot(spotId))
+            await dispatch(getReviewsOfSpot(spotId))
+        }
+        getData();
     }, [])
 
     const deleteSpot = async (e) => {

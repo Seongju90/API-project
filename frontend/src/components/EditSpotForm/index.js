@@ -16,6 +16,7 @@ const EditSpotForm = ({setShowModal}) => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
+    const [errors, setErrors] = useState([]);
 
     useEffect(() => {
         // load the current spot with id from params
@@ -24,6 +25,7 @@ const EditSpotForm = ({setShowModal}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setErrors([]);
 
         // edit spot Obj to be in the newState
         const spot = {
@@ -38,13 +40,24 @@ const EditSpotForm = ({setShowModal}) => {
 
         // might need spot & spotId, error message showing undefined
         // make edit wait before executing the hide modal
-        await dispatch(editASpot(spot, spotId))
+        await dispatch(editASpot(spot, spotId)).catch(
+            async (res) => {
+                const data = await res.json();
+                console.log('data in catch', data)
+                if (data && data.errors) setErrors(data.errors)
+            }
+        )
         // hide modal after edit
         setShowModal(false)
     }
         return (
             <form onSubmit={handleSubmit}>
                 <h1>Edit a Spot</h1>
+                <ul>
+                    {errors.map((error, idx) => (
+                    <li key={idx}>{error}</li>
+                    ))}
+                </ul>
                 <label>
                     Address
                     <input
