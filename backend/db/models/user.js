@@ -63,7 +63,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [4,30],
         isAlpha: true
       }
     },
@@ -71,7 +70,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [4,30],
         isAlpha: true
       }
     },
