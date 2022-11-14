@@ -12,11 +12,6 @@ function Navigation({ isLoaded }){
     const sessionUser = useSelector(state => state.session.user);
     const [showMenu, setShowMenu] = useState(false);
 
-    const openMenu = () => {
-      if (showMenu) return;
-      setShowMenu(true);
-    };
-
     let sessionLinks;
     if (sessionUser) {
       sessionLinks = (
@@ -44,12 +39,7 @@ function Navigation({ isLoaded }){
                 {/* conditionally render create spot, for non-users */}
                 { sessionUser && <NavLink to="/spots">Become a Host</NavLink>}
               </span>
-              {/* {isLoaded && sessionLinks} */}
-              <button onClick={openMenu}>
-                <i class="fa-solid fa-bars"></i>
-                <i className="fas fa-user-circle" />
-              </button>
-              {showMenu && sessionLinks}
+              {isLoaded && sessionLinks}
             </div>
         </div>
     );
