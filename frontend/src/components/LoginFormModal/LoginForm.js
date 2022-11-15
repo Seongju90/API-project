@@ -14,7 +14,7 @@ function LoginForm({ setShowModal }) {
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password }))
     // if login successfull close modal
-      .then(setShowModal(false))
+      .then(() => setShowModal(false))
       .catch(
       async (res) => {
         const data = await res.json();

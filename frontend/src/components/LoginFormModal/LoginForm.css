@@ -4,11 +4,18 @@
 }
 
 .user-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: 25px;
+    width: 100%;
     margin: 10px;
 }
 
 .password-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: 25px;
     width: 100%;
     margin: 10px;
@@ -25,9 +32,10 @@
 
 .input-user {
     margin-left: 5px;
+    width: 69%;
 }
 
 .input-password {
     margin-left: 5px;
-    width: 65%
+    width: 81%;
 }

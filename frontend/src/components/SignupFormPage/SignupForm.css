@@ -4,54 +4,63 @@
 }
 
 .first-name-info {
+    width: 100%;
     margin: 10px;
 }
 
 .first-name-input {
     margin-left: 10px;
-    width: 69%;
+    width: 85%;
 }
 
 .last-name-info {
+    width: 100%;
     margin: 10px;
-    width: 68%;
 }
 
 .last-name-input {
     margin-left: 10px;
+    width: 85%;
 }
 
 .email-info {
+    width: 100%;
     margin: 10px;
 }
 
 .email-input {
     margin-left: 10px;
-    width: 82%;
+    width: 90%;
 }
 
 .username-info {
+    width: 100%;
     margin: 10px;
 }
 
 .username-input {
     margin-left: 10px;
+    width: 86%;
 }
 
 .password-info-signup {
+    width: 100%;
     margin: 10px;
 }
 
 .password-input {
     margin-left: 10px;
+    width: 86%;
 }
 
 .confirmed-password-info {
+    width: 100%;
     margin: 10px;
 }
 
 .confirmed-password-input {
     margin-left: 10px;
+    width: 78%;
 }
 
 .sign-up-button {
