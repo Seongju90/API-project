@@ -16,6 +16,7 @@ const EditSpotForm = ({setShowModal}) => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState(0)
+    const [url, setUrl] = useState('');
     const [errors, setErrors] = useState([]);
 
     useEffect(() => {
@@ -25,7 +26,7 @@ const EditSpotForm = ({setShowModal}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setErrors([]);
+        const error = [];
 
         // edit spot Obj to be in the newState
         const spot = {
@@ -38,12 +39,35 @@ const EditSpotForm = ({setShowModal}) => {
             price
         }
 
+        // front-end spot validation
+        if (!address.length) error.push("Street address is required")
+        if (!city.length) error.push("City is required")
+        if (!state.length) error.push("State is required")
+        if (!country.length) error.push("Country is required")
+        if (name.length > 50) error.push("Name must be less than 50 characters")
+        if (!description.length) error.push("Description is required")
+        // e.target.value is a string not a number
+        if (price === "0" || !price) error.push("Price per day is required")
+        if (!url.length) error.push("Image url required")
+        // check if url is an image or not
+        const splitUrl = url.split(".")
+        const validImageTypes = ["png", "jpeg", "jpg"]
+        // some() tests whether at least one element in the array passes the test implemented by the provided function.
+        const validUrl = splitUrl.some(urlString => validImageTypes.includes(urlString))
+
+        if (!validUrl) {
+            error.push("Images must be png, jpeg, or jpg format")
+        }
+
+        // If I have any errors set them, otherwise edit the spot
+        setErrors(error)
+
         // might need spot & spotId, error message showing undefined
         // make edit wait before executing the hide modal
         await dispatch(editASpot(spot, spotId)).catch(
             async (res) => {
                 const data = await res.json();
-                console.log('data in catch', data)
+                // console.log('data in catch', data)
                 if (data && data.errors) setErrors(data.errors)
             }
         )
@@ -112,6 +136,14 @@ const EditSpotForm = ({setShowModal}) => {
                     type="number"
                     value={price}
                     onChange={e => setPrice(e.target.value)}
+                    />
+                </label>
+                <label>
+                    Image url
+                    <input
+                    type="text"
+                    value={url}
+                    onChange={e => setUrl(e.target.value)}
                     />
                 </label>
                 <button

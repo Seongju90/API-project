@@ -1,0 +1,37 @@
+.signup-info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.first-name-info {
+    margin: 10px;
+}
+
+.last-name-info {
+    margin: 10px;
+}
+
+.email-info {
+    margin: 10px;
+}
+
+.username-info {
+    margin: 10px;
+}
+
+.password-info {
+    margin: 10px;
+}
+
+.confirmed-password-info {
+    margin: 10px;
+}
+
+.sign-up-button {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+    margin: 10px;
+}

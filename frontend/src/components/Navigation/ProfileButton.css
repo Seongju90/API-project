@@ -20,3 +20,10 @@
     width: 30px; */
     fill: #717171;
 }
+
+.profile-dropdown {
+    position: absolute;
+    top: 50%;
+    right: 4%;
+    padding: 10px;
+}
