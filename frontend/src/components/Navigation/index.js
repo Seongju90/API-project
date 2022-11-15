@@ -23,25 +23,27 @@ function Navigation({ isLoaded }){
                 <Link to="/"><img alt="groundbnb-title" src={titleImage}/></Link>
               </div>
             </div>
-            <div className="profile-button">
+            <div className="button-and-hostlink">
               <span className="create-spot">
                   {/* conditionally render create spot, for non-users */}
                   { sessionUser && <NavLink to="/spots">Become a Host</NavLink>}
-                </span>
-              {isLoaded && (
-                <ProfileButton
-                  user={sessionUser}
-                  setLogin={setLogin}
-                  setShowModal={setShowModal}
-                />
-              )}
-              </div>
-              {showModal && (
-              <Modal onClose={() => setShowModal(false)}>
-                {login ? <LoginForm setShowModal={setShowModal}/>
-                : <SignupFormPage setShowModal={setShowModal}/>}
-              </Modal>
-              )}
+              </span>
+              <div className="profile-button">
+                {isLoaded && (
+                  <ProfileButton
+                    user={sessionUser}
+                    setLogin={setLogin}
+                    setShowModal={setShowModal}
+                  />
+                )}
+                </div>
+                {showModal && (
+                <Modal onClose={() => setShowModal(false)}>
+                  {login ? <LoginForm setShowModal={setShowModal}/>
+                  : <SignupFormPage setShowModal={setShowModal}/>}
+                </Modal>
+                )}
+            </div>
         </div>
     );
   }

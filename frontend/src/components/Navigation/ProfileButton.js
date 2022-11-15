@@ -37,22 +37,22 @@ function ProfileButton({user, setLogin, setShowModal}) {
       </button>
       {/* if user then show logout + user info, otherwise render Login/SignUp */}
       {showMenu && ( user ?
-        (<ul className="profile-dropdown">
-          <li>{user.username}</li>
-          <li>{user.email}</li>
-          <div>
-          <button onClick={logout}>Log Out</button>
-          </div>
-        </ul>) :
         (<div className="profile-dropdown">
-          <div className="login-button-dropdown">
-            <button onClick={() => {
+          <div className="user-dropdown">{user.username}</div>
+          <div className="email-dropdown">{user.email}</div>
+          <div>
+          <button className="logout-button-dropdown" onClick={logout}>Log Out</button>
+          </div>
+        </div>) :
+        (<div className="profile-dropdown">
+          <div className="login-dropdown">
+            <button className="login-button-dropdown" onClick={() => {
               setLogin(true)
               setShowModal(true)
             }}>Log In</button>
           </div>
-          <div className="signup-button-dropdown">
-            <button onClick={() => {
+          <div className="signup-dropdown">
+            <button className="signup-button-dropdown"onClick={() => {
               setLogin(false)
               setShowModal(true)
             }}>Sign Up</button>

@@ -18,21 +18,59 @@
 }
 
 .profile-dropdown {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 116%;
     right: 1%;
-    padding: 10px;
-    width: 100%;
+    padding: 5px;
+    width: 300%;
     border: solid 1px lightgrey;
     border-radius: 10px;
     background-color: white;
 }
 
-.signup-button-dropdown {
+.signup-dropdown {
     width: 80%;
     margin: 10px;
 }
 
-.login-button-dropdown {
+.login-dropdown {
     margin: 10px;
+}
+
+.user-dropdown {
+    margin: 10px;
+}
+
+.email-dropdown {
+    margin: 10px;
+}
+
+.logout-button-dropdown {
+    width: 95%;
+    margin: 10px;
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.login-button-dropdown {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+    width: 98%;
+}
+
+.signup-button-dropdown {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+    width: 112%
 }

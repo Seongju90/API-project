@@ -16,3 +16,13 @@
 .profile-button {
     position: relative;
 }
+
+.button-and-hostlink {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.create-spot {
+    margin-right: 10px;
+}
