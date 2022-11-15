@@ -7,24 +7,48 @@
     margin: 10px;
 }
 
+.first-name-input {
+    margin-left: 10px;
+}
+
 .last-name-info {
     margin: 10px;
+}
+
+.last-name-input {
+    margin-left: 10px;
 }
 
 .email-info {
     margin: 10px;
 }
 
+.email-input {
+    margin-left: 10px;
+}
+
 .username-info {
     margin: 10px;
 }
 
-.password-info {
+.username-input {
+    margin-left: 10px;
+}
+
+.password-info-signup {
     margin: 10px;
+}
+
+.password-input {
+    margin-left: 10px;
 }
 
 .confirmed-password-info {
     margin: 10px;
+}
+
+.confirmed-password-input {
+    margin-left: 10px;
 }
 
 .sign-up-button {

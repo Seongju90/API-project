@@ -41,6 +41,7 @@ function SignupFormPage({ setShowModal }) {
         <label className="first-name-info">
           First Name
           <input
+            className="first-name-input"
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -50,6 +51,7 @@ function SignupFormPage({ setShowModal }) {
         <label className="last-name-info">
           Last Name
           <input
+            className="last-name-input"
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -59,6 +61,7 @@ function SignupFormPage({ setShowModal }) {
         <label className="email-info">
           Email
           <input
+            className="email-input"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -68,15 +71,17 @@ function SignupFormPage({ setShowModal }) {
         <label className="username-info">
           Username
           <input
+            className="username-input"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
         </label>
-        <label className="password-info">
+        <label className="password-info-signup">
           Password
           <input
+            className="password-input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -86,6 +91,7 @@ function SignupFormPage({ setShowModal }) {
         <label className="confirmed-password-info">
           Confirm Password
           <input
+            className="confirmed-password-input"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
