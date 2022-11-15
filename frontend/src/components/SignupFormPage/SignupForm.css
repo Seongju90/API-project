@@ -9,10 +9,12 @@
 
 .first-name-input {
     margin-left: 10px;
+    width: 69%;
 }
 
 .last-name-info {
     margin: 10px;
+    width: 68%;
 }
 
 .last-name-input {
@@ -25,6 +27,7 @@
 
 .email-input {
     margin-left: 10px;
+    width: 82%;
 }
 
 .username-info {
