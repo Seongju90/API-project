@@ -160,18 +160,20 @@ export const deleteASpot = (id) => async(dispatch) => {
 }
 
 /* ---------- SPOT REDUCERS W/ INITIAL STATE ---------- */
+// Only want to spread old state when we modify the state, not when we READ/LOAD state.
+// On Load/Read we want to reset slice of state we don't need to stop leakage of data.
 
 // set initial state to the structure of the documents
 const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
     let newState = {}
     switch(action.type) {
         case LOAD:
-            newState = {...state}
+            newState = {...state, singleSpot: {}}
             // action.spots returns an obj, key into Spots to get the array
             newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
         case LOADONESPOT:
-            newState = {...state, singleSpot: {...state.singleSpot}}
+            newState = {...state, allSpots: {}}
             newState.singleSpot = action.spot
             return newState;
         // case LOADOWNERSPOTS:

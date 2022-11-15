@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
-// import EditSpotForm from "../EditSpotForm";
-// import { NavLink } from "react-router-dom";
 
-function ProfileButton({ user }) {
+function ProfileButton({user, setLogin, setShowModal}) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
 
@@ -35,15 +33,29 @@ function ProfileButton({ user }) {
       <button onClick={openMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      {showMenu && (
-        <ul className="profile-dropdown">
+      {/* if user then show logout + user info, otherwise render Login/SignUp */}
+      {showMenu && ( user ?
+        (<ul className="profile-dropdown">
           <li>{user.username}</li>
           <li>{user.email}</li>
-          {/* <NavLink to="/spots/current">Your Listings</NavLink> */}
           <div>
           <button onClick={logout}>Log Out</button>
           </div>
-        </ul>
+        </ul>) :
+        (<ul className="profile-dropdown">
+          <li>
+            <button onClick={() => {
+              setLogin(true)
+              setShowModal(true)
+            }}>Log In</button>
+          </li>
+          <li>
+            <button onClick={() => {
+              setLogin(false)
+              setShowModal(true)
+            }}>Sign Up</button>
+          </li>
+        </ul>)
       )}
     </>
   );

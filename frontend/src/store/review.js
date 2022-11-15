@@ -55,7 +55,7 @@ export const createReviewOfSpot = (review, spotId) => async(dispatch) => {
 
     if(response.ok) {
         const newReview = await response.json();
-        console.log('newreview in thunk', newReview)
+        // console.log('newreview in thunk', newReview)
         dispatch(actionCreateReview(newReview));
     };
 }

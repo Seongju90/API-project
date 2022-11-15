@@ -1,0 +1,33 @@
+.login-info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info {
+    font-size: 25px;
+    margin: 10px;
+}
+
+.password-info {
+    font-size: 25px;
+    width: 100%;
+    margin: 10px;
+}
+
+.login-button {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+    margin: 10px;
+}
+
+.input-user {
+    margin-left: 5px;
+}
+
+.input-password {
+    margin-left: 5px;
+    width: 67%
+}
