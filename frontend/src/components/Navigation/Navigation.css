@@ -3,6 +3,7 @@
     justify-content: space-between;
     margin-bottom: 1em;
     border-bottom: solid thin rgb(235, 232, 232);
+    align-items: center;
 }
 
 .home-link {
