@@ -1,5 +1,5 @@
 .image-links-container{
-    margin: 0.5em;
+    margin: 1em;
     /* hardcode the width to stop the container from shrinking when resizing window */
     width: 300px;
     height: 100%;
