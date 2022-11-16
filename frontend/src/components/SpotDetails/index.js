@@ -31,14 +31,15 @@ const SpotDetails = () => {
     const reviews = Object.values(reviewsObj)
     const existingReview = reviews.find(review => review.userId === userId)
 
-    // declare variable of SpotImages array
+    // Originally spot.SpotImages === undefined, can't use find method on undefined errors out
+    // change reducer so that spot has an intial state with they key SpotImages: [],
+    // Can use find method on empty array but will be undefined.
     const spotImageArray = spot.SpotImages
-    console.log(spot)
-    const previewImage = spotImageArray.find(spot => spot?.preview === true)
-    console.log(previewImage)
-    // console.log('spotImage', spot.SpotImages)
-    // spot.SpotImages.forEach(spot => console.log('spot', spot))
-     useEffect(() => {
+    const previewImage = spotImageArray.find(spot => spot.preview === true)
+    const nonPreviewImages = spotImageArray.filter(spot => spot.preview === false)
+    // console.log(nonPreviewImages)
+
+    useEffect(() => {
         const getData = async() => {
             await dispatch(getOneSpot(spotId))
             await dispatch(getReviewsOfSpot(spotId))
@@ -60,22 +61,30 @@ const SpotDetails = () => {
         <div className="spot-detail-main-container">
             <h1 className="name-of-spot">{spot.name}</h1>
             <div className="reviews-address-info">
-                <i class="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
                 <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
-                <i class="fa-solid fa-ellipsis"></i>
+                <i className="fa-solid fa-ellipsis"></i>
                 <span className="numreview-spotdetails">{spot.numReview} reviews</span>
-                <i class="fa-solid fa-ellipsis"></i>
+                <i className="fa-solid fa-ellipsis"></i>
                 <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
             </div>
             <div className="spotdetail-image-main-container">
                 <div className="left-image-container">
-                    {/* <img
-                        classImage="previewImage"
-                        src={previewImage.url}
-                        alt="left-preivew"
-                    /> */}
+                    <img
+                        className="previewImage-spotdetail"
+                        // add optional chaining because until useEffect fires previewImage === undefined, can't key into undefined
+                        src={previewImage?.url}
+                        alt="left-preview"
+                    />
                 </div>
                 <div className="right-image-container">
+                    {nonPreviewImages.map(image => (
+                        <img
+                            className="nonPreviewImage-spotdetail"
+                            src={image?.url}
+                            alt='right-preview'
+                        />
+                    ))}
                 </div>
             </div>
             {/* conditional render a modal if user is here */}

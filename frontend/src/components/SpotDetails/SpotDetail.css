@@ -20,7 +20,7 @@
     flex-direction: row;
 }
 
-/* .left-image-container {
+.left-image-container {
     border: solid 5px red
 }
 
@@ -28,4 +28,4 @@
     display: grid;
     grid: repeat (4,1fr);
     border: solid 5px yellow;
-} */
+}
