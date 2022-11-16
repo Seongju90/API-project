@@ -31,6 +31,13 @@ const SpotDetails = () => {
     const reviews = Object.values(reviewsObj)
     const existingReview = reviews.find(review => review.userId === userId)
 
+    // declare variable of SpotImages array
+    const spotImageArray = spot.SpotImages
+    console.log(spot)
+    const previewImage = spotImageArray.find(spot => spot?.preview === true)
+    console.log(previewImage)
+    // console.log('spotImage', spot.SpotImages)
+    // spot.SpotImages.forEach(spot => console.log('spot', spot))
      useEffect(() => {
         const getData = async() => {
             await dispatch(getOneSpot(spotId))
@@ -61,9 +68,14 @@ const SpotDetails = () => {
                 <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
             </div>
             <div className="spotdetail-image-main-container">
-                <div className="left-image">
+                <div className="left-image-container">
+                    {/* <img
+                        classImage="previewImage"
+                        src={previewImage.url}
+                        alt="left-preivew"
+                    /> */}
                 </div>
-                <div className="right-image">
+                <div className="right-image-container">
                 </div>
             </div>
             {/* conditional render a modal if user is here */}

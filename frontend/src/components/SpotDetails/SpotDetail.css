@@ -14,3 +14,18 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.spotdetail-image-main-container {
+    display: flex;
+    flex-direction: row;
+}
+
+/* .left-image-container {
+    border: solid 5px red
+}
+
+.right-image-container {
+    display: grid;
+    grid: repeat (4,1fr);
+    border: solid 5px yellow;
+} */
