@@ -5,3 +5,12 @@
     margin-left: 20em;
     margin-right: 20em;
 }
+
+.fa-star {
+    margin-right: 10px
+}
+
+.fa-ellipsis {
+    margin-left: 10px;
+    margin-right: 10px;
+}

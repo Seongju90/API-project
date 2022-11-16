@@ -25,7 +25,6 @@ const SpotDetails = () => {
     const ownerId = useSelector(state => state.spots.singleSpot.ownerId)
     //spot selector
     const spot = useSelector(state => state.spots.singleSpot)
-    console.log("spot", spot)
     //reviews selector
     const reviewsObj = useSelector(state => state.reviews.spot)
     // turn list of review obj into an array to iterate
@@ -33,6 +32,8 @@ const SpotDetails = () => {
 
     const existingReview = reviews.find(review => review.userId === userId)
 
+
+    console.log("spot", spot.SpotImages)
      useEffect(() => {
         const getData = async() => {
             await dispatch(getOneSpot(spotId))
@@ -55,34 +56,19 @@ const SpotDetails = () => {
         <div className="spot-detail-main-container">
             <h1 className="name-of-spot">{spot.name}</h1>
             <div className="reviews-address-info">
-                <i className="star-icon-spotdetail"class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
                 <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
-                <i className="dot-separator"class="fa-solid fa-ellipsis"></i>
-                <span className="numreview-spotdetails">{spot.numReview}</span>
+                <i class="fa-solid fa-ellipsis"></i>
+                <span className="numreview-spotdetails">{spot.numReview} reviews</span>
+                <i class="fa-solid fa-ellipsis"></i>
+                <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
             </div>
-            <ul>
-                <li>
-                    {spot.address}
-                </li>
-                <li>
-                    {spot.city}
-                </li>
-                <li>
-                    {spot.state}
-                </li>
-                <li>
-                    {spot.country}
-                </li>
-                <li>
-                    {spot.name}
-                </li>
-                <li>
-                    {spot.description}
-                </li>
-                <li>
-                    {spot.price}
-                </li>
-            </ul>
+            <div className="spotdetail-image-main-container">
+                <div className="left-image">
+                </div>
+                <div className="right-image">
+                </div>
+            </div>
             {/* conditional render a modal if user is here */}
             {/* when passing a component must be Capitalized for react to know it is a component. */}
             { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
