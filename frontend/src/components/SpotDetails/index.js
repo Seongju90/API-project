@@ -29,11 +29,8 @@ const SpotDetails = () => {
     const reviewsObj = useSelector(state => state.reviews.spot)
     // turn list of review obj into an array to iterate
     const reviews = Object.values(reviewsObj)
-
     const existingReview = reviews.find(review => review.userId === userId)
 
-
-    console.log("spot", spot.SpotImages)
      useEffect(() => {
         const getData = async() => {
             await dispatch(getOneSpot(spotId))

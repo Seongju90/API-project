@@ -7,6 +7,16 @@ const spotImages = [
     preview: true,
   },
   {
+    spotId: 1,
+    url: 'https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/dfe9fd1e-a010-43c9-b546-0bbc7d59f7f3.jpeg',
+    preview: false,
+  },
+  {
+    spotId: 1,
+    url: 'https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/53b475a3-104f-462e-8faf-85a7bcd1f13b.jpeg?',
+    preview: false,
+  },
+  {
     spotId: 2,
     url: 'https://a0.muscache.com/im/pictures/fe49a8d8-18c1-43da-9935-f12dd279a4a2.jpg',
     preview: true,
