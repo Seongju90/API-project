@@ -35,6 +35,7 @@ const SpotDetails = () => {
     // change reducer so that spot has an intial state with they key SpotImages: [],
     // Can use find method on empty array but will be undefined.
     const spotImageArray = spot.SpotImages
+
     const previewImage = spotImageArray.find(spot => spot.preview === true)
     const nonPreviewImages = spotImageArray.filter(spot => spot.preview === false)
     // console.log(nonPreviewImages)
@@ -58,49 +59,51 @@ const SpotDetails = () => {
     }
 
     return (
-        <div className="spot-detail-main-container">
-            <h1 className="name-of-spot">{spot.name}</h1>
-            <div className="reviews-address-info">
-                <i className="fa-solid fa-star"></i>
-                <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
-                <i className="fa-solid fa-ellipsis"></i>
-                <span className="numreview-spotdetails">{spot.numReview} reviews</span>
-                <i className="fa-solid fa-ellipsis"></i>
-                <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
-            </div>
-            <div className="spotdetail-image-main-container">
-                <div className="left-image-container">
-                    <img
-                        className="previewImage-spotdetail"
-                        // add optional chaining because until useEffect fires previewImage === undefined, can't key into undefined
-                        src={previewImage?.url}
-                        alt="left-preview"
-                    />
+        <div className="center-spot-container">
+            <div className="spot-detail-main-container">
+                <h1 className="name-of-spot">{spot.name}</h1>
+                <div className="reviews-address-info">
+                    <i className="fa-solid fa-star"></i>
+                    <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
+                    <i className="fa-solid fa-ellipsis"></i>
+                    <span className="numreview-spotdetails">{spot.numReview} reviews</span>
+                    <i className="fa-solid fa-ellipsis"></i>
+                    <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
                 </div>
-                <div className="right-image-container">
-                    {nonPreviewImages.map(image => (
+                <div className="spotdetail-image-main-container">
+                    <div className="left-image-container">
                         <img
-                            className="nonPreviewImage-spotdetail"
-                            src={image?.url}
-                            alt='right-preview'
+                            className="previewImage-spotdetail"
+                            // add optional chaining because until useEffect fires previewImage === undefined, can't key into undefined
+                            src={previewImage?.url}
+                            alt="left-preview"
                         />
+                    </div>
+                    <div className="right-image-container">
+                        {nonPreviewImages.map(image => (
+                            <img
+                                className="nonPreviewImage-spotdetail"
+                                src={image?.url}
+                                alt='right-preview'
+                            />
+                        ))}
+                    </div>
+                </div>
+                {/* conditional render a modal if user is here */}
+                {/* when passing a component must be Capitalized for react to know it is a component. */}
+                { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
+                { userId === ownerId && <button onClick={deleteSpot}>Delete</button>}
+                <h2>Reviews</h2>
+                <div className="reviews-container">
+                    {reviews.map(review => (
+                        <SpotReviews key={review.id} review={review} userId={userId}/>
                     ))}
                 </div>
+                {/* conditionally render the create review */}
+                {!existingReview &&
+                    <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
+                }
             </div>
-            {/* conditional render a modal if user is here */}
-            {/* when passing a component must be Capitalized for react to know it is a component. */}
-            { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
-            { userId === ownerId && <button onClick={deleteSpot}>Delete</button>}
-            <h2>Reviews</h2>
-            <div className="reviews-container">
-                {reviews.map(review => (
-                    <SpotReviews key={review.id} review={review} userId={userId}/>
-                ))}
-            </div>
-            {/* conditionally render the create review */}
-            {!existingReview &&
-                <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
-            }
         </div>
     );
 }

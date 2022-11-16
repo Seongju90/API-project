@@ -1,9 +1,12 @@
+.center-spot-container {
+    display: flex;
+    justify-content: center;
+}
+
 .spot-detail-main-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-left: 20em;
-    margin-right: 20em;
 }
 
 .fa-star {
@@ -16,16 +19,34 @@
 }
 
 .spotdetail-image-main-container {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(2, 500px);
 }
 
 .left-image-container {
-    border: solid 5px red
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 .right-image-container {
     display: grid;
-    grid: repeat (4,1fr);
-    border: solid 5px yellow;
+    grid-template-columns: repeat(2, 250px);
+    grid-template-rows: repeat(2, 250px);
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.previewImage-spotdetail {
+    object-fit: cover;
+    border-radius: 10px;
+    width: 95%;
+    height: 95%;
+}
+
+.nonPreviewImage-spotdetail {
+    object-fit: cover;
+    border-radius: 10px;
+    width: 90%;
+    height: 90%;
 }

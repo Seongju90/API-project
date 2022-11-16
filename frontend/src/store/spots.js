@@ -169,7 +169,8 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {SpotImages: []}}, actio
     let newState = {}
     switch(action.type) {
         case LOAD:
-            newState = {...state, singleSpot: {}}
+            // add SpotImages, in order to load each page
+            newState = {...state, singleSpot: {SpotImages: []}}
             // action.spots returns an obj, key into Spots to get the array
             newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
