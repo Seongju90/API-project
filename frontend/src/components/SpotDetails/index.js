@@ -8,6 +8,8 @@ import CustomModal from "../CustomModal";
 import EditSpotForm from "../EditSpotForm";
 import SpotReviews from "../SpotReviews";
 import CreateReviewForm from "../CreateReviewForm";
+import './SpotDetail.css';
+
 
 const SpotDetails = () => {
     const history = useHistory()
@@ -23,6 +25,7 @@ const SpotDetails = () => {
     const ownerId = useSelector(state => state.spots.singleSpot.ownerId)
     //spot selector
     const spot = useSelector(state => state.spots.singleSpot)
+    console.log("spot", spot)
     //reviews selector
     const reviewsObj = useSelector(state => state.reviews.spot)
     // turn list of review obj into an array to iterate
@@ -30,19 +33,13 @@ const SpotDetails = () => {
 
     const existingReview = reviews.find(review => review.userId === userId)
 
-    // added this async function so spot will load first then reviews
-    // const getData = async() => {
-    //     await dispatch(getOneSpot(spotId))
-    //     await dispatch(getReviewsOfSpot(spotId))
-    // }
-
      useEffect(() => {
         const getData = async() => {
             await dispatch(getOneSpot(spotId))
             await dispatch(getReviewsOfSpot(spotId))
         }
         getData();
-    }, [])
+    }, [dispatch, spotId])
 
     const deleteSpot = async (e) => {
         e.preventDefault()
@@ -55,8 +52,14 @@ const SpotDetails = () => {
     }
 
     return (
-        <div>
-            <h1>Spot Detail Information</h1>
+        <div className="spot-detail-main-container">
+            <h1 className="name-of-spot">{spot.name}</h1>
+            <div className="reviews-address-info">
+                <i className="star-icon-spotdetail"class="fa-solid fa-star"></i>
+                <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
+                <i className="dot-separator"class="fa-solid fa-ellipsis"></i>
+                <span className="numreview-spotdetails">{spot.numReview}</span>
+            </div>
             <ul>
                 <li>
                     {spot.address}
