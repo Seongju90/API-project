@@ -40,6 +40,9 @@ const SpotDetails = () => {
 
     const nonPreviewImages = spotImageArray.filter(spot => spot.preview === false)
 
+    while (nonPreviewImages.length < 4) {
+        nonPreviewImages.push({url: 'https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found-300x169.jpg'})
+    }
 
     useEffect(() => {
         const getData = async() => {
@@ -83,6 +86,7 @@ const SpotDetails = () => {
                     <div className="right-image-container">
                         {nonPreviewImages.map(image => (
                             <img
+                                key={image.id}
                                 className="nonPreviewImage-spotdetail"
                                 src={image?.url}
                                 alt='right-preview'
