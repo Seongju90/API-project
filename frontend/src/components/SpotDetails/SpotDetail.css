@@ -50,3 +50,13 @@
     width: 90%;
     height: 90%;
 }
+
+.edit-delete-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 2%;
+}
+
+.delete-button-spot {
+    margin-left: 15%;
+}

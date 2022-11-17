@@ -200,7 +200,7 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {SpotImages: []}}, actio
         // }
         case DELETE:
             // get rid of single spot infor with empty object so data doesn't get leaked
-            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {}}
+            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {SpotImages: []}}
             // console.log('action', action)
             // console.log('spotTObeDeleted', newState.allSpots[action.id])
             delete newState.allSpots[action.id]

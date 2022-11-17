@@ -36,7 +36,8 @@ const EditSpotForm = ({setShowModal}) => {
             country,
             name,
             description,
-            price
+            price,
+            url
         }
 
         // front-end spot validation
@@ -48,7 +49,7 @@ const EditSpotForm = ({setShowModal}) => {
         if (!description.length) error.push("Description is required")
         // e.target.value is a string not a number
         if (price === "0" || !price) error.push("Price per day is required")
-        if (!url.length) error.push("Image url required")
+
         // check if url is an image or not
         const splitUrl = url.split(".")
         const validImageTypes = ["png", "jpeg", "jpg"]

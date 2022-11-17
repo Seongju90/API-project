@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { addImgToSpot, createASpot } from "../../store/spots"
 
@@ -56,11 +56,12 @@ const CreateSpotForm = () => {
         const validUrl = splitUrl.some(urlString => validImageTypes.includes(urlString))
 
         if (!validUrl) {
-            error.push("Images must be png, jpeg, or jpg format")
+            error.push("Images must end with png, jpeg, or jpg format")
         }
 
         // If I have any errors set them, otherwise create a new spot
         setErrors(error)
+        if (error.length) return;
 
         // need await because waiting for response for newly created spot
         const newSpot = await dispatch(createASpot(spot))

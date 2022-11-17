@@ -37,8 +37,9 @@ const SpotDetails = () => {
     const spotImageArray = spot.SpotImages
 
     const previewImage = spotImageArray.find(spot => spot.preview === true)
+
     const nonPreviewImages = spotImageArray.filter(spot => spot.preview === false)
-    // console.log(nonPreviewImages)
+
 
     useEffect(() => {
         const getData = async() => {
@@ -91,8 +92,10 @@ const SpotDetails = () => {
                 </div>
                 {/* conditional render a modal if user is here */}
                 {/* when passing a component must be Capitalized for react to know it is a component. */}
-                { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
-                { userId === ownerId && <button onClick={deleteSpot}>Delete</button>}
+                <div className="edit-delete-container">
+                    { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
+                    { userId === ownerId && <button className="delete-button-spot" onClick={deleteSpot}>Delete</button>}
+                </div>
                 <h2>Reviews</h2>
                 <div className="reviews-container">
                     {reviews.map(review => (
