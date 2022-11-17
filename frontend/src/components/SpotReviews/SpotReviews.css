@@ -1,3 +1,28 @@
-.review {
+.review-main-container {
     height: 200px;
+}
+
+.user-icon {
+    width: 50px;
+}
+
+.profile-icon-name {
+    display: flex;
+    align-items: center;
+}
+
+.username-reviews {
+    margin-left: 2em;
+}
+
+.review {
+    margin-top: 2em;
+}
+
+.delete-review-button {
+    margin-left: 2em;
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
 }

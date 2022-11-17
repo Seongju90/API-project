@@ -85,3 +85,15 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
 }
+
+.star-rating-numberOfReviews {
+    padding-bottom: 2em;
+}
+
+.delete-button-spot {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+}
