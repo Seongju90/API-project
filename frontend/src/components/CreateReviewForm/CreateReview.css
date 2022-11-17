@@ -1,0 +1,28 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    display: flex;
+    width: 100%;
+}
+
+.input {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.detail {
+    padding: 1em;
+}
+
+.review-submit-button {
+    font-size: 25px;
+    margin: 5px;
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    width: 100%;
+}

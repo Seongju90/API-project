@@ -5,3 +5,11 @@
     border-radius: 10px;
     font-size: 25px;
 }
+
+.review-button {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+}

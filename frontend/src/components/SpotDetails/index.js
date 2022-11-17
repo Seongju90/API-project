@@ -25,7 +25,7 @@ const SpotDetails = () => {
     const ownerId = useSelector(state => state.spots.singleSpot.ownerId)
     //spot selector
     const spot = useSelector(state => state.spots.singleSpot)
-    //reviews selector
+    //reviews selector // selecting a nested object, so our reducer must explicity create new memory reference to change state/cause re-render
     const reviewsObj = useSelector(state => state.reviews.spot)
     // turn list of review obj into an array to iterate
     const reviews = Object.values(reviewsObj)
@@ -100,13 +100,17 @@ const SpotDetails = () => {
                     { userId === ownerId && <CustomModal className="edit-button" buttontext="Edit" Content={EditSpotForm}/>}
                     { userId === ownerId && <button className="delete-button-spot" onClick={deleteSpot}>Delete</button>}
                 </div>
+                <div className="description-main-container">
+                    <h1>Description</h1>
+                    {spot.description}
+                </div>
                 <div className="reviews-main-container">
                     <div className="review-and-button">
                         <h2>Reviews</h2>
                         <span className="write-review-button">
                             {/* conditionally render the create review */}
                             {!existingReview &&
-                                <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
+                                <CustomModal className="review-button" buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
                             }
                         </span>
                     </div>
