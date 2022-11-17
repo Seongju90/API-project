@@ -29,6 +29,7 @@ const SpotDetails = () => {
     const reviewsObj = useSelector(state => state.reviews.spot)
     // turn list of review obj into an array to iterate
     const reviews = Object.values(reviewsObj)
+
     const existingReview = reviews.find(review => review.userId === userId)
 
     // Originally spot.SpotImages === undefined, can't use find method on undefined errors out
@@ -86,7 +87,7 @@ const SpotDetails = () => {
                     <div className="right-image-container">
                         {nonPreviewImages.map(image => (
                             <img
-                                key={image.id}
+                                key={nonPreviewImages.indexOf(image)}
                                 className="nonPreviewImage-spotdetail"
                                 src={image?.url}
                                 alt='right-preview'
@@ -109,7 +110,7 @@ const SpotDetails = () => {
                         <h2>Reviews</h2>
                         <span className="write-review-button">
                             {/* conditionally render the create review */}
-                            {!existingReview &&
+                            {!existingReview && userId &&
                                 <CustomModal className="review-button" buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
                             }
                         </span>
@@ -123,7 +124,7 @@ const SpotDetails = () => {
                     </div>
                     <div className="reviews-container">
                         {reviews.map(review => (
-                            <SpotReviews key={review.id} review={review} userId={userId}/>
+                            <SpotReviews key={review.id} review={review} userId={userId} firstName={review.User.firstName} lastName={review.User.lastName}/>
                         ))}
                     </div>
                 </div>

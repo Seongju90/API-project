@@ -1,12 +1,14 @@
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getOneSpot, editASpot } from "../../store/spots"
+import { useHistory } from "react-router-dom";
+import { getOneSpot, editASpot, addImgToSpot } from "../../store/spots"
 
 import './EditSpot.css';
 
 const EditSpotForm = ({setShowModal}) => {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     // find the id of the spot from params
     const { spotId } = useParams();
@@ -42,6 +44,12 @@ const EditSpotForm = ({setShowModal}) => {
             url
         }
 
+        // creating spotImg body to dispatch to thunk
+        const spotImgBody = {
+            url,
+            "preview": true
+        }
+
         // front-end spot validation
         if (!address.length) error.push("Street address is required")
         if (!city.length) error.push("City is required")
@@ -68,13 +76,20 @@ const EditSpotForm = ({setShowModal}) => {
 
         // might need spot & spotId, error message showing undefined
         // make edit wait before executing the hide modal
-        await dispatch(editASpot(spot, spotId)).catch(
+        const edittedSpot = await dispatch(editASpot(spot, spotId)).catch(
             async (res) => {
                 const data = await res.json();
                 // console.log('data in catch', data)
                 if (data && data.errors) setErrors(data.errors)
             }
         )
+
+        if(edittedSpot.id) {
+            console.log('edit spot dispatch')
+            dispatch(addImgToSpot(edittedSpot, spotImgBody))
+            .then(history.push(`/spots/${spotId}`))
+        }
+
         // hide modal after edit
         setShowModal(false)
     }
@@ -99,10 +114,10 @@ const EditSpotForm = ({setShowModal}) => {
                         </label>
                     </div>
                     <div className="editspot">
-                        <label className="city-label-editspot">
+                        <label className="label">
                             City
                             <input
-                            className="city-input-editspot"
+                            className="input"
                             type="text"
                             value={city}
                             onChange={e => setCity(e.target.value)}
@@ -110,10 +125,10 @@ const EditSpotForm = ({setShowModal}) => {
                         </label>
                     </div>
                     <div className="editspot">
-                        <label className="state-label-editspot">
+                        <label className="label">
                             State
                             <input
-                            className="state-input-editspot"
+                            className="input"
                             type="text"
                             value={state}
                             onChange={e => setState(e.target.value)}
@@ -121,9 +136,9 @@ const EditSpotForm = ({setShowModal}) => {
                         </label>
                     </div>
                     <div className="editspot">
-                        <label className="country-label-editspot">
+                        <label className="label">
                             Country
-                            <input className="country-input-editspot"
+                            <input className="input"
                             type="text"
                             value={country}
                             onChange={e => setCountry(e.target.value)}
@@ -131,9 +146,9 @@ const EditSpotForm = ({setShowModal}) => {
                         </label>
                     </div>
                     <div className="editspot">
-                        <label className="name-label-editspot">
+                        <label className="label">
                             Name
-                            <input className="name-input-editspot"
+                            <input className="input"
                             type="text"
                             value={name}
                             onChange={e => setName(e.target.value)}
@@ -141,9 +156,9 @@ const EditSpotForm = ({setShowModal}) => {
                         </label>
                     </div>
                     <div className="editspot">
-                        <label className="description-label-editspot">
+                        <label className="label">
                             Description
-                            <input className="description-input-editspot"
+                            <input className="input"
                             type="text"
                             value={description}
                             onChange={e => setDescription(e.target.value)}
@@ -151,9 +166,9 @@ const EditSpotForm = ({setShowModal}) => {
                         </label>
                     </div>
                     <div className="editspot">
-                        <label className="price-label-editspot">
+                        <label className="label">
                             Price
-                            <input className="price-input-editspot"
+                            <input className="input"
                             type="number"
                             value={price}
                             onChange={e => setPrice(e.target.value)}
@@ -161,9 +176,9 @@ const EditSpotForm = ({setShowModal}) => {
                         </label>
                     </div>
                     <div className="editspot">
-                        <label className="url-label-editspot">
+                        <label className="label">
                             Image url
-                            <input className="url-input-editspot"
+                            <input className="input"
                             type="text"
                             value={url}
                             onChange={e => setUrl(e.target.value)}
