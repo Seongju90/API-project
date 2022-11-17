@@ -100,16 +100,22 @@ const SpotDetails = () => {
                     { userId === ownerId && <CustomModal buttontext="Edit" Content={EditSpotForm}/>}
                     { userId === ownerId && <button className="delete-button-spot" onClick={deleteSpot}>Delete</button>}
                 </div>
-                <h2>Reviews</h2>
-                <div className="reviews-container">
-                    {reviews.map(review => (
-                        <SpotReviews key={review.id} review={review} userId={userId}/>
-                    ))}
+                <div className="reviews-main-container">
+                    <div className="review-and-button">
+                        <h2>Reviews</h2>
+                        <span className="write-review-button">
+                            {/* conditionally render the create review */}
+                            {!existingReview &&
+                                <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
+                            }
+                        </span>
+                    </div>
+                    <div className="reviews-container">
+                        {reviews.map(review => (
+                            <SpotReviews key={review.id} review={review} userId={userId}/>
+                        ))}
+                    </div>
                 </div>
-                {/* conditionally render the create review */}
-                {!existingReview &&
-                    <CustomModal buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
-                }
             </div>
         </div>
     );

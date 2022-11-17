@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { deleteAReview } from "../../store/review";
+import './SpotReviews.css';
 
 // Spot details will render the review, will pass spotId as prop
 const SpotReviews = ({review, userId}) => {
@@ -17,13 +18,11 @@ const SpotReviews = ({review, userId}) => {
     }
 
     return (
-        <>
-            <div>
-                {review.review}
-                {/* conditonally render button so only users can delete own review */}
-                {review.userId === userId && <button onClick={deleteReview}>Delete</button>}
-            </div>
-        </>
+        <div className="review">
+            {review.review}
+            {/* conditonally render button so only users can delete own review */}
+            {review.userId === userId && <button onClick={deleteReview}>Delete</button>}
+        </div>
     );
 }
 

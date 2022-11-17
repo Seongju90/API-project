@@ -60,3 +60,28 @@
 .delete-button-spot {
     margin-left: 15%;
 }
+
+.reviews-main-container {
+    display: flex;
+    flex-direction: column;
+    border-top: solid thin rgb(235, 232, 232);
+    margin-top: 2em;
+    width: 100%;
+}
+
+.review-and-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.write-review-button {
+    margin-left: 1em;
+}
+
+.reviews-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
