@@ -99,6 +99,7 @@
 .description-input-createspot {
     flex: 1;
     margin-left: 1em;
+    height: 8em;
 }
 
 .price-container-createspot {

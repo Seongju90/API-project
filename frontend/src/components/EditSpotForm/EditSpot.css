@@ -1,0 +1,28 @@
+.edit-spot-main-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-spot-detail-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.editspot {
+    display: flex;
+    padding: 1em;
+}
+
+label {
+    display: flex;
+    width: 100%;
+}
+
+input {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.description-input-editspot {
+    height: 8em;
+}
