@@ -1,26 +1,23 @@
 import { useDispatch} from "react-redux";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom";
-import { getOneSpot, editASpot, addImgToSpot } from "../../store/spots"
+import { getOneSpot, editASpot} from "../../store/spots"
 
 import './EditSpot.css';
 
-const EditSpotForm = ({setShowModal}) => {
+const EditSpotForm = ({setShowModal, spot}) => {
     const dispatch = useDispatch();
-    const history = useHistory();
 
     // find the id of the spot from params
     const { spotId } = useParams();
 
-    const [address, setAddress] = useState('')
-    const [city, setCity] = useState('')
-    const [state, setState] = useState('')
-    const [country, setCountry] = useState('')
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-    const [price, setPrice] = useState(0)
-    const [url, setUrl] = useState('');
+    const [address, setAddress] = useState(spot.address)
+    const [city, setCity] = useState(spot.city)
+    const [state, setState] = useState(spot.state)
+    const [country, setCountry] = useState(spot.country)
+    const [name, setName] = useState(spot.name)
+    const [description, setDescription] = useState(spot.description)
+    const [price, setPrice] = useState(spot.price)
     const [errors, setErrors] = useState([]);
 
 
@@ -45,12 +42,6 @@ const EditSpotForm = ({setShowModal}) => {
             price,
         }
 
-        // creating spotImg body to dispatch to thunk
-        const spotImgBody = {
-            url,
-            "preview": true
-        }
-
         // front-end spot validation
         if (!address.length) error.push("Street address is required")
         if (!city.length) error.push("City is required")
@@ -61,34 +52,19 @@ const EditSpotForm = ({setShowModal}) => {
         // e.target.value is a string not a number
         if (price === "0" || !price) error.push("Price per day is required")
 
-        // check if url is an image or not
-        const splitUrl = url.split(".")
-        const validImageTypes = ["png", "jpeg", "jpg"]
-        // some() tests whether at least one element in the array passes the test implemented by the provided function.
-        const validUrl = splitUrl.some(urlString => validImageTypes.includes(urlString))
-
-        if (!validUrl) {
-            error.push("Images must be png, jpeg, or jpg format")
-        }
-
         // If I have any errors set them, otherwise edit the spot
         setErrors(error)
         if (error.length) return;
 
         // might need spot & spotId, error message showing undefined
         // make edit wait before executing the hide modal
-        const edittedSpot = await dispatch(editASpot(spot, spotId)).catch(
+        await dispatch(editASpot(spot, spotId)).catch(
             async (res) => {
                 const data = await res.json();
                 // console.log('data in catch', data)
                 if (data && data.errors) setErrors(data.errors)
             }
         )
-
-        if(edittedSpot.id) {
-            dispatch(addImgToSpot(edittedSpot, spotImgBody))
-            .then(history.push(`/spots/${spotId}`))
-        }
 
         // hide modal after edit
         setShowModal(false)
@@ -172,16 +148,6 @@ const EditSpotForm = ({setShowModal}) => {
                             type="number"
                             value={price}
                             onChange={e => setPrice(e.target.value)}
-                            />
-                        </label>
-                    </div>
-                    <div className="editspot">
-                        <label className="label">
-                            Image url
-                            <input className="input"
-                            type="text"
-                            value={url}
-                            onChange={e => setUrl(e.target.value)}
                             />
                         </label>
                     </div>
