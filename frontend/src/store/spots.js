@@ -194,10 +194,14 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {SpotImages: []}}, actio
             // changing state causes re-render, overriding old spot information(...state.singleSpot) with new spot(action.spot)
             newState = {...state, singleSpot: {...state.singleSpot, ...action.spot}}
             return newState;
-        // case ADDIMG: {
-        //     newState = {...state}
-        //     return newState;
-        // }
+        case ADDIMG: {
+            newState = {...state, singleSpot: {...state.singleSpot , SpotImages:[...state.singleSpot.SpotImages]}}
+            newState.singleSpot.SpotImages.push(action.spot)
+            // console.log('action', action)
+            console.log('spotImages reducer', newState.singleSpot.SpotImages)
+            // console.log('reducer state', newState)
+            return newState;
+        }
         case DELETE:
             // get rid of single spot infor with empty object so data doesn't get leaked
             newState = {...state, allSpots: {...state.allSpots}, singleSpot: {SpotImages: []}}

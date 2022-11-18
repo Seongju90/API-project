@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
@@ -23,12 +23,14 @@ const EditSpotForm = ({setShowModal}) => {
     const [url, setUrl] = useState('');
     const [errors, setErrors] = useState([]);
 
+
     useEffect(() => {
         // load the current spot with id from params
         dispatch(getOneSpot(spotId))
     }, [dispatch, spotId])
 
     const handleSubmit = async (e) => {
+
         e.preventDefault()
         const error = [];
 
@@ -41,7 +43,6 @@ const EditSpotForm = ({setShowModal}) => {
             name,
             description,
             price,
-            url
         }
 
         // creating spotImg body to dispatch to thunk
@@ -85,7 +86,6 @@ const EditSpotForm = ({setShowModal}) => {
         )
 
         if(edittedSpot.id) {
-            console.log('edit spot dispatch')
             dispatch(addImgToSpot(edittedSpot, spotImgBody))
             .then(history.push(`/spots/${spotId}`))
         }

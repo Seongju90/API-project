@@ -50,6 +50,14 @@ const SpotDetails = () => {
         nonPreviewImages = nonPreviewImages.slice(0,4)
     }
 
+    //select spotImage array
+    const spotImage = useSelector(state => state.spots.singleSpot.SpotImages)
+
+    // the last image is the last one added
+    const previewImageEdit = spotImage[spotImage.length - 1]
+    console.log('previewImage', previewImage)
+    console.log('editpreview', previewImageEdit)
+
     useEffect(() => {
         const getData = async() => {
             await dispatch(getOneSpot(spotId))
