@@ -14,7 +14,7 @@ function LoginForm({ setShowModal }) {
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password }))
     // if login successfull close modal
-      .then(setShowModal(false))
+      .then(() => setShowModal(false))
       .catch(
       async (res) => {
         const data = await res.json();
@@ -50,6 +50,10 @@ function LoginForm({ setShowModal }) {
           />
         </label>
         <button className="login-button" type="submit">Log In</button>
+        <button className="demo-user-button" onClick={() => {
+          setCredential('Demo-lition')
+          setPassword('password')
+          }}>Demo User</button>
       </div>
     </form>
   );

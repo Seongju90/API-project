@@ -164,11 +164,13 @@ export const deleteASpot = (id) => async(dispatch) => {
 // On Load/Read we want to reset slice of state we don't need to stop leakage of data.
 
 // set initial state to the structure of the documents
-const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
+// added intial state SpotImages:[] so we can use find method in Spot Details component.
+const spotReducer = (state = {allSpots: {}, singleSpot: {SpotImages: []}}, action) => {
     let newState = {}
     switch(action.type) {
         case LOAD:
-            newState = {...state, singleSpot: {}}
+            // add SpotImages, in order to load each page
+            newState = {...state, singleSpot: {SpotImages: []}}
             // action.spots returns an obj, key into Spots to get the array
             newState.allSpots = normalizeArray(action.spots.Spots)
             return newState
@@ -198,7 +200,7 @@ const spotReducer = (state = {allSpots: {}, singleSpot: {}}, action) => {
         // }
         case DELETE:
             // get rid of single spot infor with empty object so data doesn't get leaked
-            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {}}
+            newState = {...state, allSpots: {...state.allSpots}, singleSpot: {SpotImages: []}}
             // console.log('action', action)
             // console.log('spotTObeDeleted', newState.allSpots[action.id])
             delete newState.allSpots[action.id]

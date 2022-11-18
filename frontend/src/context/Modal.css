@@ -23,4 +23,6 @@
     background-color:white;
     border-radius: 10px;
     border: solid 1px black;
+    width: 30%;
+    padding: 2em;
   }
