@@ -5,7 +5,7 @@ import './CustomModal.css'
 
 // pass props, component, or text from parent container (SpotDetails)
 // add spotId to pass in id info
-function CustomModal({className, buttontext, Content, spotId}) {
+function CustomModal({className, spot, buttontext, Content, spotId}) {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -13,7 +13,7 @@ function CustomModal({className, buttontext, Content, spotId}) {
       <button className={className}onClick={() => setShowModal(true)}>{buttontext}</button>
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
-          {<Content setShowModal={setShowModal} spotId={spotId}/>}
+          {<Content setShowModal={setShowModal} spotId={spotId} spot={spot}/>}
         </Modal>
       )}
     </>
