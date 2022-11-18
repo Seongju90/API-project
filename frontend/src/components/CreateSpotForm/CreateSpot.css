@@ -1,0 +1,141 @@
+.createspot-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-detail-container {
+    display: flex;
+    border: solid 1px lightgrey;
+    border-radius: 1em;
+    flex-direction: column;
+    width: 600px;
+}
+
+.address-container-createspot {
+    display: flex;
+    padding: 1em;
+}
+.address-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.address-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.city-container-create-spot {
+    display: flex;
+    padding: 1em;
+}
+
+.city-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.city-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.state-container-createspot {
+    display: flex;
+    padding: 1em;
+}
+
+.state-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.state-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.country-container-createspot {
+    display: flex;
+    padding: 1em;
+}
+
+.country-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.country-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.name-container-createspot {
+    display: flex;
+    padding: 1em;
+}
+
+.name-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.name-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.description-container-createspot {
+    display: flex;
+    padding: 1em;
+}
+
+.description-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.description-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.price-container-createspot {
+    display: flex;
+    padding: 1em;
+}
+
+.price-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.price-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.url-container-createspot {
+    display: flex;
+    padding: 1em;
+}
+
+.url-label-createspot {
+    display: flex;
+    width: 100%;
+}
+
+.url-input-createspot {
+    flex: 1;
+    margin-left: 1em;
+}
+
+.submit-button-createspot {
+    font-size: 25px;
+    margin: 5px;
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+}

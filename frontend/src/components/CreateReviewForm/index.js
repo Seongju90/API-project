@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReviewOfSpot } from "../../store/review";
 
+import './CreateReview.css';
+
 const CreateReviewForm = ({spotId, setShowModal}) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -24,28 +26,40 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Review
-                <input
-                type="text"
-                value={review}
-                onChange={e => setReview(e.target.value)}
-                />
-            </label>
-            <label>
-                Stars
-                <input
-                type="number"
-                value={stars}
-                onChange={e => setStars(e.target.value)}
-                />
-            </label>
-            <button
-                type="submit"
-            >
-                Submit
-            </button>
+        <form className="create-review-main-container" onSubmit={handleSubmit}>
+            <h1> Write a Review </h1>
+            <div className="review-detail-container">
+                <div className="detail">
+                    <label className="label">
+                        Review
+                        <input
+                        className="input"
+                        type="text"
+                        value={review}
+                        onChange={e => setReview(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div className="detail">
+                    <label className="label">
+                        Stars
+                        <input
+                        className="input"
+                        type="number"
+                        value={stars}
+                        onChange={e => setStars(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div className="button-container">
+                    <button
+                        className="review-submit-button"
+                        type="submit"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
         </form>
     );
 }

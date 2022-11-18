@@ -55,7 +55,7 @@ export const createReviewOfSpot = (review, spotId) => async(dispatch) => {
 
     if(response.ok) {
         const newReview = await response.json();
-        console.log('newreview in thunk', newReview)
+        // console.log('newreview in thunk', newReview)
         dispatch(actionCreateReview(newReview));
     };
 }
@@ -88,7 +88,13 @@ const reviewsReducer = (state = {spot: {}, user:{}}, action) => {
             newState.spot[action.review.id] = action.review
             return newState
         case DELETE:
-            newState ={...state, spot: {...state.spot}, user: {}}
+            // just {...state} will change outer reference of memory,
+            // we explicity spread the nested object, to change the 2nd level inner reference of memory
+            // so that redux can catch the change of state, which leads our useSelector in react to cause a re-render if its selecting a nested object
+            // newState ={...state} // will not work only changing outer reference
+            newState = {...state, spot: {...state.spot}}
+            // because newState.spot is specifically looking for nested spot key, we need to make sure that oldstate we spread
+            // has a change in reference memory.
             delete newState.spot[action.id]
             return newState;
         default:

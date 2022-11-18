@@ -3,16 +3,26 @@
     justify-content: space-between;
     margin-bottom: 1em;
     border-bottom: solid thin rgb(235, 232, 232);
+    align-items: center;
 }
 
 .home-link {
     display: flex;
-    width: 10%;
+    width: 25%;
     align-items: center;
     height: 80%;
 }
 
-.login-signup {
-    display:flex;
+.profile-button {
+    position: relative;
+}
+
+.button-and-hostlink {
+    display: flex;
+    flex-direction: row;
     align-items: center;
+}
+
+.create-spot {
+    margin-right: 10px;
 }

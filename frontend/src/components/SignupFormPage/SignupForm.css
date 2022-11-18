@@ -1,0 +1,73 @@
+.signup-info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.first-name-info {
+    display: flex;
+    margin: 10px;
+}
+
+.first-name-input {
+    margin-left: 10px;
+    flex: 1;
+}
+
+.last-name-info {
+    display: flex;
+    margin: 10px;
+}
+
+.last-name-input {
+    margin-left: 10px;
+    flex: 1;
+}
+
+.email-info {
+    display: flex;
+    margin: 10px;
+}
+
+.email-input {
+    margin-left: 10px;
+    flex: 1;;
+}
+
+.username-info {
+    display: flex;
+    margin: 10px;
+}
+
+.username-input {
+    margin-left: 10px;
+    flex: 1;;
+}
+
+.password-info-signup {
+    display: flex;
+    margin: 10px;
+}
+
+.password-input {
+    margin-left: 10px;
+    flex: 1;
+}
+
+.confirmed-password-info {
+    display: flex;
+    margin: 10px;
+}
+
+.confirmed-password-input {
+    margin-left: 10px;
+    flex: 1;
+}
+
+.sign-up-button {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+    margin: 10px;
+}
