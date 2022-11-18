@@ -103,7 +103,7 @@ const SpotDetails = () => {
                 {/* conditional render a modal if user is here */}
                 {/* when passing a component must be Capitalized for react to know it is a component. */}
                 <div className="edit-delete-container">
-                    { userId === ownerId && <CustomModal className="edit-button" buttontext="Edit" Content={EditSpotForm}/>}
+                    { userId === ownerId && <CustomModal className="edit-button" spot={spot} buttontext="Edit" Content={EditSpotForm}/>}
                     { userId === ownerId && <button className="delete-button-spot" onClick={deleteSpot}>Delete</button>}
                 </div>
                 <div className="description-main-container">
