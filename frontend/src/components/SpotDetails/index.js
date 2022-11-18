@@ -39,10 +39,15 @@ const SpotDetails = () => {
 
     const previewImage = spotImageArray.find(spot => spot.preview === true)
 
-    const nonPreviewImages = spotImageArray.filter(spot => spot.preview === false)
+    let nonPreviewImages = spotImageArray.filter(spot => spot.preview === false)
 
     while (nonPreviewImages.length < 4) {
         nonPreviewImages.push({url: 'https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found-300x169.jpg'})
+    }
+
+    // if there are more than 4 images, take only the first four and display them on the right.
+    if (nonPreviewImages.length > 4) {
+        nonPreviewImages = nonPreviewImages.slice(0,4)
     }
 
     useEffect(() => {
@@ -124,7 +129,7 @@ const SpotDetails = () => {
                     </div>
                     <div className="reviews-container">
                         {reviews.map(review => (
-                            <SpotReviews key={review.id} review={review} userId={userId} firstName={review.User.firstName} lastName={review.User.lastName}/>
+                            <SpotReviews key={review.id} review={review} userId={userId} firstName={review.User?.firstName} lastName={review.User?.lastName}/>
                         ))}
                     </div>
                 </div>
