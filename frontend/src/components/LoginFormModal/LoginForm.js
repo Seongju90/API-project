@@ -50,6 +50,10 @@ function LoginForm({ setShowModal }) {
           />
         </label>
         <button className="login-button" type="submit">Log In</button>
+        <button className="demo-user-button" onClick={() => {
+          setCredential('Demo-lition')
+          setPassword('password')
+          }}>Demo User</button>
       </div>
     </form>
   );

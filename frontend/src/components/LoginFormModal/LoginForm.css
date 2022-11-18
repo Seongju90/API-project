@@ -40,6 +40,15 @@
     flex: 1;
 }
 
+.demo-user-button {
+    background-color: #ff395c;
+    color: white;
+    border: solid white;
+    border-radius: 10px;
+    font-size: 25px;
+    margin: 5px;
+}
+
 /*
 flex: 1 means =>
     flex-grow : 1;    ➜ The div will grow in same proportion as the window-size
