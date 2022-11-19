@@ -128,7 +128,7 @@ const SpotDetails = () => {
                     </div>
                     <div className="reviews-container">
                         {reviews.map(review => (
-                            <SpotReviews key={review.id} review={review} userId={userId} firstName={review.User?.firstName} lastName={review.User?.lastName}/>
+                            <SpotReviews key={review.id} review={review} userId={userId}/>
                         ))}
                     </div>
                 </div>
