@@ -68,6 +68,15 @@ const SpotDetails = () => {
         history.push(`/`)
     }
 
+    // reviews reducer doesn't have avgRating so to dynamically render it when creating or edit a review manually calculate here
+    let totalStar = 0;
+    reviews.forEach(review => {
+        // action thunk changes the star data type to string, so we need to change it to number before calculating average
+        totalStar += Number(review?.stars)
+    })
+
+    const avgRating = (totalStar / reviews?.length).toFixed(1)
+
     return (
         <div className="center-spot-container">
             <div className="spot-detail-main-container">
@@ -75,11 +84,11 @@ const SpotDetails = () => {
                 <div className="reviews-address-info">
                     <i className="fa-solid fa-star"></i>
                     <span className="avgrating-spotdetails-">
-                        {reviews.length === 0 ? <span>No Ratings Yet</span> : spot?.avgStarRating}
+                        {reviews.length === 0 ? <span>No Ratings Yet</span> : avgRating}
                     </span>
                     <span className="dot-text">{"•"}</span>
                     <span className="numreview-spotdetails">
-                        {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{spot?.numReview} reviews</span>}
+                        {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{reviews?.length} reviews</span>}
                     </span>
                     <span className="dot-text">{"•"}</span>
                     <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
@@ -127,11 +136,11 @@ const SpotDetails = () => {
                     <div className="star-rating-numberOfReviews">
                         <i className="fa-solid fa-star"></i>
                         <span className="avgrating-spotdetails-">
-                            {reviews.length === 0 ? <span>No Ratings Yet</span> : spot?.avgStarRating}
+                            {reviews.length === 0 ? <span>No Ratings Yet</span> : avgRating}
                         </span>
                         <span className="dot-text">{"•"}</span>
                         <span className="numreview-spotdetails">
-                            {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{spot?.numReview} reviews</span>}
+                            {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{reviews?.length} reviews</span>}
                         </span>
                     </div>
                     <div className="reviews-container">
