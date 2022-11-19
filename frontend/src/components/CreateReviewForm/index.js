@@ -7,7 +7,7 @@ import './CreateReview.css';
 
 const CreateReviewForm = ({spotId, setShowModal}) => {
     const dispatch = useDispatch();
-    const history = useHistory();
+
     // console.log('create', spotId)
     const [review, setReview] = useState("")
     const [stars, setStars] = useState(0)
@@ -40,7 +40,7 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
                   const data = await res.json();
                   if (data && data.errors) setErrors(data.errors);
                 }
-            );
+            )
     }
 
     return (
