@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReviewOfSpot } from "../../store/review";
@@ -12,6 +12,8 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
     const [review, setReview] = useState("")
     const [stars, setStars] = useState(0)
     const [errors, setErrors] = useState([]);
+
+    const user = useSelector(state => state.session.user)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,7 +31,7 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
         setErrors(error)
         if(error.length) return;
 
-        await dispatch(createReviewOfSpot(newReview, spotId))
+        await dispatch(createReviewOfSpot(newReview, user, spotId))
         setShowModal(false)
         history.push(`/spots/${spotId}`)
     }
