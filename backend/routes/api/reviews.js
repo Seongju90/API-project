@@ -11,9 +11,9 @@ const validateReview = [
     check('review')
         .exists({checkFalsy: true})
         .isLength({min: 10, max: 255})
-        .withMessage('Review must have 1 to 255 letters'),
+        .withMessage('Review must have 10 to 255 letters'),
     check('stars')
-        .isFloat({min:0 , max:5})
+        .isFloat({min:1 , max:5})
         .withMessage('Stars can only be from 1 to 5'),
     handleValidationErrors
 ]

@@ -25,15 +25,21 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
         }
 
         // front-end validations
-        if (!review.length) error.push("Review is required")
-        if (stars === 0 || stars > 5) error.push("Stars must be from 1 to 5")
+        if (!stars) error.push("Must input star rating")
+        if (stars === 0 || stars < 6) error.push("Stars can only be from 1 to 5")
+        if (!review) error.push("Review is required")
 
         setErrors(error)
         if(error.length) return;
 
-        await dispatch(createReviewOfSpot(newReview, user, spotId))
-        setShowModal(false)
-        history.push(`/spots/${spotId}`)
+        return await dispatch(createReviewOfSpot(newReview, user, spotId))
+            .then(() => setShowModal(false))
+            .catch(
+                async (res) => {
+                  const data = await res.json();
+                  if (data && data.errors) setErrors(data.errors);
+                }
+            );
     }
 
     return (
