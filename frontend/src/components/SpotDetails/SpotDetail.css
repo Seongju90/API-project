@@ -105,3 +105,8 @@
     border-top: solid thin rgb(235, 232, 232);
     margin-top: 2em;
 }
+
+.dot-text {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}

@@ -65,7 +65,7 @@ const SpotDetails = () => {
             alert(message)
         })
 
-        history.push("/")
+        history.push(`/`)
     }
 
     return (
@@ -74,10 +74,14 @@ const SpotDetails = () => {
                 <h1 className="name-of-spot">{spot.name}</h1>
                 <div className="reviews-address-info">
                     <i className="fa-solid fa-star"></i>
-                    <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
-                    <i className="fa-solid fa-ellipsis"></i>
-                    <span className="numreview-spotdetails">{spot.numReview} reviews</span>
-                    <i className="fa-solid fa-ellipsis"></i>
+                    <span className="avgrating-spotdetails-">
+                        {reviews.length === 0 ? <span>No Ratings Yet</span> : reviews[0]?.stars}
+                    </span>
+                    <span className="dot-text">{"•"}</span>
+                    <span className="numreview-spotdetails">
+                        {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{reviews.length} reviews</span>}
+                    </span>
+                    <span className="dot-text">{"•"}</span>
                     <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
                 </div>
                 <div className="spotdetail-image-main-container">
@@ -112,24 +116,27 @@ const SpotDetails = () => {
                 </div>
                 <div className="reviews-main-container">
                     <div className="review-and-button">
-                        <h2>Reviews</h2>
+                        <h2>Total Reviews</h2>
                         <span className="write-review-button">
                             {/* conditionally render the create review */}
-                            {!existingReview && userId &&
+                            {!existingReview && (userId !== ownerId) && userId &&
                                 <CustomModal className="review-button" buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
                             }
                         </span>
                     </div>
                     <div className="star-rating-numberOfReviews">
                         <i className="fa-solid fa-star"></i>
-                        <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
-                        <i className="fa-solid fa-ellipsis"></i>
-                        <span className="numreview-spotdetails">{spot.numReview} reviews</span>
-                        <i className="fa-solid fa-ellipsis"></i>
+                        <span className="avgrating-spotdetails-">
+                            {reviews.length === 0 ? <span>No Ratings Yet</span> : reviews[0]?.stars}
+                        </span>
+                        <span className="dot-text">{"•"}</span>
+                        <span className="numreview-spotdetails">
+                            {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{reviews.length} reviews</span>}
+                        </span>
                     </div>
                     <div className="reviews-container">
                         {reviews.map(review => (
-                            <SpotReviews key={review.id} review={review} userId={userId} firstName={review.User?.firstName} lastName={review.User?.lastName}/>
+                            <SpotReviews key={review.id} review={review} userId={userId}/>
                         ))}
                     </div>
                 </div>

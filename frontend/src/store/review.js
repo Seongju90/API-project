@@ -14,10 +14,13 @@ const actionLoadReviews = (reviews) => {
     }
 }
 
-export const actionCreateReview = (review) => {
+//added user info to action, reducer, and thunk to dynamically update create review
+export const actionCreateReview = (review, user, spot) => {
     return {
         type: CREATE,
-        review
+        review,
+        user,
+        spot
     }
 }
 
@@ -42,7 +45,7 @@ export const getReviewsOfSpot = (id) => async(dispatch) => {
     };
 }
 
-export const createReviewOfSpot = (review, spotId) => async(dispatch) => {
+export const createReviewOfSpot = (review, user, spotId) => async(dispatch) => {
     // console.log('reviewthunk', review)
     // console.log('reviewthunk', spotId)
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
@@ -53,10 +56,11 @@ export const createReviewOfSpot = (review, spotId) => async(dispatch) => {
         body: JSON.stringify(review)
     });
 
+
     if(response.ok) {
         const newReview = await response.json();
         // console.log('newreview in thunk', newReview)
-        dispatch(actionCreateReview(newReview));
+        dispatch(actionCreateReview(newReview, user, spotId));
     };
 }
 
@@ -82,10 +86,10 @@ const reviewsReducer = (state = {spot: {}, user:{}}, action) => {
             newState.spot = normalizeArray(action.reviews.Reviews)
             return newState;
         case CREATE:
-            newState = {...state, spot: {...state.spot}}
-            // console.log("action", action.review)
-            // console.log("id", action.review.id)
+            newState = {...state, spot: {...state.spot}, user: {...state.user}}
             newState.spot[action.review.id] = action.review
+            // console.log('reducer', action)
+            newState.user = action.user
             return newState
         case DELETE:
             // just {...state} will change outer reference of memory,

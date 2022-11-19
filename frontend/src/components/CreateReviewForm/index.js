@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReviewOfSpot } from "../../store/review";
@@ -11,16 +11,27 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
     // console.log('create', spotId)
     const [review, setReview] = useState("")
     const [stars, setStars] = useState(0)
+    const [errors, setErrors] = useState([]);
+
+    const user = useSelector(state => state.session.user)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const error = []
 
         const newReview = {
             review,
             stars
         }
 
-        await dispatch(createReviewOfSpot(newReview, spotId))
+        // front-end validations
+        if (!review.length) error.push("Review is required")
+        if (stars === 0 || stars > 5) error.push("Stars must be from 1 to 5")
+
+        setErrors(error)
+        if(error.length) return;
+
+        await dispatch(createReviewOfSpot(newReview, user, spotId))
         setShowModal(false)
         history.push(`/spots/${spotId}`)
     }
@@ -28,6 +39,13 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
     return (
         <form className="create-review-main-container" onSubmit={handleSubmit}>
             <h1> Write a Review </h1>
+            <div className="error-handling-container">
+                <ul>
+                    {errors.map((error, idx) => (
+                      <li key={idx}>{error}</li>
+                      ))}
+                </ul>
+            </div>
             <div className="review-detail-container">
                 <div className="detail">
                     <label className="label">
