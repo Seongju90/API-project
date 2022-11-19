@@ -26,8 +26,9 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
 
         // front-end validations
         if (!stars) error.push("Must input star rating")
-        if (stars === 0 || stars < 6) error.push("Stars can only be from 1 to 5")
+        if (stars === 0 || stars > 5) error.push("Stars can only be from 1 to 5")
         if (!review) error.push("Review is required")
+        if (review.length < 10 || review.length > 255) error.push('Review must have 10 to 255 letters')
 
         setErrors(error)
         if(error.length) return;
