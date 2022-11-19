@@ -75,9 +75,9 @@ const SpotDetails = () => {
                 <div className="reviews-address-info">
                     <i className="fa-solid fa-star"></i>
                     <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
-                    <i className="fa-solid fa-ellipsis"></i>
-                    <span className="numreview-spotdetails">{spot.numReview} reviews</span>
-                    <i className="fa-solid fa-ellipsis"></i>
+                    <span className="dot-text">{"•"}</span>
+                    <span className="numreview-spotdetails">{spot.numReview} Reviews</span>
+                    <span className="dot-text">{"•"}</span>
                     <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
                 </div>
                 <div className="spotdetail-image-main-container">
@@ -112,7 +112,7 @@ const SpotDetails = () => {
                 </div>
                 <div className="reviews-main-container">
                     <div className="review-and-button">
-                        <h2>Reviews</h2>
+                        <h2>Total Reviews</h2>
                         <span className="write-review-button">
                             {/* conditionally render the create review */}
                             {!existingReview && userId &&
@@ -123,9 +123,8 @@ const SpotDetails = () => {
                     <div className="star-rating-numberOfReviews">
                         <i className="fa-solid fa-star"></i>
                         <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
-                        <i className="fa-solid fa-ellipsis"></i>
-                        <span className="numreview-spotdetails">{spot.numReview} reviews</span>
-                        <i className="fa-solid fa-ellipsis"></i>
+                        <span className="dot-text">{"•"}</span>
+                        <span className="numreview-spotdetails">{spot.numReview} Reviews</span>
                     </div>
                     <div className="reviews-container">
                         {reviews.map(review => (
