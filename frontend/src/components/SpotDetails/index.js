@@ -68,7 +68,6 @@ const SpotDetails = () => {
         history.push(`/`)
     }
 
-    console.log(spot)
     return (
         <div className="center-spot-container">
             <div className="spot-detail-main-container">
@@ -80,7 +79,7 @@ const SpotDetails = () => {
                     </span>
                     <span className="dot-text">{"•"}</span>
                     <span className="numreview-spotdetails">
-                        {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{reviews.length} reviews</span>}
+                        {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{spot?.numReview} reviews</span>}
                     </span>
                     <span className="dot-text">{"•"}</span>
                     <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
