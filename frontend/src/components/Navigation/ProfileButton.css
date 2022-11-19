@@ -54,7 +54,7 @@
     color: white;
     border: solid white;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .login-button-dropdown {
@@ -62,7 +62,7 @@
     color: white;
     border: solid white;
     border-radius: 10px;
-    font-size: 25px;
+    font-size: 15px;
     width: 98%;
 }
 
@@ -71,6 +71,6 @@
     color: white;
     border: solid white;
     border-radius: 10px;
-    font-size: 25px;
+    font-size: 15px;
     width: 112%
 }
