@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { deleteASpot, getOneSpot } from "../../store/spots";
 import { getReviewsOfSpot } from "../../store/review";
 import { useParams, useHistory } from "react-router-dom";
@@ -65,18 +65,23 @@ const SpotDetails = () => {
             alert(message)
         })
 
-        history.push("/")
+        history.push(`/`)
     }
 
+    console.log(reviews)
     return (
         <div className="center-spot-container">
             <div className="spot-detail-main-container">
                 <h1 className="name-of-spot">{spot.name}</h1>
                 <div className="reviews-address-info">
                     <i className="fa-solid fa-star"></i>
-                    <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
+                    <span className="avgrating-spotdetails-">
+                        {reviews.length === 0 ? <span>No Ratings Yet</span> : reviews[0]?.stars}
+                    </span>
                     <span className="dot-text">{"•"}</span>
-                    <span className="numreview-spotdetails">{spot.numReview} Reviews</span>
+                    <span className="numreview-spotdetails">
+                        {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{reviews.length} reviews</span>}
+                    </span>
                     <span className="dot-text">{"•"}</span>
                     <span className="address-spotdetails">{spot.city}, {spot.state}, {spot.country}</span>
                 </div>
@@ -115,16 +120,20 @@ const SpotDetails = () => {
                         <h2>Total Reviews</h2>
                         <span className="write-review-button">
                             {/* conditionally render the create review */}
-                            {!existingReview && userId &&
+                            {!existingReview && (userId !== ownerId) && userId &&
                                 <CustomModal className="review-button" buttontext="Write a Review" Content={CreateReviewForm} spotId={spotId}/>
                             }
                         </span>
                     </div>
                     <div className="star-rating-numberOfReviews">
                         <i className="fa-solid fa-star"></i>
-                        <span className="avgrating-spotdetails-">{spot.avgStarRating}</span>
+                        <span className="avgrating-spotdetails-">
+                            {reviews.length === 0 ? <span>No Ratings Yet</span> : reviews[0]?.stars}
+                        </span>
                         <span className="dot-text">{"•"}</span>
-                        <span className="numreview-spotdetails">{spot.numReview} Reviews</span>
+                        <span className="numreview-spotdetails">
+                            {reviews.length === 0 ? <span>No Reviews Yet</span> : <span>{reviews.length} reviews</span>}
+                        </span>
                     </div>
                     <div className="reviews-container">
                         {reviews.map(review => (
