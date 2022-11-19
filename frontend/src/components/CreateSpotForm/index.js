@@ -45,6 +45,7 @@ const CreateSpotForm = () => {
         if (!city.length) error.push("City is required")
         if (!state.length) error.push("State is required")
         if (!country.length) error.push("Country is required")
+        if (!name) error.push("Name is required")
         if (name.length > 50) error.push("Name must be less than 50 characters")
         if (!description.length) error.push("Description is required")
         // e.target.value is a string not a number
