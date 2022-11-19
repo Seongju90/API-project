@@ -11,14 +11,23 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
     // console.log('create', spotId)
     const [review, setReview] = useState("")
     const [stars, setStars] = useState(0)
+    const [errors, setErrors] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const error = []
 
         const newReview = {
             review,
             stars
         }
+
+        // front-end validations
+        if (!review.length) error.push("Review is required")
+        if (stars === 0 || stars > 5) error.push("Stars must be from 1 to 5")
+
+        setErrors(error)
+        if(error.length) return;
 
         await dispatch(createReviewOfSpot(newReview, spotId))
         setShowModal(false)
@@ -28,6 +37,13 @@ const CreateReviewForm = ({spotId, setShowModal}) => {
     return (
         <form className="create-review-main-container" onSubmit={handleSubmit}>
             <h1> Write a Review </h1>
+            <div className="error-handling-container">
+                <ul>
+                    {errors.map((error, idx) => (
+                      <li key={idx}>{error}</li>
+                      ))}
+                </ul>
+            </div>
             <div className="review-detail-container">
                 <div className="detail">
                     <label className="label">

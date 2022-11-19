@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { deleteASpot, getOneSpot } from "../../store/spots";
 import { getReviewsOfSpot } from "../../store/review";
 import { useParams, useHistory } from "react-router-dom";
@@ -68,7 +68,6 @@ const SpotDetails = () => {
         history.push(`/`)
     }
 
-    console.log(reviews)
     return (
         <div className="center-spot-container">
             <div className="spot-detail-main-container">
