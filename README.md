@@ -22,7 +22,7 @@ where I was before, and where I am in the future. Although it may not be the bes
 
 # Landing Page
 You can access the profile dropdown which leads to login and signup, when clicking login it will give you an option for a demouser. My landing page also displays all the spot listings available.
-![Alt text](vscode-remote://wsl%2Bubuntu-20.04/home/adduser/appacademy/w12-project/airbnb-project/frontend/public/images/readmeImages/landingpage.png)
+![](https://raw.githubusercontent.com/Seongju90/API-project/dev/frontend/public/images/readmeImages/landingpage.png)
 # Features
 
 ## Spots
@@ -36,6 +36,12 @@ You can access the profile dropdown which leads to login and signup, when clicki
 
 - Users can upload an img when creating a spot, but it must end with jpg, png, or jpeg or it will throw errors.
 
+## Not logged in Spot Detail Page
+![](https://raw.githubusercontent.com/Seongju90/API-project/dev/frontend/public/images/readmeImages/not%20logged%20in%20spot%20page.png)
+
+## Logged in Spot Detail Page
+![](https://raw.githubusercontent.com/Seongju90/API-project/dev/frontend/public/images/readmeImages/spot%20edit%20delete%20host%20create.png)
+
 ## Reviews
 - Reviews for each spot will render when landing on the page.
 
@@ -43,5 +49,19 @@ You can access the profile dropdown which leads to login and signup, when clicki
 
 - You can delete a review only if you are the owner of the review.
 
+## Write Review Button only when satisfy not owner, and logged in
+![](https://raw.githubusercontent.com/Seongju90/API-project/dev/frontend/public/images/readmeImages/writereview%20condition.png)
 # Future Features
 - Bookings CRUD and Google API will be added hopefully in the future
+
+# Getting Started
+- Clone the repository from: https://github.com/Seongju90/API-project
+- Install and run dependencies in backend and frontend folders separately: `npm install` then `npm start`
+- Add .env file to backend:
+```
+PORT=8000
+DB_FILE=db/dev.db
+JWT_SECRET=<<INSERT JWT PW>>
+JWT_EXPIRES_IN=604800
+```
+- Navigate to [localhost:3000](http://localhost:3000/)
