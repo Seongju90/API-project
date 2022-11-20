@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
 import { createReviewOfSpot } from "../../store/review";
 
 import './CreateReview.css';

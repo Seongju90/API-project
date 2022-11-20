@@ -12,6 +12,7 @@ function LoginForm({ setShowModal }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
+
     return dispatch(sessionActions.login({ credential, password }))
     // if login successfull close modal
       .then(() => setShowModal(false))
