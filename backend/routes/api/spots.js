@@ -14,7 +14,7 @@ const validateSpot = [
     check('address')
         // fields with falsy values will also not exist, different then undefined
         .exists({ checkFalsy: true })
-        .isAlphanumeric('en-US', {ignore: ' '}) // ignore ' ' will ignore white space
+        .isAlphanumeric('en-US', {ignore: ' ' }) // ignore ' ' will ignore white space
         .withMessage('Street address is required'),
     check('city')
         .exists({ checkFalsy: true })
