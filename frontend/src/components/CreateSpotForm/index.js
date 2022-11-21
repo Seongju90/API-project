@@ -67,6 +67,12 @@ const CreateSpotForm = () => {
 
         // need await because waiting for response for newly created spot
         const newSpot = await dispatch(createASpot(spot))
+            .catch(
+                async (res) => {
+                  const data = await res.json();
+                  if (data && data.errors) setErrors(data.errors);
+                }
+            )
 
         // if we did create the spot
         if (newSpot.id) {
