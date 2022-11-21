@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import './SpotCard.css';
-import Star from "../SVG/star"
 
 const SpotCard = ({spot}) => {
 
@@ -19,8 +18,10 @@ const { address, price, avgRating } = spot;
             <div className="spot-info-container">
                 <div className="address-star-rating-container">
                     <div className="address">{address}</div>
-                    <Star/>
-                    <div className="ratings">{avgRating}</div>
+                    <div className="ratings">
+                        <span><i className="fa-solid fa-star"></i></span>
+                        {avgRating === "NaN" ? <span>No Ratings Yet</span> : avgRating}
+                    </div>
                 </div>
                 <div className="other-info">{`$${price}`}</div>
             </div>
