@@ -1,7 +1,7 @@
 {
-  "name": "authenticate-me",
+  "name": "airbnb-project",
   "version": "1.0.0",
-  "description": "## Database Schema Design",
+  "description": "Live Link: https://airbnb-api-project1.herokuapp.com/",
   "main": "index.js",
   "scripts": {
     "render-postbuild": "npm run build --prefix frontend",
